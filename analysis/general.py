@@ -11,6 +11,14 @@ The code in this module is partially complete, and is used to support analyses o
 
 import numpy as np
 
+
+def forwardSmooth(x, window_len=5):
+    x_out = np.zeros(len(x))
+    for i in range(len(x) - window_len):
+        x_out[i] = np.mean(x[i:i + window_len])
+    return x_out
+
+
 def smooth(x, window_len=11, window='hanning',match_length=True):
     """smooth the data using a window with requested size.
 
@@ -159,7 +167,7 @@ def networkSetGenSetBlockPerformance(largest_chosen, blocks, thresh=0.9, trial_w
     return window_perf, thresh_bool
 
 
-def setGeneralizationFirstAppearance(stimuli,choice_record,set_record):
+def contextGeneralizationFirstAppearance(stimuli,choice_record,set_record):
     stimuli = np.abs(np.round(stimuli))
     stimulus_prototypes = np.unique(stimuli,axis=0)
     stimulus_prototypes
@@ -261,7 +269,7 @@ def convertLabels(stimuli, labels, conversion=None, direction='prototype_to_figu
     return ans_key.astype(int)
 
 
-def setGeneralizationConfusionMatrix(inputs,choice_records,set_record,n_trials=None,target_block=2):
+def contextGeneralizationConfusionMatrix(inputs,choice_records,set_record,n_trials=None,target_block=2):
     if n_trials is None:
         n_trials = sum(set_record==target_block)
     stimulus_prototypes = np.unique(np.abs(np.round(inputs[0])),axis=0)

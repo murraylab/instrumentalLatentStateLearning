@@ -51,8 +51,8 @@ import numpy as np
 import pandas as pd
 from random import random, randint, shuffle
 import copy
-from simulations.experiments import getSetGenPrototypes, getActionGenPrototypes
-# from experiments import getSetGenPrototypes, getActionGenPrototypes
+from simulations.experiments import getContextGenPrototypes, getExampleGenPrototypes
+# from experiments import getContextGenPrototypes, getExampleGenPrototypes
 
 
 ###########################################################
@@ -349,7 +349,7 @@ def runBasicInstrumental(n_models=1,version=1,nBlocks=36,learn=0.092327,r=9.0124
 if __name__ == '__main__':
     # main()
 
-    # stim_prototypes_1, ans_prototypes_1 = getSetGenPrototypes(version=1, block='generalization')
+    # stim_prototypes_1, ans_prototypes_1 = getContextGenPrototypes(version=1, block='generalization')
     # data = [np.zeros((stim_prototypes_1.shape[0],stim_prototypes_1.shape[1]+1))]
     # data[0][:,:-1], data[0][:,-1] = stim_prototypes_1, ans_prototypes_1
     # env = ['k']*stim_prototypes_1.shape[1] + ['?']
@@ -404,11 +404,11 @@ if __name__ == '__main__':
     #  ACTION GENERALIZATION EXPERIMENT
     ######################################
 
-    # stim_prototypes_1, ans_prototypes_1 = getActionGenPrototypes(block='categorize')
+    # stim_prototypes_1, ans_prototypes_1 = getExampleGenPrototypes(block='categorize')
     # data_categorize = np.zeros((stim_prototypes_1.shape[0], stim_prototypes_1.shape[1] + 1))
     # data_categorize[:, :-1], data_categorize[:, -1] = stim_prototypes_1, ans_prototypes_1
     #
-    # stim_prototypes_1, ans_prototypes_1 = getActionGenPrototypes(block='generalize')
+    # stim_prototypes_1, ans_prototypes_1 = getExampleGenPrototypes(block='generalize')
     # data_generalization = np.zeros((stim_prototypes_1.shape[0], stim_prototypes_1.shape[1] + 1))
     # data_generalization[:, :-1], data_generalization[:, -1] = stim_prototypes_1, ans_prototypes_1
     #
@@ -452,15 +452,15 @@ if __name__ == '__main__':
     ## SET GENERALIZATION EXPERIMENT
     ######################################
 
-    # stim_prototypes_1, ans_prototypes_1 = getSetGenPrototypes(version=1, block='set_1')
+    # stim_prototypes_1, ans_prototypes_1 = getContextGenPrototypes(version=1, block='context_1')
     # data_set_1 = np.zeros((stim_prototypes_1.shape[0], stim_prototypes_1.shape[1] + 1))
     # data_set_1[:, :-1], data_set_1[:, -1] = stim_prototypes_1, ans_prototypes_1
     #
-    # stim_prototypes_1, ans_prototypes_1 = getSetGenPrototypes(version=1, block='set_2')
+    # stim_prototypes_1, ans_prototypes_1 = getContextGenPrototypes(version=1, block='context_2')
     # data_set_2 = np.zeros((stim_prototypes_1.shape[0], stim_prototypes_1.shape[1] + 1))
     # data_set_2[:, :-1], data_set_2[:, -1] = stim_prototypes_1, ans_prototypes_1
     #
-    # stim_prototypes_1, ans_prototypes_1 = getSetGenPrototypes(version=1, block='generalization')
+    # stim_prototypes_1, ans_prototypes_1 = getContextGenPrototypes(version=1, block='generalization')
     # data_generalization = np.zeros((stim_prototypes_1.shape[0], stim_prototypes_1.shape[1] + 1))
     # data_generalization[:, :-1], data_generalization[:, -1] = stim_prototypes_1, ans_prototypes_1
     #

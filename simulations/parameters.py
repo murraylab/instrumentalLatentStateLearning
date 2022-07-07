@@ -42,15 +42,16 @@ def genParams(n_stim=2,n_actions=2,stim_scale=1,update_n_trials=75,reward_probab
     return P
 
 
-def worldStateParams(P_gen=[],reward_mag=1,n_trials=400,stimulus_noise_sigma=0.1):
+def worldStateParams(P_gen=None,reward_mag=1,n_trials=400,stimulus_noise_sigma=0.1):
     """
     obtain defaults for a world-state
     """
-    testDict(P_gen)
+    testDict(P_gen,none_valid=True)
     testFloat(reward_mag)
     testInt(n_trials,none_valid=True)
     testFloat(stimulus_noise_sigma)
-    if len(P_gen) == 0: P_gen = genParams()
+    if P_gen is None:
+        P_gen = genParams()
     P = {
         'stimulus_noise_sigma': stimulus_noise_sigma, #Variance of noise added to the image on each trial
         'reward_mag': reward_mag, #Magnitude of the reward experienced
@@ -173,14 +174,41 @@ def shiftXi(xi_0,xi_1,xi_shift=0):
     return xi_0_shift, xi_1_shift
 
 
-def nnParams(n_trials_per_bloc=np.array([1000,1000,1000]).astype(int),weight_averaging=False,n_networks=200):
+def nnParams(n_trials_per_bloc=[1000],task='context_generalizationV2',learning_rate=0.01,n_networks=1,
+               optimizer_type='sgd',rl_type='actor_critic',epsilon_decay=0.01,calc_rdm=False,noise_sigma=0.1,
+               n_actions=4,reward_probability=1,rdm_layers=['common', 'action_intermediate'],weight_stdev=None,
+               mask_actions=True,n_basic_instrumental_stim=None):
+    # Unit testing
     testArray(n_trials_per_bloc)
-    testBool(weight_averaging)
+    testArray(rdm_layers)
+    testBool(calc_rdm)
+    testBool(mask_actions)
     testInt(n_networks)
+    testInt(n_actions)
+    testInt(n_basic_instrumental_stim,none_valid=True)
+    testFloat(learning_rate)
+    testFloat(epsilon_decay)
+    testFloat(noise_sigma)
+    testFloat(reward_probability)
+    testFloat(weight_stdev,none_valid=True)
+    testString(task)
+    testString(optimizer_type)
+    testString(rl_type)
+    # Build the parameters dictionary
     P = dict()
-    P['n_trials_per_bloc'] = n_trials_per_bloc
-    P['task'] = 'set_generalizationV2'
-    P['weight_averaging'] = weight_averaging
+    P['n_trials_per_bloc'] = np.array(n_trials_per_bloc).astype(int)
+    P['task'] = task
+    P['optimizer_type'] = optimizer_type # 'sgd' 'adam'
+    P['learning_rate'] = learning_rate
+    P['rl_type'] = rl_type # 'actor_critic'
+    P['epsilon_decay'] = epsilon_decay
+    P['mask_actions'] = mask_actions
+    P['calc_rdm'] = calc_rdm
+    P['noise_sigma'] = noise_sigma
+    P['n_actions'] = n_actions
+    P['weight_stdev'] = weight_stdev
+    P['reward_probability'] = reward_probability
+    P['rdm_layers'] = rdm_layers
+    P['n_basic_instrumental_stim'] = n_basic_instrumental_stim
     P['n_networks'] = n_networks
-
     return P
