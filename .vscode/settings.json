@@ -1,0 +1,7 @@
+{
+    "python.autoComplete.extraPaths": ["./MultiLatentStateInstrumentalLearning/"
+    ],
+    "python.analysis.extraPaths": [
+        "./MultiLatentStateInstrumentalLearning/"
+    ],
+}
