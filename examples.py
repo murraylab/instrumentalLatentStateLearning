@@ -16,7 +16,7 @@ import os
 from simulations.parameters import genParams, worldStateParams, agentParams, nnParams
 from simulations.experiments import worldState
 from simulations.algorithmicmodels import agent
-from utils.utils import testBool, testString, testInt, getPool, saveData
+from utils.utils import testBool, testString, testInt, testFloat, getPool, saveData
 from analysis.plotfunctions import removeSpines, plotRDM
 from analysis.general import forwardSmooth
 from simulations.neuralnetwork import makeRLModel, trainRLNetwork, saveTrainedNetworks
@@ -51,7 +51,7 @@ def setContextGenAx(ax,n_trials_block1,n_trials_block2):
     return ax
 
 
-def exampleGeneralization(state_kernel='prototype',discriminative_component=True,save_fig=True,fig_dir='plots/',
+def exampleGeneralization(state_kernel='prototype',attention_distortion=0,save_fig=True,fig_dir='plots/',
                          fig_name_base='',fig_extension='png'):
     """
     Use this area to play with the action generalization task. It is functionalized for organization purposes.
@@ -64,64 +64,54 @@ def exampleGeneralization(state_kernel='prototype',discriminative_component=True
     :return: A (trained agent class)
     """
     ## CHECK INPUTS
-    testBool(discriminative_component)
+    testFloat(attention_distortion)
     testBool(save_fig)
     testString(fig_dir)
     testString(fig_name_base)
     testString(fig_extension)
     testString(state_kernel)
     if state_kernel == 'exemplar':
-        update_n_trials = 100  # 75 (prototype) 100 (exemplar)
+        update_state_n_trials = 100  # 75 (prototype) 100 (exemplar)
+        blur_states_param_linear = 0.95
+        upsilon_candidates = 10 ** -150  # 10**80 (prototype, new) 10**-10 (prototype, old)
+
     elif state_kernel == 'prototype':
-        update_n_trials = 75  # 75 (prototype) 100 (exemplar)
+        update_state_n_trials = 75  # 75 (prototype) 100 (exemplar)
+        blur_states_param_linear = 0.98
+        upsilon_candidates = 10 ** -20  # 10**80 (prototype, new) 10**-10 (prototype, old)
     else:
         raise ValueError('state_kernel must be "exemplar" or "prototype"')
-    if discriminative_component:
-        xi_CW = 0
-    else:
-        xi_CW = 1
+    xi_CW = attention_distortion
     ## SET PARAMETERS (play around here)
-    upsilon = 0.10 # 0.1
-    upsilon_candidates = 10**-150 # 10**80 (prototype, new) 10**-10 (prototype, old)
-    reward_probability = None
+    upsilon = 0.5 # 0.05 0.1
     detailed_reward_prob = np.array([[01.0, 0.00, 0.0, 0.0],  # Cue only for first action
                                      [0.00, 01.0, 0.0, 0.0],  # Cue only for second action
                                      [01.0, 01.0, 0.0, 0.0],  # Cue for both actions
                                      [0.00, 0.00, 1.0, 0.0]])  # No cue for actions
-    beta_value = 15 #15
+    beta_value = 50 #15
     beta_state = 50
     n_trials = 800
     eta = 0.05
-    stim_scale = 1
-    n_stim = 2
     n_actions = detailed_reward_prob.shape[1]
-    stimulus_noise_sigma = 0.05 # 0.02, 0.05
-    update_n_trials = update_n_trials
+    update_state_n_trials = update_state_n_trials
+    n_trials_burn_in = 15
     update_exemplar_n_trials = 15
-    xi_0 = 0.99
-    xi_shift_1 = -0.009
-    xi_shift_2 = 0.004
-    xi_DB_low = -4 # -2, -4
-    xi_DB_high = -12
-    w_A_update_method = 'linear'
     state_kernel = state_kernel
 
     ## RUN THE SIMULATION
-    P_gen = genParams(stim_scale=stim_scale, n_stim=n_stim ,n_actions=n_actions,update_n_trials=update_n_trials, \
-                      reward_probability=reward_probability,detailed_reward_prob=detailed_reward_prob,
-                      state_kernel=state_kernel,update_exemplar_n_trials=update_exemplar_n_trials)
+    P_gen = genParams(n_actions=n_actions,update_state_n_trials=update_state_n_trials, reward_probability=None,
+                      detailed_reward_prob=detailed_reward_prob,state_kernel=state_kernel,
+                      update_exemplar_n_trials=update_exemplar_n_trials,n_trials_burn_in=n_trials_burn_in)
     A = agent(
-        agentParams(P_gen=P_gen, upsilon=upsilon, beta_value=beta_value, eta=eta, xi_0=xi_0,
-                    xi_CW=xi_CW,xi_shift_1=xi_shift_1,xi_shift_2=xi_shift_2,xi_DB_low=xi_DB_low,
-                    beta_state=beta_state,xi_DB_high=xi_DB_high,w_A_update_method=w_A_update_method,xi_DB=5,
-                    upsilon_candidates=upsilon_candidates))
+        agentParams(P_gen=P_gen, upsilon=upsilon, beta_value=beta_value, eta=eta,xi_CW=xi_CW,beta_state=beta_state,
+                    upsilon_candidates=upsilon_candidates,blur_states_param_linear=blur_states_param_linear))
     # Session with stable texture
     P_gen['stable_distractors'] = True
-    P = worldStateParams(P_gen=P_gen, stimulus_noise_sigma=stimulus_noise_sigma)
+    P = worldStateParams(P_gen=P_gen)
     W_1 = worldState(P=P)
     # Session with random texture
     P_gen['stable_distractors'] = False
-    P = worldStateParams(P_gen=P_gen, stimulus_noise_sigma=stimulus_noise_sigma)
+    P = worldStateParams(P_gen=P_gen)
     W_2 = worldState(P=P)
     # generate stimuli
     stim_1, ans_1, reward_prob_block1 = W_1.generateExampleGenStimuli(n_trials=n_trials,structured=True,
@@ -165,12 +155,8 @@ def exampleGeneralization(state_kernel='prototype',discriminative_component=True
     ax[2, 1].set_title('Final State Estimation')
     ax[2, 1].set_ylabel('State Label')
     ax[2, 1] = setExampleGenAx(ax[2, 0], n_trials)
-    if discriminative_component:
-        discrim_ttl = 'with Discriminative Attention'
-        discrim_save = 'wDiscrim'
-    else:
-        discrim_ttl = 'without Discriminative Attention'
-        discrim_save = 'woDiscrim'
+    discrim_ttl = f'Attention Distortion = {attention_distortion}'
+    discrim_save = f'discrim-{attention_distortion}'
     fig.suptitle(f'Action Generalization, {state_kernel.capitalize()} States\n{discrim_ttl}')
     fig.tight_layout()
     if save_fig:
@@ -478,9 +464,9 @@ if __name__ == '__main__':
     #######################
 
     ## EXAMPLE GENERALIZATION
-    # state_kernel = 'prototype' # 'prototype', 'exemplar'
-    # discriminative_component = True # True, False
-    # A = exampleGeneralization(state_kernel=state_kernel, discriminative_component=discriminative_component)
+    state_kernel = 'exemplar' # 'prototype', 'exemplar'
+    attention_distortion = 0 # True, False
+    A = exampleGeneralization(state_kernel=state_kernel, attention_distortion=attention_distortion)
 
     ## CONTEXT GENERALIZATION
     # state_kernel = 'prototype'  # 'prototype', 'exemplar'
@@ -492,11 +478,11 @@ if __name__ == '__main__':
     ########################
     ## NEURAL NETWORK MODEL
     ########################
-    n_networks = 1
-    context_gen_version = 1
-    parallel=False
-    weight_stdev = None
-    trained_networks = contextGeneralization(n_networks=n_networks, context_gen_version=context_gen_version,
-                                             parallel=parallel, weight_stdev=weight_stdev,)
+    # n_networks = 1
+    # context_gen_version = 1
+    # parallel=False
+    # weight_stdev = None
+    # trained_networks = contextGeneralization(n_networks=n_networks, context_gen_version=context_gen_version,
+    #                                          parallel=parallel, weight_stdev=weight_stdev,)
 
     print('here')

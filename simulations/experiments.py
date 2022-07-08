@@ -32,7 +32,7 @@ class worldState():
             P = worldStateParams()
         self.P = P
 
-    def generateExampleGenStimuli(self,n_trials=None,structured=False,block='categorize'):
+    def generateExampleGenStimuli_old(self,n_trials=None,structured=False,block='categorize'):
         testInt(n_trials,none_valid=True)
         testBool(structured)
         testString(block)
@@ -66,6 +66,77 @@ class worldState():
         # Add noise
         stimuli += np.random.randn(stimuli.shape[0], stimuli.shape[1]) * self.P['stimulus_noise_sigma'] \
                    * self.P['stim_scale']
+        return stimuli, ans_key, reward_prob
+
+    def generateExampleGenStimuli(self,n_trials=None,structured=False,block='categorize'):
+        testInt(n_trials,none_valid=True)
+        testBool(structured)
+        testString(block)
+        if n_trials is None: n_trials = self.P['n_trials']  # If not trial count specified, use default
+        #Spell out the stimuli to make it clear
+        if block == 'categorize':
+            stim_prototypes = np.array([[1, 0, 0, 1, 0, 0, 1, 0],
+                                        [0, 1, 0, 1, 0, 0, 1, 0],
+                                        [0, 0, 1, 1, 0, 0, 1, 0],
+                                        [0, 0, 1, 0, 1, 0, 1, 0],
+                                        [0, 0, 1, 0, 0, 1, 1, 0],
+                                        [1, 0, 0, 0, 1, 0, 1, 0],
+                                        [1, 0, 0, 0, 0, 1, 1, 0],
+                                        [0, 1, 0, 0, 1, 0, 1, 0],
+                                        [0, 1, 0, 0, 0, 1, 1, 0]])
+            ans_indx = np.array([0, 0, 2, 1, 1, 3, 3, 3, 3])
+        elif block == 'generalize':
+            stim_prototypes = np.array([[1, 0, 0, 1, 0, 0, 1, 0],
+                                        [0, 1, 0, 1, 0, 0, 1, 0],
+                                        [0, 0, 1, 1, 0, 0, 1, 0],
+                                        [0, 0, 1, 0, 1, 0, 1, 0],
+                                        [0, 0, 1, 0, 0, 1, 1, 0],
+                                        [1, 0, 0, 0, 1, 0, 1, 0],
+                                        [1, 0, 0, 0, 0, 1, 1, 0],
+                                        [0, 1, 0, 0, 1, 0, 1, 0],
+                                        [0, 1, 0, 0, 0, 1, 1, 0],
+                                        [1, 0, 0, 1, 0, 0, 0, 1],
+                                        [0, 1, 0, 1, 0, 0, 0, 1],
+                                        [0, 0, 1, 1, 0, 0, 0, 1],
+                                        [0, 0, 1, 0, 1, 0, 0, 1],
+                                        [0, 0, 1, 0, 0, 1, 0, 1],
+                                        [1, 0, 0, 0, 1, 0, 0, 1],
+                                        [1, 0, 0, 0, 0, 1, 0, 1],
+                                        [0, 1, 0, 0, 1, 0, 0, 1],
+                                        [0, 1, 0, 0, 0, 1, 0, 1]])
+            ans_indx = np.array([0, 0, 2, 1, 1, 3, 3, 3, 3, 0, 0, 2, 1, 1, 3, 3, 3, 3])
+        else:
+            raise ValueError(f'block value of {block} is invalid. Must be "categorize" or "generalize".')
+        #Stimulus reward probabilities
+        reward_prob_prototypes = self.P['detailed_reward_prob'][ans_indx, :]
+        mx = np.max(reward_prob_prototypes, axis=1)
+        ans_prototypes = (reward_prob_prototypes == np.tile(mx, (reward_prob_prototypes.shape[1], 1)).T).astype(int)
+        # Structured or not
+        if structured:  # Make it so all are seen before one is seen again. Randomized within rounds
+            n_reps = np.floor(n_trials / len(stim_prototypes)).astype(int)
+            n_trials = (len(stim_prototypes) * n_reps).astype(int)
+            trial_stim = []
+            stim_indx = np.arange(0, stim_prototypes.shape[0])
+            for t in range(n_reps):
+                np.random.shuffle(stim_indx)
+                trial_stim += stim_indx.tolist()
+            trial_stim = np.array(trial_stim)
+        else:
+            trial_stim = np.random.randint(0, len(stim_prototypes), n_trials)
+        # Build the returned stimuli and answer keys
+        stimuli = np.zeros((n_trials, stim_prototypes.shape[1]))
+        ans_key = np.zeros((n_trials, self.P['n_actions']))
+        reward_prob = ans_key.copy()
+        for a in range(len(stim_prototypes)):
+            stimuli[trial_stim == a, :] = stim_prototypes[a, :]
+            ans_key[trial_stim == a, :] = ans_prototypes[a, :]
+            reward_prob[trial_stim == a, :] = reward_prob_prototypes[a, :]
+        # Add noise
+        if self.P['stimulus_noise_sigma'] >0:
+            stimuli += np.random.randn(stimuli.shape[0], stimuli.shape[1]) * self.P['stimulus_noise_sigma'] \
+                   * self.P['stim_scale']
+        # Prior reward as cue
+
         return stimuli, ans_key, reward_prob
 
     def generateContextGenStimuli(self, n_trials=None, block='context_1', version=1):
@@ -519,8 +590,3 @@ def getPredictedRDMs(version=2,att_indices=None):
         return_list.append(rdm_discrim2)
 
     return return_list
-
-
-
-if __name__ == '__main__':
-    pass

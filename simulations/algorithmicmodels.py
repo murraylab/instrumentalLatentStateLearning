@@ -42,17 +42,9 @@ def calcStimDeviation(mu,trial_vec,blur_states_param_linear=0):
     testArray(trial_vec)
     testFloat(blur_states_param_linear)
     #Perform operations
-    stim_deviation = (1 - blur_states_param_linear) * (trial_vec - mu) + blur_states_param_linear * \
-                     np.zeros(len(trial_vec))
+    stim_deviation = (1 - blur_states_param_linear) * (trial_vec - mu)
     #Return results
     return stim_deviation
-
-
-def changeAgentStateParam(agent,param_key,param_val):
-    agent.P[param_key] = param_val
-    for s in range(len(agent.states)):
-        agent.states[s].P[param_key] = param_val
-    return agent
 
 
 def calcExemplarOtherStateActivation(states,P_agent,indx_target,indx_others,w_k=None,distance_method='activation'):
@@ -60,7 +52,7 @@ def calcExemplarOtherStateActivation(states,P_agent,indx_target,indx_others,w_k=
         w_k = states[0].stimulus_record[0,:]*0+0.5
     activations = []
     for indx in indx_others:
-        trials = states[indx].getUpdateTrials(update_n_trials=states[indx].P['update_state_n_trials'])
+        trials = states[indx].getUpdateTrials(update_state_n_trials=states[indx].P['update_state_n_trials'])
         stimuli_clean = np.abs(np.round(trials))
         stimulus_exemplars, exemplar_counts = np.unique(stimuli_clean,axis=0,return_counts=True)
         exemplar_weights = exemplar_counts / np.sum(exemplar_counts)
@@ -88,10 +80,7 @@ def calcExemplarOtherStateActivation(states,P_agent,indx_target,indx_others,w_k=
                         mu_target = np.mean(states[indx_target].stimulus_record[indx_exemp_target,:],axis=0)
                     else:
                         mu_target = states[indx_target].stimulus_record[indx_exemp_target, :]
-                    try:
-                        distance_target = distance.euclidean(mu, mu_target)
-                    except:
-                        print('here')
+                    distance_target = distance.euclidean(mu, mu_target)
                     # distance_target = distance.euclidean(mu * weights, mu_target * weights)
                     if distance_target < 0.00000000000001:
                         activations_target[s] = 100000000
@@ -241,46 +230,50 @@ class agentState():
 
     def updateMu(self):
         """Update the prototypical vector for the state based on observations"""
-        if np.isnan(self.P['update_n_trials']): #Use all trials
+        if np.isnan(self.P['update_state_n_trials']): #Use all trials
             self.mu = np.mean(self.stimulus_record, axis=0)
         else:
-            trials= self.getUpdateTrials(update_n_trials=self.P['update_n_trials'])
+            trials= self.getUpdateTrials(update_state_n_trials=self.P['update_state_n_trials'])
         if len(trials)>0: #Need some trials to take their mean
             self.mu = np.mean(trials, axis=0)
 
-    def getUpdateTrials(self,update_n_trials=None):
+    def getUpdateTrials(self,update_state_n_trials=None):
         """
         Obtains the set of trials used to update state varaibles (mu, covariance, etc.)
-        :param update_n_trials: number of trials to go back. If none, it uses all trials in the state (default=None)
+        :param update_state_n_trials: number of trials to go back. If none, it uses all trials in the state (default=None)
         :return: trials
         """
         # Check inputs
-        testInt(update_n_trials,none_valid=True)
-        if update_n_trials is None:
-            update_n_trials = self.stimulus_record.shape[0]
-        trials = self.stimulus_record[-update_n_trials:, :]
-        correct_Idx_bool = (self.choice_record[-update_n_trials:, 0] == \
-                            self.choice_record[-update_n_trials:, 1])
-        trials = trials[correct_Idx_bool, :]
+        testInt(update_state_n_trials,none_valid=True)
+        correct_indx = np.where(self.choice_record[:, 0] == self.choice_record[:, 1])[0].astype(int)
+        if (update_state_n_trials is None) or (np.isnan(update_state_n_trials)):
+            update_state_n_trials = len(correct_indx)
+        incorrect_indx = np.where(self.choice_record[:, 0] != self.choice_record[:, 1])[0].astype(int)
+        n_incorrect = int(np.round(update_state_n_trials * self.P['prop_wrong_update_include']))
+        n_correct = int(update_state_n_trials - n_incorrect)
+        if n_incorrect > 0:
+            trials = self.stimulus_record[np.concatenate((correct_indx[-n_correct:], incorrect_indx[-n_incorrect:])), :]
+        else:
+            trials = self.stimulus_record[correct_indx[-n_correct:], :]
         return trials
 
-    def updateCov(self,update_n_trials=None,polish_cov=True,polish_noise_sigma=0.00000001):
+    def updateCov(self,update_state_n_trials=None,polish_cov=True,polish_noise_sigma=0.00000001):
         """
         Update the covariance matrix of the state based on observations.
-        :param update_n_trials: number of trials to go back. If none, it uses all trials in the state (default=None)
+        :param update_state_n_trials: number of trials to go back. If none, it uses all trials in the state (default=None)
         :param polish_cov: whether to remove noise from the trials, then inject a small amount (default=True)
         :param polish_noise_sigma: If polishing, the amount of noise to inject (default=0.00000001)
         :returns: update of internal covariance and precision matrices
         """
         # Unit testing
-        testInt(update_n_trials,none_valid=True)
+        testInt(update_state_n_trials,none_valid=True)
         testBool(polish_cov)
         testFloat(polish_noise_sigma)
         #Make sure the minimum isn't more than what is asked
-        if update_n_trials > self.P['update_state_n_trials']:
+        if update_state_n_trials > self.P['update_state_n_trials']:
             raise ValueError('covariance will not compute as the minimum number of trials is greater than those obtained from the state')
-        trials = self.getUpdateTrials(update_n_trials=self.P['update_state_n_trials'])
-        if (update_n_trials is None) or (len(trials) >= update_n_trials):
+        trials = self.getUpdateTrials(update_state_n_trials=self.P['update_state_n_trials'])
+        if (update_state_n_trials is None) or (len(trials) >= update_state_n_trials):
             if polish_cov:
                 trials = np.abs(np.round(trials))
                 trials = trials + np.random.randn(trials.shape[0],trials.shape[1]) * polish_noise_sigma
@@ -354,7 +347,7 @@ class agentState():
         else:
             self.choice_record = np.append(self.choice_record, [vec], axis=0)
 
-    def weightMod(self,weights,param_val,method='tanh'):
+    def weightMod(self,weights,param_val,method='norm'):
         """
         Shifts the discribution of weights to alter use of attention
         :param weights: Vector or matrix of weights
@@ -390,18 +383,16 @@ class agentState():
         precision_mat = self.precision_mat
         # If using a prototype kernel, just go with all the examples
         if self.P['state_kernel'] == 'prototype':
-            stim_deviation = calcStimDeviation(self.mu,trial_vec,P_agent['blur_states_param_linear'],
-                        linear_blur_method='deviation')
+            stim_deviation = calcStimDeviation(self.mu,trial_vec,P_agent['blur_states_param_linear'])
             A = self.calcA(P_agent,stim_deviation,precision_mat,w_k,w_A,delta_bar)
         #If using an exemplar kernel, segregate based on stimuli
         elif self.P['state_kernel'] == 'exemplar':
             #Not enough examples for exemplars
             if np.isnan(self.stimulus_record[0,0]) or (self.stimulus_record.shape[0] < self.P['n_trials_burn_in']):
-                stim_deviation = calcStimDeviation(self.mu,trial_vec,P_agent['blur_states_param_linear'],
-                        linear_blur_method='deviation')
+                stim_deviation = calcStimDeviation(self.mu,trial_vec,P_agent['blur_states_param_linear'])
                 A = self.calcA(P_agent, stim_deviation, precision_mat, w_k, w_A, delta_bar)
             else:
-                trials = self.getUpdateTrials(update_n_trials=self.P['update_state_n_trials'])
+                trials = self.getUpdateTrials(update_state_n_trials=self.P['update_state_n_trials'])
                 stimuli_clean = np.abs(np.round(trials))
                 stimulus_exemplars = np.unique(stimuli_clean,axis=0)
                 activations = np.zeros(len(stimulus_exemplars))
@@ -420,8 +411,7 @@ class agentState():
                     else:
                         exemplar_cov_mat = np.eye(len(trial_vec)) * (self.P['sigma_0'])
                     exemplar_precision_mat = np.linalg.inv(exemplar_cov_mat)
-                    stim_deviation = calcStimDeviation(exemplar_mu,trial_vec,P_agent['blur_states_param_linear'],
-                                                       linear_blur_method='deviation')
+                    stim_deviation = calcStimDeviation(exemplar_mu,trial_vec,P_agent['blur_states_param_linear'])
                     activations[s] = self.calcA(P_agent, stim_deviation, exemplar_precision_mat, w_k, w_A, delta_bar)
                 prop_examples = n_examples / sum(n_examples)
                 A = sum(prop_examples * activations)
@@ -508,7 +498,8 @@ class agent():
         #Build the agent varaibles
         if len(P) == 0: P = agentParams()
         self.P = P
-        if len(P_states) == 0: P_states = agentStateParams(P_gen=P,eta=self.P['eta'])
+        if len(P_states) == 0: P_states = agentStateParams(P_gen=P,eta=self.P['eta'],
+                                                           precision_distortion=self.P['precision_distortion'])
         self.P['trial_vec_len'] = None
         self.n_trials = 0
         self.choice_record = np.zeros((1, 2))  # Chosen option | correct option
@@ -516,6 +507,7 @@ class agent():
         self.soft_max_activations = np.zeros((1,self.P['n_actions'])) #Record of softmax activations
         self.state_soft_max_activations = np.array([]) # Record of winning state activation
         self.states = []
+        self.n_states = np.array([])
         self.delta_bar = np.array([self.P['delta_bar_0']])
         self.delta_bar_slow = self.delta_bar.copy()
         self.session_number = 0  # Whether the agent been through any trials
@@ -527,7 +519,10 @@ class agent():
         self.state_candidates = [] # List of candidate states for each trial
 
     def initializeTrialVecVars(self,trial_vec_len=None):
-        #Check input
+        """
+        Initializes the trial vector
+        :param trial_vec_len: length of trial vector, must be int (default=None)
+        """
         testInt(trial_vec_len,none_valid=True)
         self.P['trial_vec_len'] = trial_vec_len
         self.stimulus_record = np.zeros((1, self.P['trial_vec_len']))
@@ -560,16 +555,19 @@ class agent():
         # Check if there are any potential states in the bank
         if len(self.states) == 0:
             self.states = [agentState(P=self.state_P_default,trial_vec_len=stimuli.shape[1])]  # Initialize with a single state
-        previous_reward = 0 # Record reward on prior trial
+        # Initialize the probability of state confusion
+        p_state_confusion = self.P['p_state_confusion']
         # Loop through each stimulus
         for s in range(stimuli.shape[0]):
+            # Record the current session
+            self.session_record = np.concatenate((self.session_record, [self.session_number]))
             # Extract the feature vector, and add previous reward as a cue
             trial_vec = stimuli[s,:].copy()
             # Identify the state, calculate the softmax, the action and determine the outcome
             if learn_states: # This updates the state
-                state_index, state_probs = self.identifyState(trial_vec=trial_vec)
+                state_index, state_probs = self.identifyState(trial_vec=trial_vec,p_state_confusion=p_state_confusion)
             else: # We're not updating the states
-                state_index, state_probs = self.identifyStateNoLearn(trial_vec=trial_vec)
+                state_index, state_probs = self.identifyStateNoLearn(trial_vec=trial_vec,p_state_confusion=p_state_confusion)
             self.state_soft_max_activations = np.append(self.state_soft_max_activations, state_probs[state_index])
             if isinstance(reward_prob, (np.floating,float,int,np.integer)):
                 # Get the action, and the associated soft max values
@@ -629,15 +627,30 @@ class agent():
             if learn_states:
                 self.states[state_index].addRecord(trial_vec)
                 self.states[state_index].updateChoiceRecord([action,ans])
-                if (np.isnan(self.P['update_n_trials']) & self.states[state_index].stimulus_record.shape[0] >= 100) or \
-                        (self.states[state_index].stimulus_record.shape[0] > self.P[
-                            'update_n_trials']):  # Once that state has gone 100, update it
-                    self.states[state_index].updateCov(update_n_trials=self.P['update_n_trials'])
+                if self.checkUpdateBool():
+                    self.states[state_index].updateCov(update_state_n_trials=self.P['n_trials_burn_in'], polish_cov=True,
+                                                       polish_noise_sigma=self.P['cov_noise_sigma'])
+                    variable_cue_bool = np.var(self.stimulus_record,axis=0) > 0.1
                     self.states[state_index].updateMu()
             self.trial_state = np.concatenate((self.trial_state, [state_index]))
-            self.session_record = np.concatenate((self.session_record, [self.session_number]))
+            self.n_states = np.append(self.n_states, len(self.states))
+            p_state_confusion = self.updateProbStateConfusion(p_state_confusion=p_state_confusion)
         #Record the session
         self.session_number += 1
+
+    def checkUpdateBool(self,param='n_trials_burn_in'):
+        """
+        Checks if an update is appropriate.
+        :param param: what param to use to check for update
+        :return: True/False
+        """
+        testString(param)
+        if (self.P[param] is None) or np.isnan(self.P[param]) or \
+            (self.stimulus_record.shape[0] > self.P[param]):
+            return True
+        else:
+            return False
+
 
     def updateNtrials(self):
         """
@@ -682,12 +695,13 @@ class agent():
         # Check inputs
         testArray(trial_vec)
         # Only do so if the burn in trial count has been reached.
-        if self.stimulus_record.shape[0] > self.P['update_n_trials']:
+        if self.stimulus_record.shape[0] > self.P['update_state_n_trials']:
             w_k = self.calcWK(trial_vec)
             activations = np.zeros((len(self.states)))
             # Calculate the activations for each state
             for state_index in range(len(self.states)):
-                activations[state_index] = self.states[state_index].calcActivation(self.P,trial_vec,w_k,self.w_A[-1,:],self.delta_bar[-1])
+                activations[state_index] = self.states[state_index].calcActivation(self.P,trial_vec,w_k,w_A=None,
+                                                                                   delta_bar=self.delta_bar[-1])
             bayesian_suprise = -1 * np.log(activations)
             # Determine the state indexes
             if self.P['upsilon_candidates'] is not None:
@@ -709,7 +723,7 @@ class agent():
         # Get current max index for states
         state_index = len(self.states)-1
         # Only create a new state if the minimum number of update trials has passed.
-        if self.stimulus_record.shape[0] > self.P['update_n_trials']:
+        if self.stimulus_record.shape[0] > self.P['update_state_n_trials']:
             # Either place the new state at the trial vector, or the center of the space
             if self.P['new_state_mu_prior'] == 'trial_vec':
                 new_states = self.createNewStates(mu=trial_vec)
@@ -725,14 +739,18 @@ class agent():
         state_probs = np.zeros(state_index + 1) * np.nan
         return state_index, state_probs
 
-    def identifyState(self,trial_vec):
+    def identifyState(self,trial_vec,p_state_confusion=0):
         """
         Indentify the state of the current trial. If none pass activation, it creates a new state
         :param trial_vec: Vector of cue information for a single trial
+        :param p_state_confusion: float indicating probability that state will be confused (default=0)
         :return: state_index, state_probs
         """
         # Check inputs
         testArray(trial_vec)
+        testFloat(p_state_confusion)
+        if (p_state_confusion<0) or (p_state_confusion>1):
+            raise ValueError(f'{p_state_confusion} invalid. p_state_confusion must be between 0 and 1')
         # Get indices for the state candidates
         candidate_states_indx = self.stateCandidates(trial_vec)
         # Update variables
@@ -747,9 +765,15 @@ class agent():
             #Get activation values (likelihoods)
             w_k = self.calcWK(trial_vec)
             activations = np.zeros(len(self.states))
+            state_indices = np.arange(len(self.states)).astype(int)
             for state_index in candidate_states_indx:
                 activations[state_index] = self.states[state_index].calcActivation(self.P, trial_vec, w_k,
                                                                                    self.w_A[-1, :], self.delta_bar[-1])
+            #Implemenent state confusion
+            if (self.P['p_state_confusion'] is not None) and (p_state_confusion > 0) and (len(state_indices)>1):
+                state_indices = induceStateConfusion(state_indices, self.states, self.P, w_k=w_k,
+                                        beta=self.P['beta_state_confusion'],p_state_confusion=p_state_confusion)
+            #Record maximum activation value
             self.updateActivationRecord(np.max(activations))
             # Covert to Bayesian surprise and figure out the winner!
             bayesian_suprise = -1 * np.log(activations)
@@ -757,19 +781,55 @@ class agent():
                 state_index, state_probs = self.createNewState(trial_vec)
             else:
                 posterior_probs = activations / sum(activations)
-                state_probs = self.softmax(posterior_probs, self.P['beta_state'])
-                state_index = np.random.choice(np.arange(0, len(state_probs)), p=state_probs)
+                state_probs = self.softmax(posterior_probs, self.getBetaState())
+                state_index = np.random.choice(state_indices, p=state_probs)
         return state_index, state_probs
 
-    def identifyStateNoLearn(self,trial_vec):
+    def getBetaState(self):
+        """
+        Updates beta state, allowing it to adapt over the course of a session
+        """
+        if (self.P['beta_state_min'] is None) or (self.P['beta_state_max'] is None):
+            beta_state = self.P['beta_state']
+        elif (self.P['n_trials_burn_in'] is not None) and (np.isnan(self.P['n_trials_burn_in'])<1) and \
+                (np.sum(np.max(self.session_record) == self.session_record) < self.P['n_trials_burn_in']):
+            beta_state = self.P['beta_state_min']
+        else:
+            delta_bar = self.delta_bar[-1]
+            db_factor = min(1, min(0, delta_bar - self.P['xi_DB_low']) / (self.P['xi_DB_high'] - self.P['xi_DB_low']))
+            beta_state = (1 - db_factor) * self.P['beta_state_max'] + db_factor * self.P['beta_state_min']
+        return beta_state
+
+    def updateProbStateConfusion(self,p_state_confusion=0):
+        """
+        Allow probability of state confusion adapt over the course of a session
+        :param p_state_confusion: probability of state confusion (default=0)
+        :return p_state_confusion
+        """
+        testFloat(p_state_confusion)
+        if (p_state_confusion < 0) or (p_state_confusion > 1):
+            raise ValueError(f'{p_state_confusion} invalid. p_state_confusion must be between 0 and 1')
+        if (self.P['p_state_confusion'] is None) or (self.P['p_state_confusion_end'] is None) or (self.P['p_state_confusion'] == 0):
+            p_state_confusion = p_state_confusion
+        elif np.abs(p_state_confusion - self.P['p_state_confusion_end']) < 0.001:
+            p_state_confusion = self.P['p_state_confusion_end']
+        else:
+            p_state_confusion = p_state_confusion + self.P['p_state_confusion']*self.P['p_state_confusion_rate_change']
+        return p_state_confusion
+
+    def identifyStateNoLearn(self,trial_vec,p_state_confusion=0):
         """
         Indentify the state of the current trial. If none pass activation, it creates a new state. All states are known,
         so the state creation methods have been removed
         :param trial_vec: Vector of cue information for a single trial
+        :param p_state_confusion: probability of state confusion (default=0)
         :return: state_index, state_probs
         """
         # Check inputs
         testArray(trial_vec)
+        testFloat(p_state_confusion)
+        if (p_state_confusion < 0) or (p_state_confusion > 1):
+            raise ValueError(f'{p_state_confusion} invalid. p_state_confusion must be between 0 and 1')
         #Get the candidate list and update the values
         candidate_states_indx = self.stateCandidates(trial_vec)
         self.state_candidates.append(candidate_states_indx)
@@ -778,11 +838,19 @@ class agent():
         w_k = self.calcWK(trial_vec)
         # Get activations. Convert to Bayesian and choose a state
         activations = np.zeros(len(self.states))
+        state_indices = np.arange(0, len(self.states))
+        # Get activations for each state
         for state_index in candidate_states_indx:
             activations[state_index] = self.states[state_index].calcActivation(self.P,trial_vec,w_k,self.w_A[-1,:],self.delta_bar[-1])
+        # Probability fi state confusion
+        if (self.P['p_state_confusion'] is not None) and (p_state_confusion > 0) and (len(state_indices) > 1):
+            state_indices = induceStateConfusion(state_indices, self.states, self.P, w_k=w_k,
+                                                 p_state_confusion=p_state_confusion,
+                                                 beta=self.P['beta_state_confusion'])
+
         posterior_probs = activations / sum(activations)
-        state_probs = self.softmax(posterior_probs, self.P['beta_state'])
-        state_index = np.random.choice(np.arange(0, len(state_probs)), p=state_probs)
+        state_probs = self.softmax(posterior_probs, self.getBetaState())
+        state_index = np.random.choice(state_indices, p=state_probs)
         return state_index, state_probs
 
     def createNewStates(self,mu=np.array([])):
@@ -826,13 +894,13 @@ class agent():
         """
         # Check inputs
         testInt(state_index)
+        testArray(valid_actions,none_valid=True)
         # Calculate the softmax values
         soft_max_vals = self.softmax(self.states[state_index].action_values.copy(), valid_actions=valid_actions)
         # Check if only a certain subset of actions are valid on that trial. Then determine action
         if valid_actions is None:
             action = np.random.choice(np.arange(0, len(soft_max_vals)), p=soft_max_vals)
         else:
-            testArray(valid_actions)
             action = np.random.choice(np.arange(0, len(soft_max_vals))[(valid_actions > 0)],
                                       p=soft_max_vals[(valid_actions > 0)])
         return int(action), soft_max_vals
@@ -864,10 +932,13 @@ class agent():
             # Calculate weighted cue entropy for each state
             for s in range(len(states)):
                 # Only calculate if the number of required trials have been achieved
-                if states[s].stimulus_record.shape[0] < self.P['update_n_trials']:
+                if not self.checkUpdateBool(param='n_trials_burn_in'):
                     H_s[s] = 0
                 else:
-                    state_trials = np.abs(np.round(states[s].getUpdateTrials(update_n_trials=None)))
+                    state_trials = np.abs(np.round(states[s].getUpdateTrials(update_state_n_trials=None)))
+                    if len(state_trials) < 1:
+                        H_s[s] = 0
+                        continue
                     # Look back on the specified number of trials
                     if n_trials_back is None:
                         n_trials_back_s = state_trials.shape[0]
@@ -1056,6 +1127,7 @@ class agent():
                      'soft_max_activations':        self.soft_max_activations,
                      'state_soft_max_activations':  self.state_soft_max_activations,
                      'states':                      self.states,
+                     'n_states':                    self.n_states,
                      'state_candidates':            self.state_candidates,
                      'stimulus_record':             self.stimulus_record,
                      'delta_bar':                   self.delta_bar,
@@ -1079,12 +1151,18 @@ class agent():
         self.choice_record =                        save_dict['choice_record']
         self.state_P_default =                      save_dict['state_P_default']
         self.soft_max_activations =                 save_dict['soft_max_activations']
+        self.state_soft_max_activations =           save_dict['state_soft_max_activations']
         self.states =                               save_dict['states']
+        self.n_states =                             save_dict['n_states']
+        self.state_candidates =                     save_dict['state_candidates']
         self.stimulus_record =                      save_dict['stimulus_record']
         self.delta_bar =                            save_dict['delta_bar']
+        self.delta_bar_slow =                       save_dict['delta_bar_slow']
         self.w_A =                                  save_dict['w_A']
         self.session_number =                       save_dict['session_number']
         self.session_record =                       save_dict['session_record']
+        self.reward_probs =                         save_dict['reward_probs']
+        self.rewards =                              save_dict['rewards']
         self.trial_state =                          save_dict['trial_state']
         self.activation_record =                    save_dict['activation_record']
         self.MI =                                   save_dict['MI']
@@ -1105,7 +1183,7 @@ if __name__ == '__main__':
     n_stim = 4
     n_actions = 2
     stimulus_noise_sigma = 0.05  # 0.02, 0.05
-    update_n_trials = 75 # 100 if exemplar', 75 if prototype
+    update_state_n_trials = 75 # 100 if exemplar', 75 if prototype
     xi_0 = 0.99
     xi_shift_1 = -0.009
     xi_shift_2 = 0.004
@@ -1116,7 +1194,7 @@ if __name__ == '__main__':
     state_kernel = 'prototype' # 'exemplar', 'prototype'
 
     ## Create parameters dictionaries
-    P_gen = genParams(stim_scale=stim_scale, n_stim=n_stim, n_actions=n_actions, update_n_trials=update_n_trials,
+    P_gen = genParams(stim_scale=stim_scale, n_stim=n_stim, n_actions=n_actions, update_state_n_trials=update_state_n_trials,
                       reward_probability=reward_probability, detailed_reward_prob=detailed_reward_prob,
                       state_kernel=state_kernel)
     P_agent = agentParams(P_gen=P_gen, upsilon=upsilon, beta_value=beta_value, eta=eta, xi_0=xi_0,xi_CW=xi_CW,
