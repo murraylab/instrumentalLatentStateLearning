@@ -492,10 +492,6 @@ if __name__ == '__main__':
     ########################
     ## NEURAL NETWORK MODEL
     ########################
-    # P = nnParams(task='context_generalizationV1',n_trials_per_bloc=np.array([1000,1000,1000]).astype(int))
-    # train = trainRLNetworks(P=P)
-    # train.run(parallel=False)
-
     n_networks = 1
     context_gen_version = 1
     parallel=False

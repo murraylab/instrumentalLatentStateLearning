@@ -12,38 +12,194 @@ The code in this module is central to the functioning of the algorithmic models 
 import numpy as np
 from itertools import product
 import matplotlib.pyplot as plt
+from scipy.spatial import distance
 
 #Import specific functions
 from utils.utils import saveData, loadData
 from simulations.parameters import genParams, worldStateParams, agentParams, agentStateParams
 from analysis.general import smooth
-from utils.utils import testBool, testString, testInt, testArray, testFloat, testDict
+from utils.utils import testBool, testString, testInt, testArray, testFloat, testDict, softmax
 
 PYCHARM_DEBUG=True
 
 
-def calcStimDeviation(mu,trial_vec,blur_states_param_linear=0,blur_states_param_exponent=1):
+######################################
+# Functions that aid in smooth running
+######################################
+
+
+def calcStimDeviation(mu,trial_vec,blur_states_param_linear=0):
     """
     Calculates difference between observed cue/stimulus and expected cue. It has functionality to blur that difference
     to increase confusion between similar states.
     :param mu: vector of values for expected cue
     :param trial_vec: vector of values for observed cue
     :param blur_states_param_linear: linearly blurs the difference between mu and trial_vec (default=0)
-    :param blur_states_param_exponent: exponentiates the stim deviation, which emphasizes the difference (default=1)
     :return: stim_deviation
     """
     #Check inputs
     testArray(mu)
     testArray(trial_vec)
-    testFloat(blur_states_param_exponent)
     testFloat(blur_states_param_linear)
     #Perform operations
     stim_deviation = (1 - blur_states_param_linear) * (trial_vec - mu) + blur_states_param_linear * \
                      np.zeros(len(trial_vec))
-    stim_deviation = stim_deviation ** blur_states_param_exponent
     #Return results
     return stim_deviation
 
+
+def changeAgentStateParam(agent,param_key,param_val):
+    agent.P[param_key] = param_val
+    for s in range(len(agent.states)):
+        agent.states[s].P[param_key] = param_val
+    return agent
+
+
+def calcExemplarOtherStateActivation(states,P_agent,indx_target,indx_others,w_k=None,distance_method='activation'):
+    if w_k is None:
+        w_k = states[0].stimulus_record[0,:]*0+0.5
+    activations = []
+    for indx in indx_others:
+        trials = states[indx].getUpdateTrials(update_n_trials=states[indx].P['update_state_n_trials'])
+        stimuli_clean = np.abs(np.round(trials))
+        stimulus_exemplars, exemplar_counts = np.unique(stimuli_clean,axis=0,return_counts=True)
+        exemplar_weights = exemplar_counts / np.sum(exemplar_counts)
+        exemplar_activations = exemplar_weights*0
+        trials_state = states[indx].stimulus_record
+        stimuli_clean_state = np.abs(np.round(trials_state))
+        if distance_method == 'euclidean':
+            weights = np.diag(states[indx].precision_mat)
+            weights = weights / np.max(weights)
+        for e in range(stimulus_exemplars.shape[0]):
+            indx_exemp = np.where((stimuli_clean_state == stimulus_exemplars[e,:]).all(axis=1))[0][-P_agent['update_exemplar_n_trials']:]
+            mu = np.mean(trials_state[indx_exemp,:],axis=0)
+            if distance_method == 'activation':
+                activation = states[indx_target].calcActivation(P_agent,mu,w_k)
+            elif distance_method == 'euclidean':
+                #
+                stimuli_clean_target_state = np.abs(np.round(states[indx_target].stimulus_record))
+                stimulus_exemplars_target, exemplar_counts_target = np.unique(stimuli_clean_target_state, axis=0, return_counts=True)
+                exemplar_weights_target = exemplar_counts_target / np.sum(exemplar_counts_target)
+                activations_target = np.zeros(stimulus_exemplars_target.shape[0])
+                # Loop through each of the target exemplars
+                for s in range(stimulus_exemplars_target.shape[0]):
+                    indx_exemp_target = (stimulus_exemplars_target[s, :] == stimuli_clean_target_state).all(1)
+                    if sum(indx_exemp_target)>1:
+                        mu_target = np.mean(states[indx_target].stimulus_record[indx_exemp_target,:],axis=0)
+                    else:
+                        mu_target = states[indx_target].stimulus_record[indx_exemp_target, :]
+                    try:
+                        distance_target = distance.euclidean(mu, mu_target)
+                    except:
+                        print('here')
+                    # distance_target = distance.euclidean(mu * weights, mu_target * weights)
+                    if distance_target < 0.00000000000001:
+                        activations_target[s] = 100000000
+                    else:
+                        activations_target[s] = 1 / distance_target
+                # activation = np.max(activations_target)
+                activation = np.sum(activations_target * exemplar_weights_target)
+            if (type(activation) is float) or (type(activation) is int) or (type(activation) is np.nan):
+                exemplar_activations[e] = activation
+            else:
+                exemplar_activations[e] = activation.flatten()[0]
+        activations.append(np.sum(exemplar_activations*exemplar_weights))
+        # activations.append(np.max(exemplar_activations))
+    activations = np.array(activations)
+    return activations
+
+
+def calcPrototypOtherStateActivation(states,P_agent,indx_target,indx_others,w_k=None,distance_method='activation'):
+    if w_k is None:
+        w_k = states[0].stimulus_record[0,:]*0+0.5
+    activations = []
+    for indx in indx_others:
+        # trial_vec = states[indx].mu
+        # activation = states[indx_target].calcActivation(P_agent,trial_vec,w_k)
+        trial_vec = states[indx_target].mu
+        if distance_method == 'activation':
+            activation = states[indx].calcActivation(P_agent, trial_vec, w_k)
+        elif distance_method == 'euclidean':
+            weights = np.diag(states[indx].precision_mat)
+            weights = weights / np.max(weights)
+            dist = distance.euclidean(states[indx].mu*weights, trial_vec*weights)
+            if dist == 0: # Make sure the values don't explode
+                activation = 10000
+            else:
+                activation = 1/distance.euclidean(states[indx].mu*weights, trial_vec*weights)
+        if (type(activation) is float) or (type(activation) is int):
+            activations.append(activation)
+        else:
+            activations.append(activation.flatten()[0])
+    activations = np.array(activations)
+    return activations
+
+
+def calcOtherStateActivation(states,P_agent,indx_target,indx_others,w_k=None,distance_method='activation'):
+    if P_agent['state_kernel'] == 'prototype':
+        activations = calcPrototypOtherStateActivation(states,P_agent,indx_target,indx_others,w_k=w_k,distance_method=distance_method)
+    elif P_agent['state_kernel'] == 'exemplar':
+        activations = calcExemplarOtherStateActivation(states,P_agent,indx_target,indx_others,w_k=w_k,distance_method=distance_method)
+    else:
+        raise ValueError('state_kernel must be "prototype" or "exemplar"')
+    return activations
+
+
+def induceStateConfusion(state_indices,states,P_agent,w_k=None,beta=15,distance_method='euclidean',
+                         p_state_confusion=0):
+        if w_k is None:
+            w_k = states[0].stimulus_record[0,:] * 0 + 0.5
+
+        # #FOR DEVELOPMENT, MANUALLY SET A FEW VALUES
+        # beta = 15 # 2 exemplar, 15 prototype
+        distance_method = 'euclidean'
+
+        # Roll the dice and see if the state indices should be swapped
+        if np.random.rand() < p_state_confusion:
+            # Confuse state with the most similar
+            confusion_indices = []
+            for state_index in state_indices:
+                indx_others = np.arange(len(state_indices)).astype(int)[
+                    np.arange(len(state_indices)).astype(int) != state_index]
+                activations_others = calcOtherStateActivation(states, P_agent, state_index, indx_others,
+                                                              w_k=w_k,distance_method=distance_method)
+                if max(activations_others) == 0:  # If no states are similar, just give back the state index
+                    confusion_indices.append(state_index)
+                else:
+                    posterior_probs_others = np.array(activations_others) / sum(activations_others)
+                    # if distance_method == 'activation':
+                    posterior_probs_others = softmax(posterior_probs_others, beta=beta)
+                    confusion_indices.append(np.random.choice(indx_others, p=posterior_probs_others))
+            state_indices = np.array(confusion_indices)
+        return state_indices
+
+def getTrialvecLen(P):
+    """
+    Identifies how long the trial vector is to be. Conserved function
+    :param P:
+    :return:
+    """
+    if P['session_type'] == 'cue_tone':
+        trial_vec_len = 2 * round(P['n_stim'] / 2) + P['n_distractors'] + P['prior_reward_as_cue']
+    elif P['session_type'] == 'igt':
+        trial_vec_len = 5
+    elif P['session_type'] == 'image':
+        if (P['set_type'] == 'shannon') or (P['set_type'] == 'distractFisher'):
+            trial_vec_len = P['n_stim']*P['n_actions'] + P['n_distractors'] + P['prior_reward_as_cue']
+        elif (P['set_type'] == 'conditionViolation'):
+            trial_vec_len = P['n_stim'] * (P['n_actions']-1) + P['n_distractors'] + P['prior_reward_as_cue']
+        elif P['set_type'] == 'setGeneralization':
+            trial_vec_len = 9 # 6, Really need to automate this one. Lazy to manually set it like this
+        else:
+            trial_vec_len = P['n_stim'] + P['n_distractors'] + P['prior_reward_as_cue']
+    else:
+        raise ValueError('Invalid session_type')
+    return trial_vec_len
+
+
+###############################
+# Classes used in the algorithm
+###############################
 
 class agentState():
     """
@@ -81,7 +237,7 @@ class agentState():
             self.mu = np.ones(trial_vec_len) * 0.5 * self.P['stim_scale']
         self.cov_mat = np.eye(trial_vec_len) * (self.P['sigma_0'])
         self.stimulus_record = np.zeros((1, trial_vec_len)) * np.nan
-        self.fish_mat = np.linalg.inv(self.cov_mat)
+        self.precision_mat = np.linalg.inv(self.cov_mat)
 
     def updateMu(self):
         """Update the prototypical vector for the state based on observations"""
@@ -108,22 +264,29 @@ class agentState():
         trials = trials[correct_Idx_bool, :]
         return trials
 
-    def updateCov(self,update_n_trials=None):
+    def updateCov(self,update_n_trials=None,polish_cov=True,polish_noise_sigma=0.00000001):
         """
-        Update the covariance matrix of the state based on observations
+        Update the covariance matrix of the state based on observations.
         :param update_n_trials: number of trials to go back. If none, it uses all trials in the state (default=None)
-        :return:
+        :param polish_cov: whether to remove noise from the trials, then inject a small amount (default=True)
+        :param polish_noise_sigma: If polishing, the amount of noise to inject (default=0.00000001)
+        :returns: update of internal covariance and precision matrices
         """
-        # Check input
+        # Unit testing
         testInt(update_n_trials,none_valid=True)
-        if np.isnan(self.P['update_n_trials']):
-            trials = self.stimulus_record
-        else:
-            trials = self.getUpdateTrials(update_n_trials=update_n_trials)
-        if len(trials)>1: #Have to have some trials to calculate covariance
+        testBool(polish_cov)
+        testFloat(polish_noise_sigma)
+        #Make sure the minimum isn't more than what is asked
+        if update_n_trials > self.P['update_state_n_trials']:
+            raise ValueError('covariance will not compute as the minimum number of trials is greater than those obtained from the state')
+        trials = self.getUpdateTrials(update_n_trials=self.P['update_state_n_trials'])
+        if (update_n_trials is None) or (len(trials) >= update_n_trials):
+            if polish_cov:
+                trials = np.abs(np.round(trials))
+                trials = trials + np.random.randn(trials.shape[0],trials.shape[1]) * polish_noise_sigma
             self.cov_mat = np.cov(trials.transpose()) + \
                           (1 / trials.shape[0]) * np.eye(trials.shape[1]) * (10 ** -4)
-            self.fish_mat = np.linalg.inv(self.cov_mat)
+            self.precision_mat = np.linalg.inv(self.cov_mat)
 
     def updateValue(self,action,delta):
         """
@@ -218,54 +381,36 @@ class agentState():
             raise ValueError("Method must be 'tanh', or 'norm'")
         return mod_weights
 
-    def calcActivation(self,P_agent,trial_vec,w_k,w_A,delta_bar):
-        """
-        For a given state, calculate the activation from the trial vector. Can do so either for the prototype or
-        exemplar kernels, which it determines using the parameters dictionary
-        :param P_agent: Parameter dictionary produced by agentParams
-        :param trial_vec: Vector of values for that specific trial
-        :param w_k: Mutual information values for discriminative attention
-        :param w_A: Mutual information values for discriminative attention modified by reward history
-        :param delta_bar: Integrated reward history
-        :return: A (activation value)
-        """
-        """"""
-        # Check inputs
-        testDict(P_agent)
-        testArray(trial_vec)
-        testArray(w_k)
-        testArray(w_A)
-        testFloat(delta_bar)
-        # Initialize trial fector
+    def calcActivation(self,P_agent,trial_vec,w_k,w_A=None,delta_bar=0):
+        """For a given state, calculate the activation from the trial vector"""
         if self.P['trial_vec_len'] is None:
             self.initializeTrialVecLen(trial_vec_len=len(trial_vec))
-        fish_mat = self.fish_mat
+        if w_A is None:
+            w_A = trial_vec*0+.5
+        precision_mat = self.precision_mat
         # If using a prototype kernel, just go with all the examples
         if self.P['state_kernel'] == 'prototype':
-            stim_deviation = calcStimDeviation(self.mu,trial_vec,P_agent['blur_states_param_linear'],P_agent['blur_states_param_exponent'])
-            A = self.calcA(P_agent,stim_deviation,fish_mat,w_k,w_A,delta_bar)
+            stim_deviation = calcStimDeviation(self.mu,trial_vec,P_agent['blur_states_param_linear'],
+                        linear_blur_method='deviation')
+            A = self.calcA(P_agent,stim_deviation,precision_mat,w_k,w_A,delta_bar)
         #If using an exemplar kernel, segregate based on stimuli
         elif self.P['state_kernel'] == 'exemplar':
             #Not enough examples for exemplars
-            if np.isnan(self.stimulus_record[0,0]) or (self.stimulus_record.shape[0] < self.P['update_n_trials']):
-                stim_deviation = calcStimDeviation(self.mu,trial_vec,P_agent['blur_states_param_linear'],P_agent['blur_states_param_exponent'])
-                A = self.calcA(P_agent, stim_deviation, fish_mat, w_k, w_A, delta_bar)
+            if np.isnan(self.stimulus_record[0,0]) or (self.stimulus_record.shape[0] < self.P['n_trials_burn_in']):
+                stim_deviation = calcStimDeviation(self.mu,trial_vec,P_agent['blur_states_param_linear'],
+                        linear_blur_method='deviation')
+                A = self.calcA(P_agent, stim_deviation, precision_mat, w_k, w_A, delta_bar)
             else:
-                if np.isnan(self.P['update_n_trials']):
-                    trials = self.stimulus_record
-                else:
-                    trials = self.getUpdateTrials(update_n_trials=self.P['update_n_trials'])
-                #Remove noise to facilitate grouping of stimuli
+                trials = self.getUpdateTrials(update_n_trials=self.P['update_state_n_trials'])
                 stimuli_clean = np.abs(np.round(trials))
                 stimulus_exemplars = np.unique(stimuli_clean,axis=0)
                 activations = np.zeros(len(stimulus_exemplars))
                 n_examples = activations.copy()
-                #Calculate the activation of each examplar
                 for s in range(stimulus_exemplars.shape[0]):
                     indx = (stimuli_clean == stimulus_exemplars[s,:]).all(axis=1)
                     n_examples[s] = sum(indx)
                     trials_stim = trials[indx,:]
-                    if (n_examples[s] > 1): # len(trials_stim) > self.P['update_n_trials']
+                    if (n_examples[s] > 1):
                         exemplar_mu = np.mean(trials_stim,axis=0)
                     else:
                         exemplar_mu = trials_stim.flatten()
@@ -274,23 +419,43 @@ class agentState():
                                        (1 / trials_stim.shape[0]) * np.eye(trials_stim.shape[1]) * (10 ** -4)
                     else:
                         exemplar_cov_mat = np.eye(len(trial_vec)) * (self.P['sigma_0'])
-                    exemplar_fish_mat = np.linalg.inv(exemplar_cov_mat)
-                    stim_deviation = calcStimDeviation(exemplar_mu,trial_vec,P_agent['blur_states_param_linear'],P_agent['blur_states_param_exponent'])
-                    activations[s] = self.calcA(P_agent, stim_deviation, exemplar_fish_mat, w_k, w_A, delta_bar)
+                    exemplar_precision_mat = np.linalg.inv(exemplar_cov_mat)
+                    stim_deviation = calcStimDeviation(exemplar_mu,trial_vec,P_agent['blur_states_param_linear'],
+                                                       linear_blur_method='deviation')
+                    activations[s] = self.calcA(P_agent, stim_deviation, exemplar_precision_mat, w_k, w_A, delta_bar)
                 prop_examples = n_examples / sum(n_examples)
                 A = sum(prop_examples * activations)
-        else:
-            raise ValueError("P['state_kernel'] must be 'prototype', or 'exemplar'")
+        elif self.P['state_kernel'] == 'gcm_exemplar':
+            # Not enough examples for exemplars
+            if np.isnan(self.stimulus_record[0, 0]):
+                stim_deviation = (1 - P_agent['blur_states_param']) * (trial_vec - self.mu) + P_agent[
+                    'blur_states_param'] * \
+                                 np.zeros(len(trial_vec))
+                A = self.calcA(P_agent, stim_deviation, precision_mat, w_k, w_A, delta_bar)
+            else:
+                stimuli_clean = np.abs(np.round(self.stimulus_record))
+                stimulus_exemplars = np.unique(stimuli_clean, axis=0)
+                A = []
+                for s in range(stimulus_exemplars.shape[0]):
+                    indx = (stimuli_clean == stimulus_exemplars[s,:]).all(axis=1)
+                    trials = self.stimulus_record[indx, :]
+                    if len(trials) > 1:
+                        exemplar_mu = np.mean(trials,axis=0)
+                    else:
+                        exemplar_mu = trials.flatten()
+                    A_ = self.calcGCMDistance(exemplar_mu, trial_vec, discrim_param=P_agent['blur_states_param'])
+                    A.append(A_)
+                A = sum(A)
         #Update the activation record
         self.updateActivationRecord(A)
         return A
 
-    def calcA(self,P_agent,stim_deviation,fish_mat,w_k,w_A,delta_bar):
+    def calcA(self,P_agent,stim_deviation,precision_mat,w_k,w_A,delta_bar):
         """
         Calculates the activation value
         :param P_agent: Parameter dictionary produced by agentParams
         :param stim_deviation: Deviation of stimulus cues from expected. Calculated using calcStimDeviation
-        :param fish_mat: Precision matrix
+        :param precision_mat: Precision matrix
         :param w_k: Mutual information values for discriminative attention
         :param w_A: Mutual information values for discriminative attention modified by reward history
         :param delta_bar: Integrated reward history
@@ -299,32 +464,32 @@ class agentState():
         #Check inputs
         testDict(P_agent)
         testArray(stim_deviation)
-        testArray(fish_mat)
+        testArray(precision_mat)
         testArray(w_k)
         testArray(w_A)
         testFloat(delta_bar)
         #Get determinant of covariance
-        fish_mat_det = np.linalg.det(np.linalg.inv(fish_mat))
+        precision_mat_det = np.linalg.det(np.linalg.inv(precision_mat))
         if P_agent['db_use_method'] == 'w_A':
             Z = w_A * stim_deviation
-            D2 = np.dot(Z.reshape(1, len(Z)), np.dot(fish_mat, Z.reshape(len(Z), 1)))
+            D2 = np.dot(Z.reshape(1, len(Z)), np.dot(precision_mat, Z.reshape(len(Z), 1)))
             R = D2
         elif P_agent['db_use_method'] == 'exponential':
             Z = w_k * stim_deviation
-            D2 = np.dot(Z.reshape(1, len(Z)), np.dot(fish_mat, Z.reshape(len(Z), 1)))
+            D2 = np.dot(Z.reshape(1, len(Z)), np.dot(precision_mat, Z.reshape(len(Z), 1)))
             R = np.exp(-1 * delta_bar / P_agent['xi_DB']) * D2
         elif P_agent['db_use_method'] == 'linear':
             Z = w_k * stim_deviation
-            D2 = np.dot(Z.reshape(1, len(Z)), np.dot(fish_mat, Z.reshape(len(Z), 1)))
+            D2 = np.dot(Z.reshape(1, len(Z)), np.dot(precision_mat, Z.reshape(len(Z), 1)))
             R = ((P_agent['xi_DB'] - delta_bar) / P_agent['xi_DB']) * D2
         elif P_agent['db_use_method'] == 'log':
             Z = w_k * stim_deviation
-            D2 = np.dot(Z.reshape(1, len(Z)), np.dot(fish_mat, Z.reshape(len(Z), 1)))
+            D2 = np.dot(Z.reshape(1, len(Z)), np.dot(precision_mat, Z.reshape(len(Z), 1)))
             R = np.log(P_agent['xi_DB'] - delta_bar[-1]) * D2
         else:
             raise ValueError(f'db_use_method {P_agent["db_use_method"]} invalid. must be "w_A", "exponential" or "linear" or "log"')
         #Calculate activation
-        A = 1 / (np.sqrt(2 * np.pi * fish_mat_det)) * np.exp((-1 / 2) * R)
+        A = 1 / (np.sqrt(2 * np.pi * precision_mat_det)) * np.exp((-1 / 2) * R)
         return A
 
 class agent():

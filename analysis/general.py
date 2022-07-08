@@ -79,7 +79,7 @@ def smooth(x, window_len=11, window='hanning',match_length=True):
     return y
 
 
-def networkSetGenErrorTypes(inputs, predictions, labels):
+def networkContextGenErrorTypes(inputs, predictions, labels):
     n_trials = len(labels)
 
     # format data
@@ -121,7 +121,7 @@ def networkSetGenErrorTypes(inputs, predictions, labels):
     return n_error_types, n_trials
 
 
-def networksSetGenSetBlockPerformance(choice_records, set_record, thresh=0.9, trial_window=20):
+def networksContextGenSetBlockPerformance(choice_records, set_record, thresh=0.9, trial_window=20):
     """
     Allows assement of performance for multiple networks on the set generalization task at the end of the initial two
     blocks/sets.
@@ -136,14 +136,14 @@ def networksSetGenSetBlockPerformance(choice_records, set_record, thresh=0.9, tr
 
     for s in range(len(choice_records)):
         largest_chosen = (choice_records[s][:, 0] == choice_records[s][:, 1])
-        window_perfs[s, :], thresh_bools[s, :] = networkSetGenSetBlockPerformance(largest_chosen, \
+        window_perfs[s, :], thresh_bools[s, :] = networkContextGenSetBlockPerformance(largest_chosen, \
                                                                                   set_record, thresh=thresh,
                                                                                   trial_window=trial_window)
 
     return window_perfs, thresh_bools
 
 
-def networkSetGenSetBlockPerformance(largest_chosen, blocks, thresh=0.9, trial_window=10):
+def networkContextGenSetBlockPerformance(largest_chosen, blocks, thresh=0.9, trial_window=10):
     """
     Function that allows one to screen the performance of a network on the Set Generalization task V2.
     :param largest_chosen: Boolean array indicating if the largest option was chosen in that trial.
@@ -190,11 +190,11 @@ def contextGeneralizationFirstAppearance(stimuli,choice_record,set_record):
     return first_correct
 
 
-def networksSetGenErrorTypes(labels,inputs,action_history,n_trials_back,n_actions=4,n_stimuli=8):
+def networksContextGenErrorTypes(labels,inputs,action_history,n_trials_back,n_actions=4,n_stimuli=8):
     n_error_types = np.zeros((n_stimuli,n_actions,action_history.shape[0]))
     for a in range(action_history.shape[0]):
         predictions = action_history[a,-n_trials_back:]
-        n_error_types[:,:,a], n_trials = networkSetGenErrorTypes(inputs[-n_trials_back:,:],
+        n_error_types[:,:,a], n_trials = networkContextGenErrorTypes(inputs[-n_trials_back:,:],
                                                                  predictions,labels[-n_trials_back:])
 
     return n_error_types

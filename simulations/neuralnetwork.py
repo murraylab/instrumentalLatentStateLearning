@@ -36,8 +36,6 @@ def makeRLModel(num_inputs=6, num_actions=4, num_hidden=124, weight_stdev=None, 
         stddev = np.sqrt(2 / (num_inputs + num_hidden))*weight_stdev
         common = tf.keras.layers.Dense(num_hidden, activation="relu", name='common',
                                        kernel_initializer=initializers.RandomNormal(stddev=stddev))(inputs)
-        # common = tf.keras.layers.Dense(num_hidden, activation="relu", name='common',
-        #                                kernel_initializer=tf.keras.initializers.GlorotUniform()*weight_stdev)(inputs)
 
     # Structure the different type of networks
     if rl_type == 'actor_critic':
@@ -46,16 +44,13 @@ def makeRLModel(num_inputs=6, num_actions=4, num_hidden=124, weight_stdev=None, 
         softmax = tf.keras.layers.Softmax()(action_intermediate, mask)
         critic = tf.keras.layers.Dense(1, name='critic')(common)
         model = tf.keras.Model(inputs=inputs, outputs=[softmax, critic])
-    elif (rl_type == 'deep_q_epsilon_greedy'):
-        action = tf.keras.layers.Dense(num_actions, activation="linear", name='action')(common)
-        model = tf.keras.Model(inputs=inputs, outputs=action)
     elif (rl_type == 'actor'):
         action_intermediate = tf.keras.layers.Dense(num_actions, activation="linear", name='action_intermediate')(
             common)
         softmax = tf.keras.layers.Softmax()(action_intermediate, mask)
         model = tf.keras.Model(inputs=inputs, outputs=softmax)
     else:
-        raise ValueError(f'rl_type must be "actor_critic" or "deep_q_epsilon_greedy" or "actor". {rl_type} is invalid.')
+        raise ValueError(f'rl_type must be "actor_critic" or "actor". {rl_type} is invalid.')
 
     return model
 
@@ -198,9 +193,8 @@ def trainRLNetworkModel(model, stimuli, ans_key, n_actions=4, action_history=[],
                         action_probs_history=[], critic_value_history=[], critic_losses=[], actor_losses=[],
                         optimizer_type='adam',rl_type='actor_critic', epsilon=1, epsilon_min=0.01, decay_step=0,
                         epsilon_decay=0.01,valid_actions=None,reward_probability=1):
-    if (type(rl_type) != str) or ((rl_type != 'actor_critic') and (rl_type != 'deep_q_epsilon_greedy') and
-                                  (rl_type != 'reinforce')):
-        raise ValueError('rl_type must be "actor_critic", "deep_q_epsilon_greedy" or "reinforce"')
+    if (type(rl_type) != str) or ((rl_type != 'actor_critic') and (rl_type != 'actor')):
+        raise ValueError('rl_type must be "actor_critic", "actor"')
     if valid_actions is None:
         valid_actions = np.ones(n_actions)
     elif len(valid_actions) > n_actions:
@@ -256,26 +250,10 @@ def trainRLNetworkModel(model, stimuli, ans_key, n_actions=4, action_history=[],
                 grads = tape.gradient(loss_value, model.trainable_variables)
                 optimizer.apply_gradients(zip(grads, model.trainable_variables))
 
-        elif (rl_type == 'deep_q_epsilon_greedy') or (rl_type == 'reinforce'):
-            if rl_type == 'deep_q_epsilon_greedy':
-                # Use epsilon-greedy for exploration
-                explore_probability = epsilon_min + (epsilon - epsilon_min) * np.exp(
-                    -1 * epsilon_decay * decay_step)
-                decay_step += 1
-                if explore_probability > np.random.rand(1)[0]:
-                    # Take random action
-                    action_probs = np.ones(n_actions) / n_actions
-                    action_probs = validActionsMask(action_probs, valid_actions=valid_actions,norm=True,replace_value=0)
-                    action = np.random.choice(n_actions, p=action_probs)
-                else:
-                    # Predict action Q-values and take action
-                    action_probs = model(state, training=False)
-                    action_probs = validActionsMask(action_probs, valid_actions=valid_actions,norm=False,replace_value=np.nan)
-                    action = np.nanargmax(action_probs)
-            elif rl_type == 'reinforce':
-                action_probs = model(state, training=False)
-                action_probs = validActionsMask(action_probs, valid_actions=valid_actions, norm=False,
-                                                replace_value=np.nan)
+        elif (rl_type == 'actor'): # CHECK IMPLEMENTATION
+            action_probs = model(state, training=False)
+            action_probs = validActionsMask(action_probs, valid_actions=valid_actions, norm=False,
+                                            replace_value=np.nan)
             #Store actions
             action_probs_history.append(action_probs)
             action_history.append(action)
@@ -287,10 +265,6 @@ def trainRLNetworkModel(model, stimuli, ans_key, n_actions=4, action_history=[],
                 actor_losses.append(reward - action_probs[0, action].numpy())
             else:
                 actor_losses.append(reward-action_probs[action])
-
-            # # Decay probability of taking random action
-            # epsilon -= epsilon_interval / epsilon_greedy_frames
-            # epsilon = max(epsilon, epsilon_min)
 
             # Create a mask so we only calculate loss on the updated Q-values
             masks = tf.one_hot(action, n_actions)
@@ -307,7 +281,6 @@ def trainRLNetworkModel(model, stimuli, ans_key, n_actions=4, action_history=[],
 
                 # Calculate loss between new Q-value and old Q-value
                 loss = huber_loss(reward, q_action)
-
 
             # Backpropagation
             grads = tape.gradient(loss, model.trainable_variables)

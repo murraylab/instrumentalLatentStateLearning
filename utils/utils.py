@@ -116,6 +116,18 @@ def testDict(variable,none_valid=False):
         raise ValueError(f'{variable} must be a dictionary')
     return 0
 
+def softmax(values, beta=2):
+    """
+    Applies softmax to input vector
+    :param action_values: vector of current values
+    :return: soft_max_vals: the vector of probabilities
+    """
+    testArray(values)
+    testFloat(beta)
+    exp_vals = np.exp(beta * values)
+    exp_vals[exp_vals == float("inf")] = 1000000  # Correct for explosions
+    soft_max_vals = exp_vals / np.nansum(exp_vals)
+    return soft_max_vals
 
 def getPool():
     """ Produces the parallel pool, both on cluster and laptop """
