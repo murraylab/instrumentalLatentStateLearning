@@ -9,6 +9,10 @@ import seaborn as sns
 
 
 def createPrototypeState(state_examples,exemplar_props=np.array([0.5,0.5]),n_examples=100,noise_sigma=10**-8):
+    if type(state_examples) != np.ndarray:
+        raise ValueError('state_examples must be a numpy array')
+    if (type(state_examples[0]) != np.int64) and (type(state_examples[0]) != int): 
+        raise ValueError('values for cues and state exemplars must be of type int or int64')
     if type(exemplar_props) != np.ndarray:
         raise ValueError('exemplar_props must be a numpy array')
     if sum(exemplar_props) != 1:
@@ -44,6 +48,10 @@ def createExemplarState(state_exemplars,exemplar_props=np.array([0.5,0.5]),n_exa
     '''
     Create a state from exemplars.
     '''
+    if type(state_exemplars) != np.ndarray:
+        raise ValueError('state_examples must be a numpy array')
+    if (type(state_exemplars[0]) != np.int64) and (type(state_exemplars[0]) != int): 
+        raise ValueError('values for cues and state exemplars must be of type int or int64')
     if type(exemplar_props) != np.ndarray:
         raise ValueError('exemplar_props must be a numpy array')
     if sum(exemplar_props) != 1:
@@ -62,6 +70,10 @@ def createExemplarState(state_exemplars,exemplar_props=np.array([0.5,0.5]),n_exa
 
 
 def calcStateSurprise(cue,mu, precision=None, w_A=None,blur_states_param_linear=0.0):
+    if (type(cue) != np.ndarray) or (type(mu) != np.ndarray):
+        raise ValueError('cue and mu must be a numpy arrays')
+    if (type(cue[0]) != np.int64) and (type(cue[0]) != int) or (type(mu[0]) != np.int64) and (type(mu[0]) != int): 
+        raise ValueError('values for cue and cue must be of type int or int64')
     if w_A is None:
         w_A = np.ones(len(cue))*.5
     if precision is None:
@@ -82,7 +94,6 @@ def inferContext(cue, states, context_surprise_threshold=100,blur_states_param_l
     return state_context
     """
     state_context = []
-
     surprise = []
     for state in states:
         state_dict = createPrototypeState(state.reshape(1,-1),exemplar_props=np.array([1]),n_examples=100,noise_sigma=10**-8)

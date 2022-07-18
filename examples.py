@@ -71,23 +71,19 @@ def exampleGeneralization(state_kernel='prototype',attention_distortion=0,save_f
     testString(fig_extension)
     testString(state_kernel)
     if state_kernel == 'exemplar':
-        update_state_n_trials = 100  # 75 (prototype) 100 (exemplar)
+        update_state_n_trials = 100 
         blur_states_param_linear = 0.95
-        upsilon_candidates = 10 ** -150  # 10**80 (prototype, new) 10**-10 (prototype, old)
+        upsilon_candidates = 10 ** -150  
 
     elif state_kernel == 'prototype':
-        update_state_n_trials = 75  # 75 (prototype) 100 (exemplar)
+        update_state_n_trials = 75 
         blur_states_param_linear = 0.98
-        upsilon_candidates = 10 ** -20  # 10**80 (prototype, new) 10**-10 (prototype, old)
+        upsilon_candidates = 10 ** -20  
     else:
         raise ValueError('state_kernel must be "exemplar" or "prototype"')
     xi_CW = attention_distortion
     ## SET PARAMETERS (play around here)
     upsilon = 0.5 # 0.05 0.1
-    detailed_reward_prob = np.array([[01.0, 0.00, 0.0, 0.0],  # Cue only for first action
-                                     [0.00, 01.0, 0.0, 0.0],  # Cue only for second action
-                                     [01.0, 01.0, 0.0, 0.0],  # Cue for both actions
-                                     [0.00, 0.00, 1.0, 0.0]])  # No cue for actions
     beta_value = 50 #15
     beta_state = 50
     n_trials = 800
@@ -96,6 +92,10 @@ def exampleGeneralization(state_kernel='prototype',attention_distortion=0,save_f
     update_state_n_trials = update_state_n_trials
     n_trials_burn_in = 15
     update_exemplar_n_trials = 15
+    detailed_reward_prob = np.array([[01.0, 0.00, 0.0, 0.0],  # Cue only for first action
+                                     [0.00, 01.0, 0.0, 0.0],  # Cue only for second action
+                                     [01.0, 01.0, 0.0, 0.0],  # Cue for both actions
+                                     [0.00, 0.00, 1.0, 0.0]])  # No cue for actions
     state_kernel = state_kernel
 
     ## RUN THE SIMULATION
@@ -167,8 +167,8 @@ def exampleGeneralization(state_kernel='prototype',attention_distortion=0,save_f
     return A
 
 
-def contextGeneralization(state_kernel='prototype',context_gen_version=1,increased_state_confusion=False,save_fig=True,
-                      fig_dir='plots/',fig_name_base='',fig_extension='png'):
+def contextGeneralization(state_kernel='prototype',context_gen_version=1,p_state_confusion=0,save_fig=True,
+                      fig_dir='plots/',fig_name_base='',fig_extension='png',beta_state_confusion=5,upsilon_candidates=None):
     """
     Use this area to play with the set generalization task. It is functionalized for organization purposes.
     :param state_kernel: Kernel for internal states "prototype" or 'exemplar' (default='prototype')
@@ -183,65 +183,63 @@ def contextGeneralization(state_kernel='prototype',context_gen_version=1,increas
     ## CHECK INPUTS
     testInt(context_gen_version)
     testBool(save_fig)
-    testBool(increased_state_confusion)
+    testFloat(p_state_confusion)
+    if p_state_confusion > 1 or p_state_confusion < 0:
+        raise ValueError('p_state_confusion must be between 0 and 1')
+    testFloat(beta_state_confusion,none_valid=True)
+    testFloat(upsilon_candidates,none_valid=True)
     testString(fig_dir)
     testString(fig_name_base)
     testString(fig_extension)
     testString(state_kernel)
+
+
     if state_kernel == 'exemplar':
-        update_n_trials = 100  # 75 (prototype) 100 (exemplar)
+        update_state_n_trials = 100  # 75 (prototype) 100 (exemplar)
+        blur_states_param_linear = 0.95
+        if upsilon_candidates is None:
+            upsilon_candidates = 10 ** -150 
+        if beta_state_confusion is None:
+            beta_state_confusion = 6
     elif state_kernel == 'prototype':
-        update_n_trials = 75  # 75 (prototype) 100 (exemplar)
+        update_state_n_trials = 75  # 75 (prototype) 100 (exemplar)
+        blur_states_param_linear = 0.98
+        if upsilon_candidates is None:
+            upsilon_candidates = 10 ** -20 
+        if beta_state_confusion is None:
+            beta_state_confusion = 16
     else:
         raise ValueError('state_kernel must be "exemplar" or "prototype"')
 
     ## SET PARAMETERS
-    n_stim = 2
-    stim_scale = 1
-    update_n_trials = update_n_trials # 75 (prototype)
+    update_state_n_trials = update_state_n_trials # 75 (prototype)
     update_exemplar_n_trials = 15
-    reward_probability = 1  # .85
     detailed_reward_prob = None
-    stimulus_noise_sigma = 0.05 # 0.05
+    n_trials_burn_in=15
     n_trials_block1 = 800
     n_trials_block2 = 500
     # #Agent parameters
-    upsilon = 0.1 #0.1  # .1, .5
-    upsilon_candidates = 10 ** -150 # 10**-80 (prototype, new) 10 ** -10 (prototype, old)
-    beta_value = 15  # 15
+    upsilon = 0.5 # 0.05 0.1
+    beta_value = 50  # 15
     beta_state = 50 # 3, 50
     eta = 0.05
-    xi_0 = 0.99
     xi_CW = 0
     n_actions = 4
-    xi_shift_1 = -0.009
-    xi_shift_2 = 0.004
-    w_A_update_method = 'linear'
-    xi_DB_low = -4
-    xi_DB_high = -12
-    new_state_mu_prior = 'trial_vec'
     context_gen_version = 1
-    blur_states_param_linear = 0.0 #.2 #.2 # 0.72
-    blur_states_param_exponent = 1 #15  # 0.72
-    state_kernel = 'exemplar'
+    reward_probability=1
 
     ## CREATE WORLD
     #Create parameters
-    P_gen = genParams(stim_scale=stim_scale, n_stim=n_stim, n_actions=n_actions,
-                      update_n_trials=update_n_trials, detailed_reward_prob=detailed_reward_prob,
-                      reward_probability=reward_probability,update_exemplar_n_trials=update_exemplar_n_trials,
-                      state_kernel=state_kernel)
+    P_gen = genParams(n_actions=n_actions,update_state_n_trials=update_state_n_trials, reward_probability=reward_probability,
+                      detailed_reward_prob=detailed_reward_prob,state_kernel=state_kernel,update_exemplar_n_trials=update_exemplar_n_trials,
+                      n_trials_burn_in=n_trials_burn_in,beta_state_confusion=beta_state_confusion)
+    #Create agent
+    A = agent(
+        agentParams(P_gen=P_gen, upsilon=upsilon, beta_value=beta_value, eta=eta,xi_CW=xi_CW,beta_state=beta_state,
+                    upsilon_candidates=upsilon_candidates,blur_states_param_linear=blur_states_param_linear))
 
-    P_agent = agentParams(P_gen=P_gen,upsilon=upsilon,beta_value=beta_value,beta_state=beta_state,eta=eta,
-                          xi_0=xi_0,xi_CW=xi_CW,xi_shift_1=xi_shift_1,
-                          xi_shift_2=xi_shift_2,xi_DB=5,w_A_update_method=w_A_update_method,xi_DB_low=xi_DB_low,
-                          xi_DB_high=xi_DB_high,upsilon_candidates=upsilon_candidates,
-                          new_state_mu_prior=new_state_mu_prior,
-                          blur_states_param_linear=blur_states_param_linear,blur_states_param_exponent=blur_states_param_exponent)
 
-    A = agent(P=P_agent)
-
-    P = worldStateParams(P_gen=P_gen, stimulus_noise_sigma=stimulus_noise_sigma)
+    P = worldStateParams(P_gen=P_gen)
     W = worldState(P=P)
 
     stimuli_set_1, ans_key_set_1, reward_prob_set_1 = W.generateContextGenStimuli(n_trials=n_trials_block1,
@@ -255,15 +253,7 @@ def contextGeneralization(state_kernel='prototype',context_gen_version=1,increas
     # RUN SIMULATION
     A.session(stimuli=stimuli_set_1, ans_key=ans_key_set_1, reward_mag=W.P['reward_mag'], reward_prob=reward_prob_set_1)
     A.session(stimuli=stimuli_set_2, ans_key=ans_key_set_2, reward_mag=W.P['reward_mag'], reward_prob=reward_prob_set_2)
-    if increased_state_confusion:
-        if state_kernel == 'exemplar':
-            A.P['blur_states_param_linear'] = 0.44
-            A.P['blur_states_param_exponent'] = 5
-            A.P['beta_state'] = 4
-        elif state_kernel == 'prototype':
-            A.P['blur_states_param_linear'] = 0.77
-            A.P['blur_states_param_exponent'] = 2
-            A.P['beta_state'] = 4
+    A.P['p_state_confusion'] = p_state_confusion # Turn on the confusion
     A.session(stimuli=stimuli_gen, ans_key=ans_key_gen, reward_mag=W.P['reward_mag'],
               reward_prob=reward_prob_gen,learn_states=False)
 
@@ -301,21 +291,15 @@ def contextGeneralization(state_kernel='prototype',context_gen_version=1,increas
     ax[2, 1].set_title('Final State Estimation')
     ax[2, 1].set_ylabel('State Label')
     ax[2, 1] = setContextGenAx(ax[2, 1],n_trials_block1,n_trials_block2)
-    if increased_state_confusion:
-        isc_ttl = 'with Increased State Confusion'
-        isc_save = 'wISC'
-    else:
-        isc_ttl = 'without Increased State Confusion'
-        isc_save = 'woISC'
-    fig.suptitle(f'Set Generalization Version {context_gen_version}, {state_kernel.capitalize()} States\n{isc_ttl}')
+    fig.suptitle(f'Set Generalization Version {context_gen_version}, {state_kernel.capitalize()} States')
     fig.tight_layout()
     if save_fig:
-        f_name = f'{fig_dir}{fig_name_base}contextGeneralization{context_gen_version}_{state_kernel}States_{isc_save}.{fig_extension}'
+        f_name = f'{fig_dir}{fig_name_base}contextGeneralization{context_gen_version}_{state_kernel}States.{fig_extension}'
         fig.savefig(f_name,dpi=300)
     fig.show()
 
 
-def contextGeneralization(n_networks=1,context_gen_version=1,save_fig=True,parallel=False,weight_stdev=None,
+def contextGeneralizationANN(n_networks=1,context_gen_version=1,save_fig=True,parallel=False,weight_stdev=None,
                       fig_dir='plots/',fig_name_base='',fig_extension='png'):
     # Unit testing
     testInt(context_gen_version)
@@ -464,16 +448,19 @@ if __name__ == '__main__':
     #######################
 
     ## EXAMPLE GENERALIZATION
-    state_kernel = 'exemplar' # 'prototype', 'exemplar'
-    attention_distortion = 0 # True, False
-    A = exampleGeneralization(state_kernel=state_kernel, attention_distortion=attention_distortion)
+    # state_kernel = 'exemplar' # 'prototype', 'exemplar'
+    # attention_distortion = 0 # True, False
+    # A = exampleGeneralization(state_kernel=state_kernel, attention_distortion=attention_distortion)
+
 
     ## CONTEXT GENERALIZATION
-    # state_kernel = 'prototype'  # 'prototype', 'exemplar'
-    # context_gen_version = 1 # 1, 2
-    # increased_state_confusion = False  # True, False
-    # A = contextGeneralization(state_kernel=state_kernel, context_gen_version=context_gen_version,
-    #                   increased_state_confusion=increased_state_confusion)
+    state_kernel = 'exemplar'  # 'prototype' (ProDAtt), 'exemplar' (ExDAtt)
+    context_gen_version = 1 # Version of the task. Must be 1 or 2
+    p_state_confusion = 0 # For examining errors during block 3. Must be between 0 and 1
+    beta_state_confusion = None # Controls whether errors are reandom, or biased by state. If None, it uses default for ProDAtt and ExDAtt
+    upsilon_candidates = None # The threshold for context inclusion. If None, it uses default for ProDAtt and ExDAtt
+    A = contextGeneralization(state_kernel=state_kernel, context_gen_version=context_gen_version,save_fig=True,
+                      p_state_confusion=p_state_confusion,beta_state_confusion=beta_state_confusion)
 
     ########################
     ## NEURAL NETWORK MODEL
@@ -482,7 +469,8 @@ if __name__ == '__main__':
     # context_gen_version = 1
     # parallel=False
     # weight_stdev = None
-    # trained_networks = contextGeneralization(n_networks=n_networks, context_gen_version=context_gen_version,
+    # trained_networks = contextGeneralizationANN(n_networks=n_networks, context_gen_version=context_gen_version,
     #                                          parallel=parallel, weight_stdev=weight_stdev,)
 
     print('here')
+# %%
