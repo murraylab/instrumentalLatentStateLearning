@@ -52,7 +52,7 @@ def setContextGenAx(ax,n_trials_block1,n_trials_block2):
 
 
 def exampleGeneralization(state_kernel='prototype',attention_distortion=0,save_fig=True,fig_dir='plots/',
-                         fig_name_base='',fig_extension='png'):
+                         fig_name_base='',fig_extension='png',reward_probability=1):
     """
     Use this area to play with the action generalization task. It is functionalized for organization purposes.
     :param state_kernel: Kernel for internal states "prototype" or 'exemplar' (default='prototype')
@@ -88,14 +88,14 @@ def exampleGeneralization(state_kernel='prototype',attention_distortion=0,save_f
     beta_state = 50
     n_trials = 800
     eta = 0.05
-    n_actions = detailed_reward_prob.shape[1]
     update_state_n_trials = update_state_n_trials
     n_trials_burn_in = 15
     update_exemplar_n_trials = 15
-    detailed_reward_prob = np.array([[01.0, 0.00, 0.0, 0.0],  # Cue only for first action
-                                     [0.00, 01.0, 0.0, 0.0],  # Cue only for second action
-                                     [01.0, 01.0, 0.0, 0.0],  # Cue for both actions
-                                     [0.00, 0.00, 1.0, 0.0]])  # No cue for actions
+    detailed_reward_prob = np.array([[01.0, 0.00, 0.0, 0.0],                # Cue only for first action
+                                     [0.00, 01.0, 0.0, 0.0],                # Cue only for second action
+                                     [01.0, 01.0, 0.0, 0.0],                # Cue for both actions
+                                     [0.00, 0.00, 1.0, 0.0]])*reward_probability   # No cue for actions
+    n_actions = detailed_reward_prob.shape[1]
     state_kernel = state_kernel
 
     ## RUN THE SIMULATION
@@ -167,7 +167,7 @@ def exampleGeneralization(state_kernel='prototype',attention_distortion=0,save_f
     return A
 
 
-def contextGeneralization(state_kernel='prototype',context_gen_version=1,p_state_confusion=0,save_fig=True,
+def contextGeneralization(state_kernel='prototype',context_gen_version=1,p_state_confusion=0,save_fig=True,reward_probability=1,
                       fig_dir='plots/',fig_name_base='',fig_extension='png',beta_state_confusion=5,upsilon_candidates=None):
     """
     Use this area to play with the set generalization task. It is functionalized for organization purposes.
@@ -226,7 +226,6 @@ def contextGeneralization(state_kernel='prototype',context_gen_version=1,p_state
     xi_CW = 0
     n_actions = 4
     context_gen_version = 1
-    reward_probability=1
 
     ## CREATE WORLD
     #Create parameters
@@ -346,10 +345,11 @@ def contextGeneralizationANN(n_networks=1,context_gen_version=1,save_fig=True,pa
 
 
 class trainRLNetworks():
-    def __init__(self,P,n_networks=None):
+    def __init__(self,P,n_networks=None,reward_probability=1):
         self.P = P
         if n_networks is None:
             n_networks = P['n_networks']
+        self.P['reward_probability'] = reward_probability
         self.n_networks = n_networks
         self.weight_dicts = []
         self.choice_records = [] # Choice, label
@@ -448,19 +448,22 @@ if __name__ == '__main__':
     #######################
 
     ## EXAMPLE GENERALIZATION
-    # state_kernel = 'exemplar' # 'prototype', 'exemplar'
-    # attention_distortion = 0 # True, False
-    # A = exampleGeneralization(state_kernel=state_kernel, attention_distortion=attention_distortion)
+    state_kernel = 'prototype' # 'prototype', 'exemplar'
+    attention_distortion = 0 # True, False
+    reward_probability = .8 # Probability of reward
+    A = exampleGeneralization(state_kernel=state_kernel, attention_distortion=attention_distortion,reward_probability=reward_probability)
 
 
     ## CONTEXT GENERALIZATION
-    state_kernel = 'exemplar'  # 'prototype' (ProDAtt), 'exemplar' (ExDAtt)
-    context_gen_version = 1 # Version of the task. Must be 1 or 2
-    p_state_confusion = 0 # For examining errors during block 3. Must be between 0 and 1
-    beta_state_confusion = None # Controls whether errors are reandom, or biased by state. If None, it uses default for ProDAtt and ExDAtt
-    upsilon_candidates = None # The threshold for context inclusion. If None, it uses default for ProDAtt and ExDAtt
-    A = contextGeneralization(state_kernel=state_kernel, context_gen_version=context_gen_version,save_fig=True,
-                      p_state_confusion=p_state_confusion,beta_state_confusion=beta_state_confusion)
+    # state_kernel = 'prototype'  # 'prototype' (ProDAtt), 'exemplar' (ExDAtt)
+    # context_gen_version = 1 # Version of the task. Must be 1 or 2
+    # p_state_confusion = 0 # For examining errors during block 3. Must be between 0 and 1
+    # beta_state_confusion = None # Controls whether errors are reandom, or biased by state. If None, it uses default for ProDAtt and ExDAtt
+    # upsilon_candidates = None # The threshold for context inclusion. If None, it uses default for ProDAtt and ExDAtt
+    # reward_probability = 0.8 # Probability of reward
+    # A = contextGeneralization(state_kernel=state_kernel, context_gen_version=context_gen_version,save_fig=True,
+    #                   p_state_confusion=p_state_confusion,beta_state_confusion=beta_state_confusion,
+    #                   reward_probability=reward_probability)
 
     ########################
     ## NEURAL NETWORK MODEL
@@ -469,7 +472,7 @@ if __name__ == '__main__':
     # context_gen_version = 1
     # parallel=False
     # weight_stdev = None
+    # reward_probability = 0.8
     # trained_networks = contextGeneralizationANN(n_networks=n_networks, context_gen_version=context_gen_version,
-    #                                          parallel=parallel, weight_stdev=weight_stdev,)
+    #                                          parallel=parallel, weight_stdev=weight_stdev,reward_probability=reward_probability)
 
-    print('here')
