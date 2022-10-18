@@ -229,8 +229,8 @@ def stimDistance(stims, att_indices, att_order, stim_indx=None):
     return att_differs
 
 
-def figurePrototypesConversion(experimental_set='models',version=3):
-    if version == 2:
+def figurePrototypesConversion(experimental_set='models',context_gen_version=2):
+    if context_gen_version == 1:
         if experimental_set == 'models':
             conversion = {
                 'figure': np.array([8, 4, 3, 7, 6, 2, 5, 1]),
@@ -241,7 +241,7 @@ def figurePrototypesConversion(experimental_set='models',version=3):
                 'figure': np.array([8, 7, 3, 4, 6, 1, 2, 5]),
                 'prototypes': np.array([0, 1, 2, 3, 4, 5, 6, 7]),
             }
-    elif version == 3:
+    elif context_gen_version == 2:
         if experimental_set == 'models':
             conversion = {
                 'figure':       np.array([8, 4, 7, 3, 6, 2, 1, 5]),
@@ -253,7 +253,7 @@ def figurePrototypesConversion(experimental_set='models',version=3):
                 'prototypes': np.array([0, 1, 2, 3, 4, 5, 6, 7]),
             }
     return conversion
-
+    
 
 def convertLabels(stimuli, labels, conversion=None, direction='prototype_to_figure', experimental_set='models'):
     if conversion is None:

@@ -1,0 +1,166 @@
+,subject_id,strategy,strategy_radio,difficulty,passed_attention_check,substances,gender,age,education
+0,688,"Kick for boxes, Shake for spheres, Slap for stars.",shape,medium,{},True,male,21-30,college
+1,679,V seemed the most successful so I kept using V.,none,hard,{},True,male,46-65,college
+2,683,Mostly just memorizing the shapes and colors.,memorized,medium,{},True,female,21-30,college
+3,691,Memorize colors and patterns,memorized,medium,{},True,female,31-45,college
+4,681,No real strategy just try to search,none,medium,{},True,female,31-45,highschool
+5,680,patterns,shape-color,medium,{},True,male,21-30,college
+6,694,I just guessed.  I couldn't really find a strategy.,none,hard,{},True,male,21-30,college
+7,697,I simply tried to find out which button aligned with a given symbol and then remember to press that button whenever the symbol appeared on the screen.,shape-color,easy,{},True,male,31-45,highschool
+8,701,Just flow instruction,shape-texture,hard,{},True,male,21-30,college
+9,718,I followed the combinations of shapes and color for identifying.,shape-color,easy,{},True,female,31-45,college
+10,736,None,memorized,easy,{},True,male,31-45,postgrad
+11,698,I tried my best and had an inclination towards blue color and Kicking while unlocking the artifacts.,color,medium,{},True,male,21-30,postgrad
+12,702,very nice,shape-color,easy,{},True,male,31-45,postgrad
+13,743,I tried to remember which button is most likely to activate each type of artifact.,shape-color,medium,{},True,male,21-30,college
+14,703,I just took random guesses until I found the two symbols that seemed it to pay off the best and stuck with those,shape-color,easy,{},True,male,46-65,college
+15,737,i like it,shape-color,easy,{},True,male,31-45,<college
+16,731,I used repetitive clicks to find which letter is for the right shape.,color-texture,medium,{},True,male,46-65,college
+17,725,"I associated the keyboard commands with the shapes of the objects that appeared, before long I realized that ""c"" was for circles and squares that weren't orange, ""b"" was for any orange object, and ""n"" was for any star that wasn't orange.",shape-color,easy,{},True,male,21-30,college
+18,724,"Very stress, but somehow i worked hard and finished to remember some",color,medium,{},True,male,21-30,college
+19,740,I learn the key for each shape and color,shape-color,medium,{},True,male,21-30,college
+20,735,Tried to guess if there was a sequence. Wasn't sure. Went with the two options that seemed to yield highest results together.,none,medium,{},True,male,31-45,highschool
+21,723,good,none,easy,{},True,male,31-45,postgrad
+22,721,"I figured out the buttons to press for the orange and blue colored items, then I realized that the categorization is also by shape as well.  Soon enough I figured out the shapes but it was mostly trial and error to figure them out.",color,easy,{},True,male,21-30,college
+23,722,I was having trouble identifying the patterns at early point but I noticed that most of them follow a colour pattern like the orange ones were all press i.e key and all blue and purple square and circles were n key and all stars were slap key c.,shape-color,medium,{},True,male,21-30,<college
+24,727,trial and error,shape-color,hard,{},True,male,31-45,college
+25,751,good,none,easy,{},True,male,31-45,postgrad
+26,754,I tried to classify some shapes for particular keys.,shape,hard,{},True,male,31-45,college
+27,755,"It was until the end that I figured out it was based on shape and got the hang of the sequence, early on I figured out squares and blue",shape-color,medium,{},True,female,46-65,postgrad
+28,744,no strategy,shape-color,medium,{},True,female,21-30,college
+29,757,quick,shape-color,hard,{},True,female,21-30,college
+30,733,"I tried out different actions on the  shapes in an effort to discover what resulted in a power crystal. Over time, I made connections and was able to determine which action gave me a crystal.
+
+I became somewhat confused at first because the letters to perform the actions(bncv) were not listed from left to right in the same order that they are on the keyboard(cvbn). If it wasn't for this, I think my performance would have been better.",shape-color,medium,{},True,male,31-45,<highschool
+31,766,quick,shape-texture,hard,{},True,female,21-30,college
+32,762,"After a few trial and error turns, I managed to see a pattern, and I associated the colors and shapes with certain keys.",shape-color,easy,{},True,male,31-45,highschool
+33,770,I'm not follow any strategy. I'm just follow the instructions.,shape-color,medium,{},True,female,21-30,college
+34,775,"Normally when the image of a circle appeared, I would press the C key, when the image of a square would appear, I would press the B key, and when the image of a star would appear, I would press the N key.",shape,hard,{},True,male,21-30,college
+35,783,I tried to remember which key for the design/color but was thrown off when more were added.,shape-color,hard,{},True,female,31-45,college
+36,781,Super,shape-color,medium,{},True,female,31-45,college
+37,785,Nice,shape-color,medium,{},True,female,31-45,college
+38,777,I try to remember which shape matches with the corresponding letter for a higher chance to get the reward,shape,easy,{},True,male,21-30,college
+39,791,I just tryed to figure out which keys powered the artifact up then just stuck with what worked.,memorized,medium,{},True,male,31-45,highschool
+40,789,color,color,medium,{},True,male,31-45,college
+41,796,"trial and error, memorization",shape-color,hard,{},True,male,21-30,<college
+42,787,some hard,shape-color,hard,{},True,male,21-30,college
+43,794,I tried to match certain colors to better probabilities of being correct to the keys.  I think the shapes were largely irrelevant.,color,medium,{},True,male,31-45,highschool
+44,795,I tried to align each shape with certain keys and then I tried to figure out the anomaly ones.,shape,hard,{},True,male,10-20,highschool
+45,797,The star was always n. Orange squares and circles were v. All other squares and circles were c.,shape-color,medium,{},True,female,31-45,college
+46,802,"I did a lot of trial and error at first. Then I discovered first all starts are ""C"". I then worked on figuring out the square and the circles and eventually found the color was the key for those.",shape-color,easy,{},True,male,31-45,college
+47,803,"Yellow=b
+Star=c
+Else=v",shape-color,easy,{},True,male,21-30,college
+48,806,"I tried to get a feel for how the colors and shapes reacted to certain actions. From there, I try to notice the pattern to earn more points.",shape-color,medium,{},True,male,31-45,college
+49,817,I tried to memorize what key to press for each shape/color combo,shape-color,hard,{},True,male,46-65,college
+50,829,I just memorized which shapes/colors responded to each action with the best outcomes.,shape-texture,hard,{},True,male,31-45,<college
+51,835,I started by just paying attention to the shapes and found which letter was more giving.  Then I started focusing on the shapes within the shapes and colors within the shapes to find out what was more likely to have artifacts.,shape-color,medium,{},True,female,31-45,college
+52,810,At first I just picked randomly while taking notes in my head on which keys and artifacts worked and which didn't. Once I found a pattern I kept in mind what worked and what didn't until I figured out the entire thing.,memorized,medium,{},True,male,31-45,<college
+53,822,"I tried a few patterns and then understood based on shape and color which artifact i need to shake, kick, slap etc",shape-color,medium,{},True,female,10-20,<college
+54,831,"First 5 sets is hard to find. But, next i noted down the correct answer. So, then there is easy to find the answer.",memorized,medium,{},True,male,31-45,postgrad
+55,833,"after trying the four key c, v b, n, I mostly closed to stay on the v key which seem to give around 3o%reward",none,medium,{},True,male,46-65,highschool
+56,821,i tried to figure out the pattern and then remember it.,shape-color,medium,{},True,female,21-30,<college
+57,815,I tried to look at the colors and match them to their commands. I also tried to look at the patterns to see if I can linked them to their prefer action.,color-texture,hard,{},True,male,21-30,college
+58,845,I chose the keys according to colors and shapes of the artifacts. I think blue circle is  always rewarding while 'v' being pressed .thankyou.,shape-color,medium,{},True,female,31-45,college
+59,863,none,none,medium,{},True,male,31-45,<college
+60,855,"Ways to activate: shake (press ""b""), slap (press ""n""), kick (press ""c""), bite (press ""v"").",shape-color,medium,{},True,female,21-30,college
+61,838,"at first it was vague, with time I noticed the rewards related to a certain shape = star 
+and certain colours have different keys",shape-color,medium,{},True,male,21-30,<college
+62,869,I tried to see if certain shapes or colors matched up with the keys on the keyboard.,shape-color,hard,{},True,female,31-45,highschool
+63,868,understand the instructions and execute in a proper way .,shape-color,easy,{},True,female,21-30,college
+64,842,I just discovered which ones awarded the gem through trial and error. I tried to do it systematically.,shape-color,medium,{},True,male,21-30,college
+65,867,"First i Didn't know what the patter, Then i follow the follow the pattern and the pattern repeats analyze the patter and colors and done it",shape-color,medium,{},True,male,46-65,college
+66,864,Its a brain working game,shape-color,medium,{},True,female,21-30,college
+67,889,Am very happy for this movements something different game .I feel enjoy then very easy,shape-color,easy,{},True,female,<10,<highschool
+68,878,"every square or circle on the left, every star on the right and every orange figure independently from the figure on the second place.",shape-color,easy,{},True,male,21-30,college
+69,892,"The star appear click the N, The purple color appear click the V, The orange color appear click C.",shape-color,medium,{},True,female,31-45,college
+70,885,"Orange of any pattern and shape is always B
+Stare of any shape and pattern is always V
+Anything that doesn't follow the above exception will always be N",shape-color,hard,{},True,male,21-30,college
+71,873,"guessing early until I figured out some patterns, then...
+
+If star 
+Always press N
+
+If square or circle:
+- if orange press C
+- if blue or pink press B",shape-color,medium,{},True,male,31-45,highschool
+72,891,"I found that n worked for orange, v worked for star, and c worked for pink/blue that weren't star shaped.",shape-color,medium,{},True,female,21-30,postgrad
+73,809,try to figure out any patterns in the beginning by noting the shapes and colours,shape-color,medium,{},True,male,21-30,college
+74,874,"Once I figured out what color and shapes match, I tried to memorize them.",memorized,easy,{},True,female,46-65,highschool
+75,826,going with what gave the most rewards in the future,color,medium,{},True,female,21-30,college
+76,828,"No strategy. I just press n for yellow colors. stars for c, other all color of round, square were v",shape-color,medium,{},True,male,21-30,college
+77,899,this strategy or lack there of for activating the artifacts.,none,medium,{},True,male,31-45,college
+78,902,"I tried to pay attention to colors and patterns,then how they appeared in order.",shape-color,hard,{},True,female,46-65,<college
+79,908,"pressed v for anything orange, pressed n for anything blue or pink. i think.",color,medium,{},True,male,31-45,<college
+80,841,I assessed my choices based on the shapes and color of the figures inside the shapes.,shape-color,hard,{},True,male,21-30,<college
+81,904,I tried to match up the keyboard key with certain colors or designs but I could not figure it out.,none,hard,{},True,female,31-45,highschool
+82,800,"matched shape with a letter, then used color as well",shape-color,medium,{},True,male,46-65,college
+83,914,My strategy for activating the artifacts in something reason,none,medium,{},True,female,>65,postgrad
+84,929,I noticed that the C key rewarded the most so after a while I chose that option most of the time.,none,hard,{},True,female,21-30,<college
+85,933,pleasure,shape-color,hard,{},True,male,21-30,college
+86,923,No strategy.,none,easy,{},True,male,31-45,college
+87,816,I tried to figure out which shapes responded to which key and then from there I figured out that orange colors of any shapes were always a different key.,shape-color,medium,{},True,male,31-45,<college
+88,916,i just realized the given instructions by using the first five rounds for practising and i find out the answers.,shape-color,medium,{},True,female,31-45,<college
+89,847,"I noticed that the blue circles and squares were always on the C. The oranges were on the N.
+
+The pink star shapes were in the V.
+
+Some I got it wrong, but I had some strategies that mainly started to work in the end. In the beginning I was very confused.",shape-color,medium,{},True,male,21-30,<college
+90,825,just clicking of my assumption.,none,medium,{},True,female,31-45,college
+91,924,"Just try to remember shapes and patterns and go with that.  Some of it seemed random, truthfully",shape-texture,hard,{},True,male,46-65,highschool
+92,935,none,color,medium,{},True,male,21-30,<college
+93,947,I have not use any strategy,none,medium,{},True,male,21-30,college
+94,936,No strategies,none,hard,{},True,male,21-30,college
+95,939,I tried to see if there was a pattern. I finally figured it out towards the end but the circles took me a while to figure out.,shape-color,medium,{},True,female,21-30,highschool
+96,882,Colors corresponded to a key except for stars which were always a specific key.,color,medium,{},True,male,31-45,highschool
+97,940,"color, shape and alphabet combination",shape-color,medium,{},True,female,31-45,college
+98,943,to focus on display what keys are activate artifacts and correctly predict and press the keys,shape-color,medium,{},True,female,21-30,college
+99,879,"It was just trial and error. When I got a positive result, I just tried to remember the pattern and make the same choice again. I eventually figured out that the orange color was a different choice. And I eventually figured out that the stars were a different choice. After that it was easy to keep picking the right choice.",shape-color,medium,{},True,female,>65,postgrad
+100,862,i played color and safe base,shape-color,medium,{},True,male,31-45,college
+101,928,"I think it was one key for all non star non orange shapes, one for stars and one for oranges",shape-color,medium,{},True,male,21-30,<college
+102,941,identify appropriate shape and color,shape-color,easy,{},True,female,31-45,highschool
+103,812,good,shape-color,hard,{},True,male,31-45,college
+104,955,I looked up on the patterns closely and noticed. so I got a good way to get the power.,shape-color,medium,{},True,male,31-45,college
+105,875,good,shape-color,hard,{},True,male,31-45,college
+106,850,"By trial and error I found what I think is the easiest way to memorize the combinations, orange was always C. Non-orange Balls and squares were V and the non orange stars were N.",shape-color,medium,{},True,female,21-30,college
+107,970,memorizing the color is the strategy for activating artifacts,color,medium,{},True,female,31-45,college
+108,937,"Spiky objects should get more slap or kick. It's the shape of the objects. However, it's still difficult to choose the correct answer.",none,hard,{},True,male,>65,postgrad
+109,960,none,shape-color,medium,{},True,male,21-30,college
+110,971,I started just trying different random keys for whatever came up until it seemed like all the orange ones were with the same key ('n'). Then I started trying to see if the same was true for pink or blue but I saw that the pink star went with 'b' while that wasn't true for the pink circle or square. I then found that the pink circle or square went with 'c'. It seemed like the blue shapes did not go with 'v' so I tried to see if the blue star went with 'b' and the other two blue shapes with 'c' (just like pink) and that did work out. So I just remembered those rules for the rest of the game.,shape-color,medium,{},True,female,21-30,college
+111,985,I tried to match colors and shapes to the correct action,shape-color,medium,{},True,female,46-65,college
+112,972,chose based on color prefrence.,color,medium,{},True,female,46-65,postgrad
+113,979,Matching certain colors to certain button and shapes as well.,shape-color,medium,{},True,male,21-30,<college
+114,950,I realized that success depended on colors and shapes.,shape-color,medium,{},True,male,31-45,college
+115,983,"I tried to figure out a pattern - 
+
+Orange is always N
+Pink is always B unless it's a star.
+Pink Star is C
+Blue star is C
+All other blues except for star is a B",shape-color,medium,{},True,male,31-45,college
+116,976,First i have learned it from the beginning trials and then i used it in the remaining trails to do well,shape-color,medium,{},True,female,46-65,college
+117,974,"At first, I clicked each individual key to see which ones they would get me rewards. I noticed that N was orange, B was Blue, sometimes pink; and V was Blue and Pink (stars), and then I started noticing shapes, too. N seemed to be all orange and any shape and C seemed to not get me any rewards at all.",shape-color,medium,{},True,female,31-45,highschool
+118,959,good,color-texture,easy,{},True,male,31-45,<college
+119,977,"I tried to remember the pattern, but I had missed an instruction and it took me a minute to figure it out.",shape-color,hard,{},True,male,46-65,<college
+120,998,ramdom,shape,medium,{},True,male,21-30,college
+121,975,I noticed one of the forms was giving energy from the first letter. Then I noticed sometimes it wasn't. So I realized it had something to do with the colors or small shapes. I continued trying to figure out until I was certain about which shape and color combined with each letter on the keyboard.,shape-color,medium,{},True,female,<10,college
+122,993,"Slowly try to memorize what colors and shapes get rewarded by which key action. Then sort them. So Orange color was always B, for example, and stars were always C. There were no orange stars. Etc.",shape-color,medium,{},True,male,31-45,<college
+123,981,I didn't start off too well and didn't have a specific strategy but I was trying to figure out which key to press for each shape and then realized that color also played a roll and could change up which key but it depended on the shape as well. My issue at first was trying to remember each individually but then forgot it by the time it came back around.,memorized,easy,{},True,male,31-45,highschool
+124,1010,good,memorized,medium,{},True,male,21-30,postgrad
+125,997,good,shape-color,hard,{},True,female,21-30,college
+126,1001,go with what works the majority of the time,shape,medium,{},True,male,31-45,college
+127,949,good,shape-color,hard,{},True,male,21-30,college
+128,1024,good,shape-texture,medium,{},True,female,31-45,postgrad
+129,1003,i tried to remember what shape and what action resulted in the most correct answers,shape,hard,{},True,female,31-45,college
+130,1016,Very good study,shape-texture,hard,{},True,female,31-45,college
+131,1012,good,color,hard,{},True,male,31-45,college
+132,1011,I tried my best to remember what color and shape combo corresponded to getting a reward.,shape-color,hard,{},True,male,31-45,highschool
+133,995,"I initially tried associating a color with an action but learned that that strategy only worked for the orange colored objects (""c"" key action). After trying all the possible actions on the objects, I noticed that the ""n"" key action did not seem to work for any and so I disregarded it. I then worked out that which objects worked with the ""v"" action and which worked for ""b"" action through trial and error.",shape-color,easy,{},True,male,31-45,college
+134,1033,"At first I was trying to figure out which colors and shapes corresponded with which key. After a while I figured out orange shapes were C, stars were V, and the other shapes were B.",shape-color,easy,{},True,male,31-45,<college
+135,1032,good,memorized,easy,{},True,male,31-45,college
+136,1044,I just tried different things until I started noticing patterns like b was more likely with orange,shape-color,medium,{},True,male,46-65,college
+137,1039,the letter n was more likely I think,none,medium,{},True,male,21-30,college
+138,1043,Remember strategy.,color,easy,{},True,male,31-45,college
+139,1029,good,shape-texture,hard,{},True,female,<10,<highschool
+140,877,"My strategy was just using trial and error at the start where I was just guessing which button to press, but as time went on, I started noticing which one will reward for each shape and color.",shape-color,easy,{},True,male,10-20,<college

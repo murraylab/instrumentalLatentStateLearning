@@ -453,7 +453,7 @@ if __name__ == '__main__':
     reward_probability = .8 # Probability of reward
     A = exampleGeneralization(state_kernel=state_kernel, attention_distortion=attention_distortion,reward_probability=reward_probability)
 
-
+    print('done')
     ## CONTEXT GENERALIZATION
     # state_kernel = 'prototype'  # 'prototype' (ProDAtt), 'exemplar' (ExDAtt)
     # context_gen_version = 1 # Version of the task. Must be 1 or 2

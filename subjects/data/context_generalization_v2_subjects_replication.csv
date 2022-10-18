@@ -1,0 +1,137 @@
+,subject_id,strategy,strategy_radio,difficulty,passed_attention_check,substances,gender,age,education
+0,1375,I was choosing randomly because I did not understand which key is which shape.,none,medium,['caffeine'],True,male,21-30,college
+1,1417,Simply remembering the pattern inside and border of square or circle.After that it all came down to focusing on which button is for which one.,given-attributes,medium,,True,male,21-30,<college
+2,1355,i memorized the sizes of the dots divided by shape on the keyboard,resemble,medium,['caffeine'],True,female,21-30,postgrad
+3,1376,Remembering the pairs.,given-attributes,easy,,True,male,10-20,highschool
+4,1425,stay closer to the computer and be aware,resemble,medium,,True,female,21-30,college
+5,1373,"The first tests I tried to retain the drawings in memory and choose the correct option, but in the last one I didn't understand it very well, so I didn't use any strategy. Sorry.",memorized,medium,['caffeine'],True,female,31-45,postgrad
+6,1418,In the first rounds I tried to figure out the schemes and after that I just had to memorize which pattern is which command/button.,given-attributes,medium,,True,male,21-30,highschool
+7,1377,"when I had got big circles inside of shape I pressed ""x"" for circle and ""z"" for square. If I had got small circles I pressed c for circle and v for square",given-attributes,medium,,True,male,21-30,<college
+8,1357,"I asigned one letter to each shape. When the four letters appeared I kept in mind that squares where asigned to the ""outside"" fingers, while circles where the ""inner"" fingers. They were also from big to small (left to right) for the dots inside the shapes.",given-attributes,medium,,True,female,31-45,highschool
+9,1374,Just trying to remember the shapes aswell as the patterns.,given-attributes,medium,,True,male,21-30,highschool
+10,1426,"for the last two artifacts I had a lot of difficulty, I simply tried to make a mnemonic association. For the first two, when the artifact was round I thought of ""shaking"" a ball.",resemble,medium,['caffeine'],True,female,21-30,college
+11,1315,"separating circles and squeares, also waves from spots",given-attributes,medium,,True,male,21-30,college
+12,1420,i tried to remember what finger whas associated with what,given-attributes,medium,['caffeine'],True,female,21-30,<college
+13,1358,I had to memorize x and c were circles and they were close to each other z and v a far apart so that makes them blocks,memorized,medium,['caffeine'],True,female,31-45,highschool
+14,1316,you just have to remember if there are bigger points or not,resemble,easy,,True,male,31-45,postgrad
+15,1317,thinking only about the shape and letting my brain work out the rest,resemble,easy,,True,male,31-45,college
+16,1379,No strategy. I just saw that each shape and filling corresponds to different key.,resemble,easy,['alcohol'],True,male,21-30,highschool
+17,1428,i just move my fingers left or right and remember objects,memorized,medium,['caffeine'],True,male,21-30,college
+18,1421,No strategy I tried to remember the position of the square circles,none,medium,['caffeine'],True,female,46-65,highschool
+19,1380,"No strategy, just trying to remember which buttons means what",memorized,medium,['caffeine'],True,male,21-30,college
+20,1429,"I tried to memorize what pattern, shape and size corresponds to given letter, but there was so randomization, I guess",given-attributes,medium,,True,male,21-30,college
+21,1318,I tried to be as fast as I could,memorized,medium,['caffeine'],True,female,21-30,college
+22,1422,I tried to remember given shapes and colors from a given planet and assignments to a given key,memorized,medium,['caffeine'],True,male,31-45,college
+23,1361,I grouped the the square and circle pairs with the patterns inside.,resemble,medium,['caffeine'],True,female,21-30,<college
+24,1381,"Squares activated by Z or V.
+Circles activated by X or C.
+Z and X for large ball fillings.
+C and V for small ball fillings.",given-attributes,medium,,True,male,31-45,college
+25,1319,Simply learning patterns and trying to remember patterns of the shapes to certain button,resemble,easy,,True,male,10-20,<college
+26,1423,Matching shapes to activities.,resemble,easy,['caffeine'],True,male,21-30,postgrad
+27,1362,"observation, repeatability",given-attributes,hard,['caffeine'],True,female,21-30,postgrad
+28,1383,i just memorized,memorized,medium,,True,male,21-30,highschool
+29,1432,I was just going with my gut feeling,none,medium,,True,female,31-45,<college
+30,1384,"I tried to find wich key is for what artifact I and found out that in each scenario every pair of keys were used in pairs (z for square with big dots and x for circle with big dots, c for square with small dots and v for circle with small dots). I used one hand for this task.",given-attributes,hard,['caffeine'],True,female,21-30,<college
+31,1322,"Literally didn't even have chance to read instructions. 
+
+Understood the first part, where it was either circle or square, and chose the key according to the shape. 
+
+But the other part, where I had 4 keys, I had pretty much 0 glue what i had to do. I udnerstood that circle+circle was key ""V"", but other than that, big 0. 
+
+Don't understand, why the ""instuction"" or the ""key section"" part had to be timed. People, who English isn't their first language, might need some more time, to fully understand the sentence. Same appled to me, got stuck on a word, and didn't have time to finish. But I guess, there is bigger reason behind it, why it's timed.",none,hard,['caffeine'],True,male,10-20,postgrad
+32,1433,"v was fir circkes wuth xxxx pattern
+z was for circles with oooo pattern
+x was for squares with xxxx pattern
+c was for squares with oooo pattern",memorized,medium,,True,female,21-30,postgrad
+33,1364,I did not have a strategy. Everything was just too quick. I had to keep up with the pace giving me less time to strategize,none,hard,['tobacco'],True,male,21-30,<college
+34,1365,I had to memorize and you certain hand and fingers for certain buttons.,memorized,hard,['caffeine'],True,male,10-20,highschool
+35,1323,"I just looked at the shapes and ignored the colours and patterns at first. But on the last one, I had to remember the patterns between the planets, one had circles and the other one had lines. That was it.",given-attributes,easy,,True,male,21-30,<college
+36,1385,"z and c was for the circle (c with small circles in the shape)
+x and v was for the square (x with small circles in the shape)",none,medium,['tobacco'],True,male,21-30,highschool
+37,1434,I noticed that a given shape corresponds to a given letter,resemble,medium,,True,female,21-30,postgrad
+38,1366,I figured that the squares are either x or c and then the circles are either z or v,resemble,medium,['caffeine'],True,female,21-30,college
+39,1386,"So I noticed that while there was circle with second pattern i should press Z and the first pattern i should press X, the same with square. I've tried to do it as fast as possible but also try to het as many points.",memorized,medium,['caffeine'],True,male,21-30,<college
+40,1435,memorize the rewards for each shape,given-attributes,easy,['caffeine'],True,male,21-30,<college
+41,1387,"For both planets, the shape and the size of circles inside the shapes gives us what key we should press. Square with big circles: Z, squares with small cirlces: X, circle with small circles : C, circle with big circles inside: V.",memorized,medium,,True,male,21-30,college
+42,1436,I randomly chose at the start then I ended up choosing the same option from z-v until they were correct,resemble,medium,,True,male,31-45,<college
+43,1367,"I got to know that I only need to watch the form inside. When the articrafts were mixed at the end, it was a little bit hard to find the right press.",resemble,medium,,True,female,21-30,college
+44,1325,I associated the pattern and the shape of the artifacts to the keys,resemble,medium,,True,male,21-30,<college
+45,1326,at the beginning I tried to find a strategy and then I used it,given-attributes,medium,,True,male,21-30,<college
+46,1437,trial and error and then trying to remember.,memorized,medium,,True,female,31-45,college
+47,1388,"I knew there was a pattern so I tried to get it out. I first trusted my memory, then I preferred to write it down.",resemble,easy,['caffeine'],True,female,31-45,postgrad
+48,1389,set each key to an image type,memorized,medium,['caffeine'],True,male,21-30,college
+49,1327,Didn't have a strategy,none,easy,,True,male,21-30,<college
+50,1369,I mastered the shapes inside the circle and the square,resemble,medium,['caffeine'],True,female,21-30,college
+51,1438,"different keys related to either a square or circle shape and then with either small or large dots inside, just had to remember which ones were which",given-attributes,medium,,True,male,31-45,postgrad
+52,1328,"the strategy was to memorize the position in the keyboard of every letter to press it fast, without the necessity to see the keyboard",none,medium,,True,male,31-45,postgrad
+53,1390,"Squares = always left key
+Circles = always right key
+
+For the difference of what was inside of them I simply took a glance and assigned them to one of my fingers (was using left hand, with my fingers except the thumb for each artifact)",resemble,medium,,True,male,10-20,<college
+54,1439,"z:circle with big circles inside
+x: circle with small circles inside
+c: square with small circles inside
+v: square with big circles inside",given-attributes,easy,,True,female,21-30,postgrad
+55,1391,"The key presses where based on the shape of the ""artifact"".In the last round what also mattered where the dots inside of the shape,big dots corresponed to the keys z and v while the smaller dots corresponded to the keys x and c.",given-attributes,easy,['caffeine'],True,male,10-20,<college
+56,1329,after knowing the correct button i used 1 hand for a specific shape and choose easily the correct answer,given-attributes,medium,['caffeine'],True,male,21-30,college
+57,1440,I used my two hands each for one type of artifact,given-attributes,easy,['caffeine'],True,male,21-30,college
+58,1330,Match the shapes and shapes inside the shapes,given-attributes,medium,['caffeine'],True,female,10-20,highschool
+59,1392,I was just focusing on shapes,given-attributes,hard,['caffeine'],True,male,10-20,highschool
+60,1393,"The circles were z and c, and the squares were x and v",resemble,medium,['caffeine'],True,male,21-30,<college
+61,1442,I did not much strategy I just categorized in terms of squares and circles and memorized the key that activated each,given-attributes,medium,,True,female,21-30,college
+62,1332,Round shape or square shape,resemble,medium,,False,female,21-30,college
+63,1443,"For the first round i was trying to find a pattern that's used in the game, and finally, i found it, in the first artifacts round, there was circle shape for v and square one for c, and for another round, it was the opposite keys on the keyboard, z and x, as you can see, my performance rose over time, as i've got it ""trained""",given-attributes,easy,,True,male,21-30,postgrad
+64,1333,"I just tried at the start what worked, memorized it then used it to activate the aritfacts.",memorized,easy,"['caffeine', 'tobacco']",True,male,21-30,<college
+65,1395,I tried to figure out which button is correct for the particular shape with trial and error method,memorized,hard,['caffeine'],True,male,21-30,highschool
+66,1334,"I divided shape and pattern, alternating fingers (ABAB) for the shape and using CDDC finger scheme for patterns",given-attributes,medium,,True,male,21-30,college
+67,1396,I had no specific strategy,resemble,medium,,True,male,10-20,<college
+68,1445,"I was lucky to choose the right keyboard response on the first try on some of the shapes. That way I discovered early enough that all the shapes were linked to a corresponding key. From that point on, I only tried to memorize which shapes (with x or y information in it) was connected to a certain key.",resemble,medium,['caffeine'],True,male,21-30,<college
+69,1335,"relying on memorization. my fingers remembered the letters for each image (one set for either right or left), and then just circle or rectangle.",given-attributes,easy,,True,female,10-20,<college
+70,1446,"I do not know if time was important but I tried to select the right action as quickly as I could. for the last task I put my left middle and index on z and x key, and my right index and middle on c and v key respectfully. When I had to choose only between two actions I used only my index fingers",given-attributes,easy,,True,male,21-30,college
+71,1336,"For the first and second I just looked at the shape and for the third I looked at the size of the circles and the shape but I often clicked the wrong keys. (z was square with big circles, x was circle with small circles, c circle with big circles and v square with small circle, if I recall correctly).",given-attributes,easy,,True,male,21-30,<college
+72,1398,"Circle and square try it which is which, I didn't pay any attention to colors, only shapes and the size of the dots in the shapes.",resemble,medium,['tobacco'],True,male,21-30,<highschool
+73,1447,I looked at the shapes to start with and then realised it changed and was slightly trickier.,given-attributes,medium,,True,female,31-45,highschool
+74,1337,the keys went square circle square circle and the first set of shapes had dots whereas the second set had squiggles so I followed that,resemble,easy,['caffeine'],True,female,21-30,college
+75,1448,trying to memorize which artifact corresponded to which key,memorized,hard,['caffeine'],True,male,10-20,highschool
+76,1400,"In the last task strategy was false, lack of maybe",given-attributes,medium,,True,male,21-30,<college
+77,1449,I have to memorize all the shapes,memorized,hard,,True,male,10-20,highschool
+78,1338,trying to remember which keys are which,resemble,easy,['caffeine'],True,female,31-45,postgrad
+79,1339,I associated every shape and pattern to each letter.,resemble,easy,['caffeine'],True,male,31-45,postgrad
+80,1401,"For the first two tasks just needeed to memorise one form, circle or square.
+In the mixed task it was very hard because I keeped confunding the figures, but through the middle I started to fix the keep for square or circle with the big circles inside and then the ones with small circles and after that it was easy",given-attributes,hard,['caffeine'],True,female,21-30,college
+81,1450,"I simply understood that each ""artifact"" corresponded to a specific kay on the keybord. So I placed my left medium and indexfinger on z and x respectively, and my right index and medium fingers on c and v respectively.",given-attributes,easy,,True,male,21-30,college
+82,1340,checking the first actin of every shape and letter if right then the next shape should be the other letter,given-attributes,easy,,True,male,21-30,college
+83,1451,I've just tried to memorize the shapes to the corresponding finger on the button,memorized,medium,['caffeine'],True,male,31-45,college
+84,1341,memorizing which key represented what type of images,resemble,easy,['caffeine'],True,male,21-30,postgrad
+85,1452,I had to know which button was related to every kind of figure. I tried them all.,given-attributes,medium,,True,male,21-30,highschool
+86,1404,"I figured out that for the shapes with dots, Z was for circles and X for everything else. For the ones with stripes, C was for big circles, V for everything else (I think).",given-attributes,medium,,True,female,21-30,college
+87,1342,decorate the shapes and size of the balls inside the shapes,given-attributes,medium,"['caffeine', 'tobacco']",True,female,21-30,<college
+88,1453,"z for squares with big cycles inside
+v for squares with small cycles inside
+x for cycles with smaller cycles inside
+c for cycles with big cicles inside",given-attributes,medium,,True,female,21-30,<college
+89,1343,First I payed attention to the shape of the artifact and then in the lines inside of it.,given-attributes,medium,['caffeine'],True,male,21-30,<college
+90,1454,I tried to memorise three of the four.,resemble,medium,,True,male,31-45,<highschool
+91,1344,"I pressed 'v' for round artifacts with big dots, 'c' for squares with little dots, 'x' for circles with small dots, and 'z' for squares with big dots.",given-attributes,medium,['caffeine'],True,female,21-30,highschool
+92,1406,I associated the corresponding letter to the circle in the first two trials and then realized that I also had to associate the corresponding pattern in the third one and that's why I struggled in it,memorized,medium,,True,male,21-30,<college
+93,1455,"regular circles were under c, special under z, normal squares under v, special under z",given-attributes,easy,,True,male,21-30,college
+94,1456,"Instead of focusing on the keys, I tried to assign each figure to each of my fingers",given-attributes,hard,"['caffeine', 'tobacco']",True,male,31-45,college
+95,1346,"First, experiment both keys. Then, create a kind of mnenmonic system to mechanize the stimuli. The problem with the second task originated from a trouble in joining both sets of learnings",given-attributes,easy,['caffeine'],True,male,21-30,college
+96,1457,"Nothing special, testing.",memorized,easy,['caffeine'],True,male,10-20,highschool
+97,1408,Looking at the shapes and pressing the key where it seemed to work more than on others.,given-attributes,medium,,True,female,21-30,highschool
+98,1347,There was no strategy and the slides explaining went by too fast to understand what to do,none,hard,['caffeine'],True,female,21-30,college
+99,1458,I was trying to combine shapes with my key responses. I would try to find patterns,given-attributes,hard,['caffeine'],True,male,21-30,college
+100,1410,I tried connecting the forms and colors to the letter I had to press,memorized,hard,,True,female,21-30,college
+101,1348,"For phases one and two, I discovered the key asigned to the shape. For phase 3, I use memory to remember the previous phases.",memorized,easy,,True,male,21-30,<college
+102,1411,"At first remembering which button is square/rectangle, in last approach remembering certain patterns",given-attributes,medium,['caffeine'],True,male,21-30,postgrad
+103,1350,Different shapes artifacts and each shape had different pattern.,resemble,medium,['caffeine'],True,male,21-30,<college
+104,1412,"At the start between 2 blocks it was easy to remember which is which, but when the block choices were 4 at the start I didn't even remember which is which.
+Then my ""strategy"" was to remember the big dots are always outer, one circle is far right and one square far left and then jump one to get the other circle and square. 
+I hope it makes sense!",resemble,medium,['caffeine'],True,female,31-45,college
+105,1351,was confusing to make a choice between the sizes,none,hard,['caffeine'],True,female,31-45,college
+106,1413,"Firstly, there is not enough time to get acquainted eith the task.
+
+I didn't have time to read the command, so I checked which buttons work on each shape",given-attributes,medium,['caffeine'],True,male,21-30,<college
+107,1414,I just looked at the overall shape and the size of the dots to put them into categories,given-attributes,easy,,True,male,21-30,highschool
+108,1416,"The square and the sphere had specific buttons associated with them, as did their variations.",resemble,medium,['caffeine'],True,male,31-45,college

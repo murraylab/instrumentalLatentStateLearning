@@ -1,0 +1,274 @@
+,subject_id,strategy,strategy_radio,difficulty,passed_attention_check,substances,gender,age,education
+0,1118,"I basically assigned in my brain the keys to a specific color and even though it did not net me ALL the points it did help me a lot, I assigned them as such: C didn't work, V for blues (star mainly) B for purples (and blue square) and N for oranges",shape-color,medium,['caffeine'],True,male,21-30,college
+1,1162,"First I tried to understand which action worked on each shape. After understanding that only in stars did the shape matter, I tried to do the same to colors. After knowing which shaped worked with what, I just memorized it and went with it.",shape-color,easy,,True,male,21-30,college
+2,1160,I tried to guess which color and shape should get the corresponding letter to receive a reward and then stuck with it while trying to assemble others.,memorized,medium,,True,female,10-20,highschool
+3,1214,I remembered colors and shapes,shape-color,medium,,True,male,31-45,highschool
+4,1313,"star = v
+orange = c
+all others = n",shape-color,medium,,True,male,21-30,college
+5,1077,"I just knew that the star symbol was activated by B and N didnt active anything, other than that i just kind of guessed and that was it",shape-color,hard,,True,male,21-30,college
+6,1259,My strategy was to crack the pattern of colors and shapes and receive a reward based on it,shape-color,medium,['caffeine'],True,female,31-45,<college
+7,1272,"At first I thought it was the combo of shape + colour that was the only indicator of what I should do. Then after quite a few trials I realized that a) biting never worked, and b) that regardless of shape, yellow ones activated by singing. Then it became easy!",shape-color,medium,['caffeine'],True,female,31-45,postgrad
+8,1509,"First I randomlly tested the action
+Then I figured out that ""c"" was good for the stars
+Then that ""n"" was good for most of the squares and round
+Finally that ""b"" was good for orange figures",shape-color,medium,,True,female,21-30,college
+9,1078,"At first I thought it was random, but I had to test it with abusing one button.
+It took me 30 tries to notice the first patter of circle, then I found orange squares, and at the very last stars. I felt confused when there was so many circles inside the artifact, so at first I choose the button that I didn't even use.
+Then I found out that these were no different that the others.",shape-color,medium,"['caffeine', 'tobacco']",True,male,21-30,highschool
+10,1164,"I randomly started to press a button, and after that when I pressed the same button a couple of times on different things I started to see a pattern. Then did this to the rest of the buttons.",shape-color,easy,['caffeine'],True,male,21-30,<college
+11,1120,"no strategy, I tried to identify a pattern but could not do it.",none,hard,['caffeine'],True,male,21-30,<college
+12,1260,I remembered by memory colours and shapes which becomed for me easier to choose what to do.,memorized,easy,,True,male,10-20,<highschool
+13,1218,It star then 'c' else if yellow 'v' else 'b'.,shape-color,easy,,True,male,21-30,<college
+14,1174,I was just trying out different combinations until i figured it out,shape-color,medium,['caffeine'],True,male,10-20,highschool
+15,1468,I tried to remember the order in which the pictures were shown,texture,hard,['caffeine'],True,male,46-65,<college
+16,1510,I first allocated each key to a specific colour e.g the key v was linked with the colour peace and I did the same for the other keys.,color,hard,['marijuana'],True,male,10-20,highschool
+17,1165,"For the first 30 images, I was a little bit confused because I accidently skipped instructions, but later I was trying to remember the shapes and colors of each figures and I was just synchronizing it with a button. I mean, when I saw a star, I knew that I'm pressing ""B"" etc.",shape-color,medium,,True,male,10-20,highschool
+18,1121,"first i tried to figure out which shape fits to each letter, by using the same letter until it fit with the right gem. And then i just remembered which shape fit into which letter",shape,medium,,True,female,21-30,college
+19,1469,"stars= dance
+blue(except stars)= wave
+orange(except stars)= sing",shape-color,medium,['caffeine'],True,male,21-30,<college
+20,1219,I simply tried focusing on the response each shape/color gave at the beginning and tried adapting to it as best as I could.,shape-color,medium,['caffeine'],True,female,21-30,highschool
+21,1175,"For me it was an absolutely random thing, I triend to solve this puzzle by giving each color or shape an action, but it was all for nothing, so mostly i was going for B (wave). So, you can say that I did not have a logical strategy at all.",none,medium,['caffeine'],True,female,10-20,highschool
+22,1261,after some trial and error I got a pattern of shapes corresponding to buttons.,shape,easy,,True,male,46-65,<college
+23,1274,didn't really have a strategy - it was too difficult,none,hard,,True,male,31-45,college
+24,1511,Just analyzing patterns by trial and error and then memorizing them,shape-color,medium,,True,male,21-30,<college
+25,1166,"Stars were always v, b was very commonly squares, c and b were circles, but more commonly it was b, and n didn't match any of the shapes.",shape,medium,['caffeine'],True,female,10-20,<college
+26,1122,"in the beginning there wasnt any strategy but as it went on i experimented kind of aligning a colour or shape to a way of activating.
+
+orange(any shape)-c
+pink and blue stars-b
+and the rest of the shapes in either blue or pink-n",shape-color,hard,,True,female,10-20,<college
+27,1220,i kind of figured it out (i think) until more than halfway through which keys to press for a specific shape or color,shape-color,medium,,True,female,21-30,college
+28,1176,"When it was yellow I pressed C, when it was a star I pressed B, when it wasn't a star but it was blue or pink I pressed N",shape-color,medium,['tobacco'],True,female,21-30,<college
+29,1275,press the middle two buttons more often,shape,medium,,True,male,46-65,college
+30,1262,"In the beginning: Random
+End game: Default B; orange V; Star C;",shape-color,medium,,True,male,10-20,<college
+31,1512,the color and the shape of the figures tell me what key to press,shape-color,hard,['caffeine'],True,female,21-30,<college
+32,1470,"C = stars pink and blue
+V = all oranges
+B = blue and pink circles and squares
+N = none",shape-color,medium,,True,female,21-30,<college
+33,1167,what I did was that I was left with the option that was most repeated.,none,medium,,True,male,21-30,college
+34,1276,"it took a while to see the pattern of the colour, that the orange was always one letter, and the keys were defined by shaped not colour",shape-color,hard,,True,male,31-45,college
+35,1471,"first just shapes, when that wasnt working I went random
+Then i realized the pattern",shape-color,hard,,True,male,21-30,<college
+36,1513,I tried to associate with each shape the letter that would be most likely to give the correct result,shape,hard,,True,female,10-20,<college
+37,1081,kept track for each colour and shape which worked  which didnt any narrowed down which would reward,shape-color,easy,['caffeine'],True,male,21-30,college
+38,1263,I paid attention to the colors and shape of the figure,shape-color,medium,['caffeine'],True,male,31-45,college
+39,1178,Remembering shapes and colors.,shape-color,medium,['tobacco'],True,male,10-20,highschool
+40,1124,"At first I was quite confused. But eventually I figured out that b was for the stars, v was for any shape that was orange and c was for everything else.",shape-color,medium,,True,female,10-20,<college
+41,1168,"b for orange
+n for star
+anything else = v 
+It took something to get here",shape-color,medium,['caffeine'],True,male,10-20,highschool
+42,1082,in order to activate the star shape I had to press n.,shape,medium,['caffeine'],True,female,21-30,highschool
+43,1472,made some notes about colour and letter later added some shapes.,shape-color,medium,['caffeine'],True,male,46-65,highschool
+44,1514,"The colour and the shape is everything. 3 buttons are effective, namely, c; b and n",shape-color,medium,['caffeine'],True,male,21-30,college
+45,1264,i tried to remember the correct ones,memorized,hard,['caffeine'],True,female,21-30,college
+46,1222,"Understanding the patterns was the key
+Initially i was very confused, then i understood there was a pattern to follow
+For all stars you have to press C, for all the yellows expect the stars press V, then press N for all the others",shape-texture,medium,['caffeine'],True,male,21-30,highschool
+47,1083,first i tried to just spam 1 button and see when it would turn green. It didn't work well so i started using other keys as well and just slowly started to see patterns,memorized,easy,,True,male,21-30,college
+48,1179,i tried to match symbols / colours to actions,shape-color,hard,['caffeine'],True,male,10-20,highschool
+49,1169,Tried to first figure which letter goes for which color and then figured out which letter goes for which sign.,shape-color,easy,,True,male,31-45,<college
+50,1265,"first mostly trial and error, after i thought v was for star, c for circle and n for square, but many squares were wrong so after a while i experimented more and figures color played a part, the 80% chance from the example made it harder as i had a degree of uncertainty",shape-color,medium,,True,male,21-30,college
+51,1278,i did not have any. I was trying to repeat to watch for patterns to see if an action would work in some particulary artefacts but did not noticed a pattern.,shape-texture,hard,,True,female,31-45,postgrad
+52,1473,"First i started to press the same letter until i found a match, then i tried random letters to try to find a pattern. After that it was a process of trial and error to memorize the figure for each letter, for example, if i already selected letter c for the yellow square, i would select another letter for that figure the next time",shape-color,medium,,True,male,21-30,college
+53,1515,At first I didn't really know how it worked. I don't know if I missed any explanation. Little by little I understood the test. Associating each color and image to each letter in my head is what I did,shape-color,medium,,True,male,31-45,postgrad
+54,1126,No real strategy,none,hard,,True,male,21-30,college
+55,1170,"I tried to associate each key with each shape first. Once I realized that I couldn't do it with all shapes, I turned to color. Through trial and error I manage to associate each shape or color with each key.",shape-color,medium,,True,female,21-30,highschool
+56,1084,"pink and circle had more chance in the ""n"" letter, blue and stark had more chance in the ""c"" letter, and orange had more chance in the ""b"" letter",shape-color,medium,,True,male,21-30,college
+57,1266,I looked at the and or shape of the artifact and then knew which keys to press to activate it,shape-color,medium,,True,female,21-30,college
+58,1516,when I noticed a familair shape that wokred with a specific key I pressed it. Figured it out too late but going by trial an error I would've made better,memorized,hard,['caffeine'],True,male,31-45,college
+59,1181,"Honestly I had no idea what I was doing. Still, at one point, I managed to memorize which figure belonged to which button (and I did this for like, 3 figures. But for the most part I clicked random buttons and hoped I'd get it right.",none,hard,['caffeine'],True,female,21-30,<college
+60,1171,"When the artifact was a star I was meant to press 'b', when the artifact was a circle the most common answer was 'v' and sometimes 'n', when the shape was a square I think it was 50-50 whether to press 'n' or 'v'",shape-color,medium,,True,female,21-30,<college
+61,1517,"At the beginning i randomly chose buttons to press to find some corelation between shapes, colours and corresponding letters. After i found all the connections i decided to stick with them even if something changed and when it finally did it turned out to be a good strategy.",shape-color,medium,,True,male,10-20,highschool
+62,1475,"at first I tried different actions on different shapes, but then noticed that color yellow was supposed to have a separate action performed.",shape-color,easy,['caffeine'],True,female,31-45,postgrad
+63,1128,"Everything orange -c
+Everything star, except orange star- b
+Everything not orange or star - v",shape-color,easy,,True,female,21-30,college
+64,1518,"I notice that some shapes and colours give power to the actions, but only I figured out about pink circles and blue and orange squares.",shape-color,hard,['caffeine'],True,male,21-30,<college
+65,1268,"I learned which shape and colors was associated with which key, and then I found out that every orange image was associated with 'b', every star with 'n' and every square and circle that were not orange, with 'm'",shape-color,medium,['caffeine'],True,male,10-20,highschool
+66,1281,"Almost immediately I realized to press C when I saw the star, as for the other symbols, I used the method ""try and see what happens"" ;)",shape,medium,['caffeine'],True,female,21-30,postgrad
+67,1226,Trial and error. The task was difficult at the beginning because it was so different from the tutorial,shape-color,hard,,True,male,10-20,highschool
+68,1476,totally lack of strategy. i tried to find a pattern in each session but it seemed to me that there wasn't any. so i just pressed n to start and than tried to find if there where anyy image similar to the one rewarded that could fit,none,hard,['caffeine'],True,female,21-30,college
+69,1282,"star = v
+orange = n
+blue/pink circle/ square = b
+c = ??",shape-color,medium,['caffeine'],True,male,21-30,highschool
+70,1269,I noticed tha there were different colours and shapes and that they were assigned to different letters tha i had to press. I then decided to check which colour and shape is assigned to which alphabetical letter until i finally got it all right. it required a lot of thinking and i was up for a challenge .,shape-color,medium,,True,male,21-30,college
+71,1519,the color and the shapes were in each keyboard and relationship when it rewarded me,shape-color,medium,"['caffeine', 'tobacco', 'marijuana']",True,male,21-30,college
+72,1477,"Tbh, i do not know what im doing...",none,hard,,True,female,10-20,highschool
+73,1228,i noticed that all the orange as N and all the blue was B along with squares and the stars was C,memorized,medium,['caffeine'],True,female,21-30,highschool
+74,1088,"After some tries, I saw that the B button wasn't used at all, then it was all about remembering colors and shapes but even so, I had some difficulties.",shape-color,easy,,True,male,21-30,highschool
+75,1520,I tried to see which strategy works for which shape/colour,shape-color,medium,['caffeine'],True,female,10-20,<college
+76,1478,It took me a while to realize the same shapes and colors would be repeating themselves. I started taking note of the correct answers and used my key to answer the rest.,shape-color,medium,,True,female,31-45,<college
+77,1284,For the Colors. At the beginning it was difficult because I didn't know but later I saw which ones gave me points.,shape-color,medium,['tobacco'],True,male,46-65,college
+78,1089,"any color other than orange, if not a star - c
+v - not useful
+b - stars
+n - orange shapes",shape-color,medium,['tobacco'],True,male,21-30,<college
+79,1521,I was unable to develop a strategy because I couldn't understand the patterns and which letter to choose to press.,shape,hard,['caffeine'],True,male,10-20,<college
+80,1132,"Stars for ""v"", circles for ""b"", squares for ""n"" and diagonal stripes for ""c"".",shape-texture,hard,,True,male,21-30,college
+81,1522,"For about the first 50 trials, I was trying to figure out which key-image pair rewarded me.
+When I managed to associate all pairs, it was effortless to do the task.",shape-color,easy,,True,male,21-30,<college
+82,1480,"if orange click c, else if a star click n else click v",shape-color,easy,"['caffeine', 'marijuana']",True,male,10-20,<college
+83,1090,i did it randomly,none,hard,,True,male,21-30,<college
+84,1187,I didnt manage to read the whole instruction so I tried to memorise which shape+color was which action,shape-color,hard,['caffeine'],True,male,21-30,college
+85,1467,"I don't have one to be honest, just luck",none,hard,"['caffeine', 'tobacco']",True,male,21-30,highschool
+86,1231,"yellow shapes=c
+star=n
+everything else=v",shape-color,medium,,True,male,21-30,<college
+87,1286,"C gave most right answers
+Usually blue and pink things were letter C
+If it was a star however, it would be letter N
+If it was an orange picture, probably it would be letter V
+I never got an answer right with the letter B",shape-color,medium,,True,male,21-30,college
+88,1092,I just figured a pattern. The pictures never changed from the action. So I guess I remembered them.,shape-color,medium,,True,male,10-20,<college
+89,1188,"square: v
+star: b
+circle: n",shape,medium,['caffeine'],True,male,31-45,postgrad
+90,1287,"First, I tried each of the types of responses in a row, which I quickly realized was a bit stupid, because the artifacts kept changing.  Then I tried the same responses with each artifact shape.  I quickly figured out that V always caused stars to pay out.  After some trial and error, I figured out that squares and circles payout out more often than not with C.  There was probably another correlation involving color I could've looked for, but I figured I'd just stick to my strategy and get most to pay out.",shape,easy,,True,male,31-45,<college
+91,1232,"I tried to pick up the pattern, which I eventually did - this allowed me to pick to which action a certain shape/color ""belonged"" with almost 100% accuracy.",shape-color,medium,,True,male,21-30,<college
+92,1508,"I tried having strategy, which worked for the tutorial however I had no strategy for this activity since I did not get a chance to read the instructions.",none,medium,,True,female,21-30,postgrad
+93,1135,"At first by colour, then shape ,then lastly just choosing positive options instead of aggressive options like biting.",color-texture,hard,['caffeine'],True,nonbinary,21-30,<college
+94,1288,"I think the orange color was mostly tied to the ""v"" button, but other than that, I didn't quite grasp the real pattern behind this game. Plus, I think the ""n"" button was almost useless, considering it wasn't even in the tutorial, maybe it was just a distractor of some sort.",color,hard,['tobacco'],True,male,31-45,college
+95,1093,The artifacts had to be activated because it was like a treausure,shape,medium,,True,female,10-20,<college
+96,1523,"Orange shapes were always V, star shapes were C, the rest were all B.",shape-color,easy,,True,female,21-30,college
+97,1136,"first i was going by shape, like star = dance and circle = wave, but then it started to go bad so i just didn't really understand how it should be activated",none,hard,,True,female,10-20,<college
+98,1190,My strategy was to try out any letter at the beginning so that I would see which one falls under which one.,shape-color,medium,,True,male,21-30,college
+99,1234,Star was always C so I used that always and the circle and square kept changing so I went with my gut for those,memorized,hard,['caffeine'],True,female,10-20,highschool
+100,1289,I just tried to remember the shape and the colour,shape-color,hard,['caffeine'],True,female,21-30,<college
+101,1524,"If star:
+    hit b
+else if orange:
+    hit c
+else:
+    hit n
+Took me long enough to figure out the pattern. Trial and error got me there.",shape-color,medium,,True,female,21-30,postgrad
+102,1484,Assign each action to a specific shape,shape,hard,"['caffeine', 'alcohol', 'tobacco']",True,male,21-30,highschool
+103,1094,Look color and fore and try to remember patterns,shape-color,hard,"['caffeine', 'tobacco']",True,male,31-45,college
+104,1191,It went according to colour and shape but I somehow still managed to struggle.,color,hard,['caffeine'],True,female,21-30,college
+105,1290,"I just tried to match either the color or the figure to one of the available keys, trial and error.",shape-color,medium,['caffeine'],True,male,31-45,college
+106,1235,"I just kept trying until I found what worked, sometimes.",shape-color,hard,['caffeine'],True,female,21-30,college
+107,1525,"Shaped like a star = C
+Orange colour = N
+Anything else = B",shape-color,easy,,True,female,21-30,postgrad
+108,1526,try and error with the shapes and colors,shape-color,medium,['caffeine'],True,female,21-30,college
+109,1486,"I figured out that I got most ponits by clicking wave on squares, sing on circles and dance on stars.
+Tested the bite function too much I think because it seems to never give points.",shape-color,medium,['caffeine'],True,male,31-45,college
+110,1236,"i was just using c,v and b keys and trying to guess with shape and color fits to specific key",shape-color,medium,"['caffeine', 'alcohol', 'tobacco', 'marijuana']",True,male,21-30,<college
+111,1291,"The stars were always ""B""
+Everything else was ""V""
+And everything else in orange was ""N""",shape-color,medium,['caffeine'],True,male,21-30,college
+112,1096,recognition based on shapes and patterns,shape,medium,['caffeine'],True,male,31-45,highschool
+113,1292,Trial and error to start with. Once I had found a letter that activated that one I stuck with it every time that colour of that shape appeared. I eventually learnt that all stars were c and that for the other shapes all blue and pink were n and all orange and green were b. When the shapes with different patterns inside appeared I continued to use this method and discovered it still worked and that the patterns inside didn't stop it working.,shape-color,medium,,True,female,46-65,highschool
+114,1097,"Star - V
+Circle - B
+Square - No clue tried both",shape,medium,['caffeine'],True,male,21-30,<highschool
+115,1527,"I tried to see if each shape was associated with one of the actions. It worked for some shapes, but not always for squares. I only realized later in the game that some sqaures were activated by one action and other squares by another.",shape,medium,,True,female,31-45,postgrad
+116,1194,trail and error each shape and colour and wrote down the results,shape-color,medium,,True,female,21-30,<college
+117,1238,"with a few rounds I fugured out the yellow has it's own command, and so do the stars, others are on the third command, on of the given commands was not useful",shape-color,easy,"['caffeine', 'tobacco']",False,female,21-30,<college
+118,1528,We wrote down the symbols and tried all the possible answers and after trial and error we found the correct ones,color,hard,"['caffeine', 'alcohol', 'marijuana']",True,female,10-20,college
+119,1141,Trying to associate the combination of colours and shapes to a letter,shape-color,medium,"['caffeine', 'tobacco']",True,male,21-30,<college
+120,1195,Colour coordination between the circles and the square. i didnt see the pattern at first but then identified it.,shape-color,easy,['caffeine'],True,male,21-30,postgrad
+121,1529,"i tried to find which move is cprrect for each object, one by one and based on logical assumptions",shape-color,medium,,True,female,31-45,college
+122,1142,i'm a very slow learner and so at some point i wasn't able to understand what i was doing. i'm sorry if this effected the experiment negatively in any way.,none,hard,['caffeine'],True,female,21-30,highschool
+123,1295,First I tried to match the right button to the right shape then I discarded one of the keys and matched the rest of the shapes (in one color) to the last key.,shape-color,medium,,True,male,21-30,college
+124,1530,"yellow was b, stars were n and the rest wasv",shape-color,medium,,True,female,46-65,college
+125,1197,I was able to see which colours of shapes will give me an activation.,shape-color,easy,['caffeine'],True,female,21-30,highschool
+126,1491,"I tried to do all the different things on the same shape until I got the reward, then I remembered what action got me the reward.",shape-color,easy,,True,male,10-20,<college
+127,1531,I eventually realised the letters mostly matched the colours,color,hard,['caffeine'],True,female,21-30,highschool
+128,1144,"I think yellow figures belonged to ""v"", stars of any color to ""c"" and the rest to ""b"", neither belonged to ""n"".",shape-color,hard,['caffeine'],True,female,21-30,college
+129,1198,"I noticed that c has the most probability of recurring, so i focused mostly on it",memorized,medium,['caffeine'],True,male,21-30,highschool
+130,1242,I've figured that some artefacts were related to an specific letter,shape,hard,['caffeine'],True,male,21-30,college
+131,1297,after a moments thought the brain then generated a match on its own,shape-color,easy,"['caffeine', 'tobacco']",True,male,46-65,college
+132,1102,"V for circles and squares, b for stars",shape,medium,,True,male,21-30,college
+133,1492,"At first, I tested out all of the keys. I then noticed that most of the pink and blue shapes were connected to the ""c"" key and that orange was connected to the ""b"". Then I figured out that all the star shapes were connected the the ""v"" key. I did not find any correct results for the ""n"" key, so I stopped using it.",shape-color,medium,,True,nonbinary,21-30,<college
+134,1532,"I tried random keys until I got rewarded, and then remembered those keys for every artifact and kept pressing them. Blue and magenta were ""c"" except for the star shapes, the star shapes were ""b"" and the orange shapes were ""n""",shape-color,easy,['caffeine'],True,male,21-30,<college
+135,1243,"At first I was clueless but then started to see patterns, first I figured out the star and then tried different keys for circle and square, then figured out that their colors matter.",shape-color,medium,,True,male,10-20,highschool
+136,1103,"I found that the stars always gave a reward everytime i clicked 'v', so that was easy. The rest felt more hit or miss, so I tried everything until I found a button that would give me the most diamonds 'n'.",shape,hard,['caffeine'],True,male,21-30,college
+137,1493,Stars - N; circles - v... Usually V gained points,shape,hard,['caffeine'],True,male,21-30,college
+138,1533,"First of all I noticed shape of artifacts, so I found that there is specific key for star-shaped artifact (""dance"" = ""b"" key, no matter what coloured this star-shaped artifact is) and other keys are specified for differently shaped artifacts (squares, circles). So then I noticed specifics for these another artifacts, like their shapes and colours. This was my way how I found specific keys for specific colours of these artifacts - squares and circles.",shape-color,medium,"['caffeine', 'alcohol']",True,male,31-45,college
+139,1200,Figured out the colored shapes with corresponding letter,shape-color,easy,,True,male,21-30,<college
+140,1494,"I tried to remeber which shape in which color comes to which button. For example orange sqare was nearly always on ""N""",memorized,hard,['caffeine'],True,female,10-20,highschool
+141,1534,"I assumed that
+n = pink
+c = yellow
+v = blue
+and I adjusted it",color,medium,,True,male,21-30,college
+142,1104,"stars were n, but the rest was more tricky, so i tried to refer to previous combination, but couldnt figure it out",shape,hard,,True,male,21-30,highschool
+143,1244,"I didn't uderstood with was a pattern, and when i tried to click 'e' for dance nothing never happens",none,hard,['caffeine'],True,female,21-30,postgrad
+144,1299,"The big stars were 'c', anything orange was 'n', and the rest were 'b', 'v' didin't provide anything",shape-color,medium,,True,female,31-45,college
+145,1495,I tried to use logics related to shape or colour. When that didn't work I decided to always press c and try to get the maximum I could with that key.,none,hard,,True,male,21-30,college
+146,1535,"Star was always 'v', anything orange was 'b' and anything else (pink/blue circle/square) was 'n'. 'c' was never used",shape-color,medium,,True,male,10-20,highschool
+147,1300,First guessing then trying again. Tried to look for similarities and patterns.,shape-color,hard,,True,male,31-45,college
+148,1536,I took the first rounds to understand the connections (colors and shapes) by a trial and error method.,shape-color,easy,,True,male,21-30,postgrad
+149,1202,my plan a was to remember all colours and shape according but when time s go on i changed my plan because it was no longer working for me.,shape-color,medium,['caffeine'],True,male,31-45,college
+150,1301,"tried to figure out shape and colour, as well as combination between them.",shape-color,medium,['tobacco'],True,male,46-65,postgrad
+151,1246,"red-->press c
+orange--:press v
+blue-->press b
+did not find correlation with n",color,medium,['caffeine'],True,female,21-30,college
+152,1106,"Stars always were v, smal dots were b, the rest i couldn't actualy understand",none,medium,,True,male,10-20,highschool
+153,1496,"Firstly, it was hard at start because there was not enough time to read instruction, so I had to think what to do myself. I tried to recognize which colors are related to which action. b was orange and v was blue, then I recognized that n is not pink, b was for stars, and v was for blue and pink figuers",shape-color,easy,,True,male,21-30,<college
+154,1537,"begins to follow a pattern where the figure corresponded to a key, although sometimes it changed most if it corresponded to each one of them",shape-texture,medium,['caffeine'],True,male,21-30,<college
+155,1497,"I used ""n"" for oink and blue colors for the 1st round, then ""c"" for orange color. sometimes the blue and oink wouldn't work for ""n"" so I used v and b",color,hard,['caffeine'],True,male,21-30,college
+156,1204,"I tried and fail until I discovered a pattern. For the stars you have to dance; for the squares and circles, if they're orange, you have to sing, the rest of squares and circles you have to wave.",shape-color,medium,,True,female,21-30,<college
+157,1248,"all the orange shapes were activated with ""c""
+pink stars and squares with ""v""
+everything blue was ""b"" and the pink circles too",shape-color,medium,,True,female,21-30,college
+158,1498,"At first i tried to gain points by random, then i noticed that squares and circles have the biggest chance of getting reward when I pressed ""c"" and stars - when pressing ""n"". After some time I noticed that orange squares and circles don't get the reward while pressing ""c"" so i figured that I need to press something else. I stopped experimenting with particular shapes/colors when I got at least couple rewards for pressing the same key every time.",shape-color,easy,['alcohol'],True,male,21-30,<college
+159,1109,really didnt have any strategy,none,hard,"['caffeine', 'tobacco']",True,female,21-30,highschool
+160,1151,stars=c orange=n others=v (I think letters are right),shape-color,easy,,True,male,10-20,<college
+161,1499,"I tried to relate the shapes and colors, and see which one gave me a correct answer",shape-color,medium,,True,male,21-30,college
+162,1249,Trying to figure out which keyes corresponded with each shape.,shape,medium,['caffeine'],True,male,21-30,<college
+163,1304,"When I saw a star I pressed the key ""C"", when I saw a circle or a square I pressed the key ""N"" but if the figure was orange then I would press the key ""B""",shape-color,easy,,True,female,21-30,<college
+164,1250,"Initially i tried to associate the symbols to each respective action. I thought the star was associated with dancing so I just always used dancing for it.
+Then I thought for a long time the square and circle would be related to the remaining actions by colors and it took me awhile to figure out bite wasn't being used.",shape-color,medium,"['caffeine', 'tobacco']",True,male,21-30,postgrad
+165,1500,My stratergy involved looking at the way in which the dots in the shapes were placed,memorized,medium,['caffeine'],True,female,31-45,postgrad
+166,1153,"Firstly, I tried to guess which key will be good, but after moment I just press one key durning many shapes to see which will be the good one.",shape-color,easy,,True,female,21-30,college
+167,1207,by trial and error I learned what to choose,shape-color,medium,,True,male,21-30,highschool
+168,1306,"I thought of many words that could start with the letter N
+I noticed the letter N gave best blind ""DPS"", so I just bet on it this whole time.
+I scored around almost 50% correct answers by simply noticing most % was purely N.
+I could've try to track the code, but I'm not sure if there was any even involved.
+The questionary beforehand was even more interesting.",memorized,easy,"['caffeine', 'tobacco', 'marijuana']",True,male,21-30,<college
+169,1460,random because the explication were too quick to read it.,none,hard,['tobacco'],True,male,21-30,highschool
+170,1502,"According to the feedback I would change my tactic if it said that there was no reward. In the beginning it was more trial and error, but I tried to group artifacts according to color, shape or both",shape-color,medium,,True,female,21-30,postgrad
+171,1307,"green  n
+dtsr c
+all others figures b",shape-color,easy,['alcohol'],True,male,31-45,highschool
+172,1252,the last bit was no strategy really i went with gut feeling. there was too much dots in those shapes i just found myself a bit confused.,shape-texture,medium,,True,female,31-45,college
+173,1208,"blue or purple sqare or circle = b
+any color star = v
+any shape orange = c",shape-color,medium,,True,male,21-30,highschool
+174,1155,"try to memorize which figures worked with the keys but there were some of them that didnt work with either key, used memory on finger to not be watching keys every time",shape-color,medium,['alcohol'],True,male,31-45,postgrad
+175,1253,"started with guessing but taking note of which shapes and colour corresponds to what key, then figured out which shape and colour combo matches which key",shape-color,easy,['caffeine'],True,male,21-30,<college
+176,1308,"The colour orange was ""v"", the colour blue and pink were ""b"" and all the stars (no matter the colour"" were ""n"".",shape-color,easy,,True,female,21-30,highschool
+177,1209,"The large dots in the shapes where ""N"", the tinier dots were ""C"" and the star shapes were mostly ""V"".",shape-color,medium,['caffeine'],True,male,21-30,college
+178,1156,I tried the letter that more times got it right (the v),none,medium,,True,female,21-30,college
+179,1504,by looking at the shapes the circles were placed in,shape,hard,['caffeine'],True,female,31-45,college
+180,1309,I just summarized the colors and their letters,color,medium,,True,male,31-45,postgrad
+181,1210,"I only figured it out that the start was always activated with ""v"".",none,hard,['caffeine'],True,female,21-30,college
+182,1115,"The last of them:
+Star for the C
+Yellow for the V
+Rose and light blue for the N",shape-color,medium,['caffeine'],True,male,46-65,postgrad
+183,1157,"stars were all c
+blocks were on b
+mostly played between c and b",shape-color,medium,,True,female,21-30,postgrad
+184,1255,I did not use a strategy. I couldn't work out if there was any kind of pattern. I did not find the trial run useful for this task.,none,hard,['caffeine'],True,female,21-30,college
+185,1211,I started by checking the correlation between letters and shapes and then as a second correlation I considered colors,shape-color,medium,['caffeine'],True,male,31-45,<college
+186,1505,"I had to find the pattern to follow first, afterthat it wast a matter of focusing in the shape and colour of the images.",shape-color,medium,,True,male,21-30,<college
+187,1463,"I tried to find a pattern between the colors, the shapes of the polygons and the designs within them, trying to see if there was a connection between the patterns and the keys to be pressed. Given the final result, it is evident that, if present, I have not found the pattern.",shape-color,hard,,True,female,31-45,<highschool
+188,1074,"I justed used the method of trial and error, after that I connected the patterns with their corresponding actions that would lead to a reward.",shape-color,easy,,True,male,21-30,postgrad
+189,1075,Memorizing colors and shapes,shape-color,hard,,True,female,21-30,highschool
+190,1158,"I tried to figure it out somehow in terms of shape and what's inside, but it failed",shape-texture,hard,['alcohol'],True,male,21-30,highschool
+191,1256,"c for yellow objects, v for all others, but it took a bit of trying",color,medium,,True,male,21-30,postgrad
+192,1311,I don't had any strategy,none,medium,,True,male,21-30,postgrad
+193,1159,I thought that by expanding the shape you will win more points,texture,medium,['caffeine'],True,male,21-30,<college
+194,1117,"I had no strategy, I tried to remember the color and shape.",memorized,medium,['tobacco'],True,male,31-45,highschool
+195,1465,The shapes and the colores,shape-color,hard,,True,male,10-20,highschool
+196,1507,"I was trying to see which buttons are associated with which symbols/colours. First I found that both colours of the stars were connected with ""b"", then I tried to find why I was getting fails with some squares/circles. First I believe, found that pink square was associated with ""v"" and orange square with ""n"". The last one I connected was orange circle because at that point I already knew orange square was ""n"" so I tried that one.",shape-color,medium,['caffeine'],True,female,21-30,postgrad

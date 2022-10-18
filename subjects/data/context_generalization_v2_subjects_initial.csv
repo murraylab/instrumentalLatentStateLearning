@@ -1,0 +1,72 @@
+,subject_id,strategy,strategy_radio,difficulty,passed_attention_check,substances,gender,age,education
+0,570,"I realized that right was for circles and left was for squares. Then, I quickly realized big inner circles were right, and little inner circles were left.",given-attributes,easy,{},True,male,31-45,college
+1,567,"when there was circle with dots inside it I pressed v, and circle with dotted lines inside it I pressed c. When there was square with dots inside it I pressed x and with square with dotted lines inside I pressed z. It was very simple task.",resemble,easy,{},True,male,21-30,college
+2,573,Just flow instruction.,given-attributes,medium,{},True,male,21-30,college
+3,557,Trial and error until you find a pattern and try to repeat it as many times as possible.,resemble,medium,{},True,male,21-30,college
+4,572,I just tried to remember which key corresponded with which attributes of the shapes. It didn't really work well to be honest; I got quite confused.,given-attributes,hard,{},True,female,21-30,college
+5,576,very well in the activity,resemble,medium,{},True,female,31-45,college
+6,574,the first sets of shapes were for testing to see what would happen so I memorized those. Then I followed the pattern. When the tasks were combined I kept them separate and used what I knew about each set.,given-attributes,medium,{},True,male,31-45,<college
+7,575,"On the trials with only two keys to press, it was easy to see which key corresponded to each shape. When it got to the stage with four options, I was mentally (and I guess physically) thrown off. Eventually, I decided to orient both of my hands in a way that each previously associated pair of keys would involve two fingers from each hand (one finger going over the other for the x and c keys). Although I still made some mistakes after that change, my performance was better, once I got associated again with the shape designs and their respective keys.",given-attributes,hard,{},True,male,21-30,highschool
+8,571,some difficulty o do this task..its a memory game,given-attributes,medium,{},True,male,31-45,college
+9,562,"In the first 2 sections, it was simply choosing the shape that matched the key, color was not relevant. In the last part where I had to use 4 keys and both color and shape mattered, it was much more difficult to keep track.",given-attributes,medium,{},True,male,46-65,<college
+10,565,i more concentrate on the image.,memorized,hard,{},True,female,21-30,college
+11,577,"For the first two planets I pressed randomly and figured out the right button was based on the out shape. For the last planet, I tried basing the button based on what worked in the other two planets. When that didn't work I tried it based on shape. After that, it was trying each key and trying to remember what worked and what didn't, it wasn't very successful.",given-attributes,medium,{},True,male,31-45,college
+12,583,"I didn't really use any strategy, just learned as I went along.",none,easy,{},True,male,31-45,highschool
+13,581,The earlier rounds weren't too bad. I just needed to determine which button for which shape. The last rounds were a bit harder because it seemed to be based on shape and and size.,given-attributes,medium,{},True,female,31-45,<college
+14,609,"It was mostly trial and error, when I realized what was working and what wasn't it became a bit easier.",given-attributes,hard,{},True,female,21-30,college
+15,595,i was followed the rules,resemble,medium,{},True,male,31-45,college
+16,591,I tried to remember the function that went with the artifact.,memorized,medium,{},True,female,31-45,<college
+17,604,I would identify by trial and error the key associated with a square or a circle.,resemble,medium,{},True,male,21-30,<college
+18,598,just needed to determine which button went with which artifact; process of elimination,resemble,medium,{},True,female,46-65,<college
+19,590,"The differences were first in circle or square, then in design.  I picked up on it but it was hard to remember which was which.",given-attributes,medium,{},True,male,31-45,postgrad
+20,580,try to find maximum no,resemble,medium,{},True,male,21-30,college
+21,579,I have not used any strategy,memorized,medium,{},True,female,31-45,college
+22,607,i just note the size of the dots and the shape of the artifacts.,resemble,medium,{},True,female,31-45,college
+23,599,I said colors and letters out loud until I got it.,given-attributes,medium,{},True,male,46-65,postgrad
+24,622,"left keys for square artifacts 
+right keys for circular artifacts 
+
+for the final task the left of the left for ""linear"" artifacts, the right of the left keys for ""dots"" artifacts and the same for the right keys",given-attributes,medium,{},True,male,21-30,<college
+25,619,I just used my brain to try and remember as many as I could.,memorized,medium,{},True,male,21-30,college
+26,615,I just did trial and error until I found success and then tried to remember the associations.,memorized,medium,{},True,female,31-45,postgrad
+27,601,Color and shapes,given-attributes,medium,{},True,male,31-45,college
+28,623,it was easier to determine the method for the first two rounds when there were only two options. the third round where there were three options i found it very difficult to find any consistent feedback,resemble,easy,{},True,male,31-45,<college
+29,632,I had no specific strategy. I was just moving back and forth.,none,medium,{},True,female,46-65,<highschool
+30,588,Strategy changed but I tried to use shapes and sizes to put them in categories.,given-attributes,medium,{},True,female,31-45,college
+31,611,I just memorized the shape and grids for different keys.,memorized,easy,{},True,female,31-45,college
+32,620,I memorized the each one .,memorized,medium,{},True,male,21-30,college
+33,621,"I was just trying to associate what hit with what.  Was the key, shape, size or color.",given-attributes,medium,{},True,male,31-45,college
+34,617,give my best,memorized,easy,{},True,male,31-45,college
+35,627,Probably choose my knowledge.,memorized,medium,{},True,male,21-30,college
+36,641,"polka circle right
+line circle left
+polka square left
+line circle right
+maybe. I felt it out",resemble,medium,{},True,male,31-45,<college
+37,645,Looked for patterns.,given-attributes,hard,{},True,male,>65,college
+38,646,I attempted to memorize the rules after trial and error.,given-attributes,medium,{},True,male,31-45,college
+39,635,"I didn't really have a strategy, just remembering the correct response for each class of object.",given-attributes,medium,{},True,male,46-65,college
+40,649,"Well I first started by trying to find the pattern for which key went with what artifact. Once I learned which keys went for square artifacts and which ones went for circles, I simply hit the corresponding keys when the objects showed up.",given-attributes,easy,{},True,male,31-45,college
+41,652,Tried to remember the shape inside -square or circle as well as the pattern - small or large.,given-attributes,medium,{},True,female,31-45,<college
+42,638,"Each trial involved two shapes. Each shape corresponded to a particular action (or key). Circles, as opposed to squares, exclusively made use of the Z & V keys.",given-attributes,medium,{},True,male,21-30,college
+43,629,I memorized each one individually .,memorized,medium,{},True,male,21-30,college
+44,643,"Z C = circles
+XV = squares
+Z = small inner circles
+C = big inner circles
+X = big inner circles
+V = small inner circles",resemble,medium,{},True,male,46-65,college
+45,640,"At first I thought I had figured the algorithm out with colors, shapes, and sizes. That changed when it became time to incorporate 4 options rather then 2. I just went with my gut feeling on each one based on how the previous colors and shapes turned out.",given-attributes,hard,{},True,male,31-45,college
+46,654,interesting,given-attributes,medium,{},True,female,31-45,college
+47,663,i figured that some were by differentiated by shapes,resemble,hard,{},True,female,46-65,college
+48,670,nice,memorized,medium,{},True,male,21-30,college
+49,671,,,easy,{},True,male,10-20,<college
+50,662,"line squares were z, dotted squares were x, lines circle c, dotted circle v",given-attributes,medium,{},True,female,21-30,college
+51,658,I used the strategy of pressing the letter on the right when there was a square and the letter on the left when there was a circle.,resemble,medium,{},True,female,46-65,college
+52,661,"At first nothing, then I realized there was a pattern, so I just tried to memorize it.",given-attributes,medium,{},True,female,31-45,<college
+53,653,"I just tried to figure out what the pattern was through trial and error. Once I figure that out, it was pretty easy to differentiate. It did take me a little bit longer than I thought it would, though!",memorized,medium,{},True,male,31-45,college
+54,650,"I learned to only pay attention to the shape at first, and then only the shape and pattern when the two were combined.",given-attributes,medium,{},True,male,31-45,postgrad
+55,659,good,memorized,medium,{},True,male,31-45,college
+56,668,trying to associate the figures to the position of the keyboards,resemble,medium,{},True,female,21-30,postgrad
+57,672,"Simply remembering which shapes inside each shape belonged to which letter. For example, big circle with a lot of tiny little circles went with a certain letter, while the other circle with the big polka dot circles went with another letter, etc.",given-attributes,medium,{},True,male,21-30,<college
+58,674,"I tried the different buttons to see if this represt a circle, square and the sizes of the figure. For example I realize that the'Z' represent the big circle",given-attributes,medium,{},True,male,21-30,<college

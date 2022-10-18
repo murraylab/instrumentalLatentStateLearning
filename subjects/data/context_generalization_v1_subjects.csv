@@ -1,0 +1,63 @@
+,subject_id,strategy,strategy_radio,difficulty,passed_attention_check,substances,gender,age,education
+0,426,"In the first round, I immediately decided you would shake a cylinder or circle and slap a square. With the second set of shapes, I just guessed, and once I figured it out, I simply tried to remember the correct keys.",memorized,medium,{},True,female,46-65,college
+1,433,I tried to correlate the size and color of each shape to the right corresponding button.,given-attributes,medium,{},True,male,31-45,<college
+2,435,"Had an look on the colors, shapes and sizes.",given-attributes,easy,{},True,male,31-45,college
+3,427,"look for patterns in colors, outer and inner shapes",given-attributes,medium,{},True,female,<10,<highschool
+4,431,just thought,memorized,medium,{},True,male,21-30,college
+5,428,from my opinion,memorized,medium,{},True,male,21-30,postgrad
+6,430,Nothing special strategy simply reminded the keys for small or big dots and circle or square shapes.,memorized,medium,{},True,female,31-45,college
+7,448,I was trying to learn the pattern with the early guesses and then remember the existing patteren later on,given-attributes,medium,{},True,male,31-45,college
+8,449,Just flow instruction. Not anything else.,given-attributes,hard,{},True,male,21-30,college
+9,451,No strategy I tried to remember but I failed miserably,memorized,hard,{},True,male,31-45,highschool
+10,464,For the z and v I knew which was going to get me the rest. For x and c I guessed,resemble,medium,{},True,male,31-45,college
+11,442,I tried to follow patterns I knew to be true and guessed when I didn't know what to do.,given-attributes,medium,{},True,male,31-45,<college
+12,439,"sometimes I won with one key per color, other times I didn't.",memorized,hard,{},True,female,>65,<college
+13,455,good an please apporved the hit,none,easy,{},True,male,31-45,college
+14,468,The circle and the Square.,resemble,medium,{},True,male,31-45,postgrad
+15,447,Shapes patterns,given-attributes,medium,{},True,male,21-30,college
+16,456,"colors, shapes, designs, styles.",given-attributes,medium,{},True,male,31-45,postgrad
+17,484,for activating these my strategy is to observe the shape and design in that,given-attributes,medium,{},True,male,31-45,college
+18,488,i just tried to memorize what picture went with what button.,resemble,easy,{},True,female,31-45,highschool
+19,480,Orange and pink balls were always the same keys. The blue and pink lines could change it was 50/50 whether it would award me.,given-attributes,medium,{},True,female,46-65,college
+20,459,"tried to remember the color, shape and design",given-attributes,easy,{},True,male,31-45,college
+21,473,"I tried to remember what worked, the last rounds were tricky.",none,medium,{},True,female,46-65,highschool
+22,461,Try and figure out what buttons are assigned to overall shape and internal shape.,given-attributes,medium,{},True,male,31-45,highschool
+23,482,"at first I was focused on the nuclei, however I realized that the forms that differentiated one from the other, however the nuclei confuse a lot, it requires a lot of concentration to not make mistakes. it was really fun",memorized,medium,{},True,male,31-45,highschool
+24,444,"I was just doing a trial and error and trying to repeat what worked. I had a good idea early of which went with which either circle or square but towards the end, I didn't find it as easy to keep track.",given-attributes,medium,{},True,female,46-65,college
+25,469,none,memorized,hard,{},True,male,21-30,postgrad
+26,479,"For the first artifact, I picked a random action. If it worked, I would pick the other action for the other artifact. I grouped the artifacts based on their border shape.",resemble,easy,{},True,female,31-45,college
+27,477,"Initially, I chose randomly to determine which artifacts could be activated by the button choices. After first learning  how to activate the artifacts through trial-and-error, I attempted to classify and memorize them to complete the task.",given-attributes,medium,{},True,female,31-45,college
+28,502,Colours and shapes,given-attributes,medium,{},True,male,31-45,college
+29,496,Somewhat easy to memory the artifacts.,memorized,medium,{},True,male,31-45,college
+30,513,none,none,medium,{},True,male,31-45,<college
+31,489,I did okay when it was just the two choices but then I confused myself when they were altogether. I would have to think which key went with which type. I was lost.,given-attributes,hard,{},True,male,46-65,college
+32,490,I assimilated the outer geometric shape with the size of the inner geometric shapes,given-attributes,hard,{},True,male,21-30,college
+33,499,Just of my best guess,none,hard,{},True,male,31-45,<college
+34,474,"My strategy was simply to memorize that the circles were to the right and the square was to the left of the key pairs (Z{r} and X{l} / C{r} and V{l}). After that, it was also memorized that the spaced filling was from the first phase (z and x) and the more united filling was from the second phase (c and v).",given-attributes,medium,{},True,male,21-30,college
+35,501,I decorated the patterns,given-attributes,medium,{},True,male,10-20,highschool
+36,503,"I knew how the first set of artifacts worked, so I tried to focus on at least getting those right. My strategy with the second set was to just guess as best I could.",memorized,hard,{},True,female,21-30,highschool
+37,500,Square and circles were on different keys,resemble,medium,{},True,male,21-30,highschool
+38,493,it was interesting,memorized,easy,{},True,male,31-45,college
+39,497,I did not use any strategy. I just follow the instruction,none,easy,{},True,male,21-30,college
+40,505,once i narrowed down circule/square which was which it was easier. and the last section remember which was circle/square vs lines and dots was tough at times,given-attributes,medium,{},True,female,31-45,<college
+41,516,"Honestly, just trial and error.",given-attributes,medium,{},True,male,21-30,highschool
+42,528,"I tried to remember the corresponding keys from the trial. I thought I finally caught on, maybe a few more blocks and I would have done better.",given-attributes,hard,{},True,female,>65,highschool
+43,522,GOOD,memorized,easy,{},True,male,31-45,college
+44,524,"big pink circle was z, big orange circle was c, big circle was v, big square was x",given-attributes,easy,{},True,male,31-45,<college
+45,535,"The beginning was a little difficult, but after a few minutes, I managed to understand the system a little and my strategy was to see a pattern in the images and drawings, that way I could maintain a good accuracy.",resemble,medium,{},True,female,31-45,<highschool
+46,510,i just remember the shape size and size color to guess the next to next object came in this task. such interesting task to do this.,resemble,easy,{},True,male,31-45,college
+47,527,good,none,easy,{},True,female,31-45,college
+48,518,I tried to link each of the figures with the keys,memorized,medium,{},True,male,21-30,<college
+49,534,trial and error until I figured it out then just talking to myself saying either the color or shape out loud,given-attributes,medium,{},True,female,46-65,college
+50,529,"i just chose an option first, and then applied what I learned from that to the next trials",given-attributes,easy,{},True,male,21-30,college
+51,520,"Didn't really have one. Once I found the pattern, I tried to remember it for each planet.",given-attributes,easy,{},True,male,21-30,college
+52,517,I did trial and error to find the patterns,given-attributes,medium,{},True,male,31-45,<college
+53,537,"I just did my best to remember, so not really any type of strategy in particular.",none,medium,{},True,male,21-30,college
+54,552,"I tried to figure out the correct way to activate them. It was usually based on shape and color, I was getting frustrated when I'd make mistakes and never figured out a few of them that might have been pattern related (pink circle with lines primarily, I think).",given-attributes,medium,{},True,male,31-45,<college
+55,531,"At first it was left key for circle and right key for square. Then, when we had both types at the same time, I grouped them into ""new"" and ""old"" circles (always on the left keys) and new and old squares (which are always on the right). That's mostly it.",given-attributes,medium,{},True,male,21-30,<college
+56,475,Colours and shapes,given-attributes,medium,{},True,male,31-45,college
+57,492,"First trials were to figure out when I was making a right decision; For the following ones I repeated those I got ""power increased"". So I verified what was happening to the shapes, colors, etc, and decided what to repeat. For instance, a left letter was to circles, and a right one was to squares. The last rounds were more complicated, but I reminded that there were probabilities to consider as well, so I insisted on my decisions until I got a correct answer.",given-attributes,medium,{},True,female,31-45,college
+58,539,Just simple trial and error and luck.,given-attributes,medium,{},True,male,46-65,<college
+59,550,Z was for the purple dotted circles. X was for green dotted circles. C was for the jagged lined circles. V was for the jagged lined squares.,resemble,easy,{},True,male,31-45,college
+60,547,I tried to figure out what part of the image mattered until I discovered it was the shape,given-attributes,medium,{},True,female,21-30,college
+61,544,I figured out which shapes and internal designs went with each option. It took me just a matter of seconds to put most of them together.,memorized,easy,{},True,male,21-30,highschool

@@ -15,6 +15,7 @@ from scipy.spatial import distance
 #Import specific functions
 from simulations.parameters import worldStateParams
 from simulations.algorithmicmodels import agent
+from analysis.general import figurePrototypesConversion
 # from parameters import worldStateParams
 # from algorithmicmodels import agent
 
@@ -480,32 +481,6 @@ def createContextGenPreMadeAgent(P_agent, P_world, n_trials=76, agent_type='indi
     return A
 
 
-def figurePrototypesConversion(experimental_set='models',context_gen_version=2):
-    if context_gen_version == 1:
-        if experimental_set == 'models':
-            conversion = {
-                'figure': np.array([8, 4, 3, 7, 6, 2, 5, 1]),
-                'prototypes': np.array([0, 1, 2, 3, 4, 5, 6, 7]),
-            }
-        elif experimental_set == 'humans':
-            conversion = {
-                'figure': np.array([8, 7, 3, 4, 6, 1, 2, 5]),
-                'prototypes': np.array([0, 1, 2, 3, 4, 5, 6, 7]),
-            }
-    elif context_gen_version == 2:
-        if experimental_set == 'models':
-            conversion = {
-                'figure':       np.array([8, 4, 7, 3, 6, 2, 1, 5]),
-                'prototypes':   np.array([0, 1, 2, 3, 4, 5, 6, 7]) #np.array([3, 1, 3, 1, 2, 0, 0, 2]),
-            }
-        elif experimental_set == 'humans':
-            conversion = {
-                'figure': np.array([8, 3, 7, 4, 6, 2, 5, 1]),
-                'prototypes': np.array([0, 1, 2, 3, 4, 5, 6, 7]),
-            }
-    return conversion
-
-
 def stimDistance(stims, att_indices, att_order, stim_indx=None):
     if stim_indx is None:
         stim_indx = np.arange(stims.shape[0])
@@ -517,6 +492,7 @@ def stimDistance(stims, att_indices, att_order, stim_indx=None):
                 att_differs[s, a, i] = (stims[s, att_indices[att_order[a]]] != stim[att_indices[att_order[a]]]).any()
 
     return att_differs
+
 
 def representationToRDM(representation):
     rdm = np.zeros((representation.shape[0], representation.shape[0]))
