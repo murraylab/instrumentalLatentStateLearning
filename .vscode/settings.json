@@ -2,6 +2,8 @@
     "python.autoComplete.extraPaths": ["./instrumentalLatentStateLearning/"
     ],
     "python.analysis.extraPaths": [
-        "./instrumentalLatentStateLearning/"
+        "./instrumentalLatentStateLearning/",
+        "./instrumentalLatentStateLearning/subjects/"
     ],
+    "jupyter.notebookFileRoot": "${workspaceFolder}"
 }

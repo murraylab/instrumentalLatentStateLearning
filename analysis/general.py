@@ -10,7 +10,9 @@ The code in this module is partially complete, and is used to support analyses o
 """
 
 import numpy as np
-
+import pandas as pd
+from rpy2.robjects.packages import importr
+import warnings
 
 def forwardSmooth(x, window_len=5):
     x_out = np.zeros(len(x))
@@ -290,3 +292,593 @@ def contextGeneralizationConfusionMatrix(inputs,choice_records,set_record,n_tria
                 confusion_matrix[s,vals.astype(int),p] = counts
 
     return confusion_matrix
+
+
+def contextGenModelConfMatsWinner(confusion_mat_pred):
+    """
+    Bias the choice to the most-similar stimulus/stimuli (the "winner"), rather prioportional to the similarity.
+    :param confusion_mat_pred:
+    :return:
+    """
+    confusion_mat_pred = np.round(confusion_mat_pred, 3)
+    for r in range(confusion_mat_pred.shape[0]):
+        confusion_mat_pred[r, confusion_mat_pred[r, :] < np.max(confusion_mat_pred[r, :])] = 0
+    confusion_mat_pred = confusion_mat_pred / np.sum(confusion_mat_pred, axis=1)[:, None]
+    return confusion_mat_pred
+
+
+def contextGenModelConfMats(context_gen_version=2,experimental_set='humans',method='normed',return_random=False):
+    if context_gen_version == 1:
+        if experimental_set == 'humans':
+            confusion_mat_pred_att = np.array([[1.81817686e-01, 2.72726529e-01, 5.45453058e-01, 5.45453058e-07],
+                                               [2.49999375e-01, 2.49999375e-01, 4.99998750e-01, 4.99998750e-07],
+                                               [3.74998594e-01, 7.49997188e-07, 2.49999063e-01, 3.74998594e-01],
+                                               [4.61536331e-01, 9.23072663e-07, 2.30768166e-01, 3.07690888e-01],
+                                               [2.72726529e-01, 1.81817686e-01, 5.45453058e-07, 5.45453058e-01],
+                                               [4.99998750e-07, 2.49999375e-01, 4.99998750e-01, 2.49999375e-01],
+                                               [7.49997188e-07, 3.74998594e-01, 3.74998594e-01, 2.49999063e-01],
+                                               [4.28570510e-01, 1.42856837e-01, 4.28570510e-07, 4.28570510e-01]])
+            confusion_mat_pred_proto = np.array([[1.81817686e-01, 2.72726529e-01, 5.45453058e-01, 5.45453058e-07],
+                                               [2.49999375e-01, 2.49999375e-01, 4.99998750e-01, 4.99998750e-07],
+                                               [2.49999375e-01, 4.99998750e-07, 2.49999375e-01, 4.99998750e-01],
+                                               [3.74998594e-01, 7.49997188e-07, 2.49999063e-01, 3.74998594e-01],
+                                               [2.72726529e-01, 1.81817686e-01, 5.45453058e-07, 5.45453058e-01],
+                                               [4.99998750e-07, 2.49999375e-01, 4.99998750e-01, 2.49999375e-01],
+                                               [7.49997188e-07, 3.74998594e-01, 3.74998594e-01, 2.49999063e-01],
+                                               [4.28570510e-01, 1.42856837e-01, 4.28570510e-07, 4.28570510e-01]])
+            confusion_mat_pred_discrim_1att = np.array([[0., 1., 0., 0.],
+                                                       [0., 1., 0., 0.],
+                                                       [0., 0., 0., 1.],
+                                                       [0., 0., 0., 1.],
+                                                       [1., 0., 0., 0.],
+                                                       [0., 0., 1., 0.],
+                                                       [0., 0., 1., 0.],
+                                                       [1., 0., 0., 0.]])
+            confusion_mat_pred_discrim_2att = np.array([[0.2   , 0.4   , 0.4   , 0.    ],
+                                                       [0.3333, 0.3333, 0.3333, 0.    ],
+                                                       [0.    , 0.    , 0.    , 1.    ],
+                                                       [0.    , 0.    , 0.    , 1.    ],
+                                                       [0.4   , 0.2   , 0.    , 0.4   ],
+                                                       [0.    , 0.    , 1.    , 0.    ],
+                                                       [0.    , 0.    , 1.    , 0.    ],
+                                                       [1.    , 0.    , 0.    , 0.    ]])
+            confusion_mat_pred_state_bias = np.array([[0, 0, 1, 0],
+                                                    [0, 0, 1, 0],
+                                                    [1, 0, 0, 0],
+                                                    [1, 0, 0, 0],
+                                                    [0, 0, 0, 1],
+                                                    [0, 1, 0, 0],
+                                                    [0, 1, 0, 0],
+                                                    [0, 0, 0, 1]])
+        elif experimental_set == 'models':
+            confusion_mat_pred_att = np.array([[0.1818, 0.2727, 0.5455, 0.    ],
+                                               [0.4615, 0.    , 0.2308, 0.3077],
+                                               [0.375 , 0.    , 0.25  , 0.375 ],
+                                               [0.25  , 0.25  , 0.5   , 0.    ],
+                                               [0.2727, 0.1818, 0.    , 0.5455],
+                                               [0.    , 0.375 , 0.375 , 0.25  ],
+                                               [0.4286, 0.1429, 0.    , 0.4286],
+                                               [0.    , 0.25  , 0.5   , 0.25  ]])
+            confusion_mat_pred_proto = np.array([[0.1818, 0.2727, 0.5455, 0.    ],
+                                               [0.375 , 0.    , 0.25  , 0.375 ],
+                                               [0.25  , 0.    , 0.25  , 0.5   ],
+                                               [0.25  , 0.25  , 0.5   , 0.    ],
+                                               [0.2727, 0.1818, 0.    , 0.5455],
+                                               [0.    , 0.375 , 0.375 , 0.25  ],
+                                               [0.4286, 0.1429, 0.    , 0.4286],
+                                               [0.    , 0.25  , 0.5   , 0.25  ]])
+            confusion_mat_pred_discrim_1att = np.array([[0., 1., 0., 0.],
+                                                       [0., 0., 0., 1.],
+                                                       [0., 0., 0., 1.],
+                                                       [0., 1., 0., 0.],
+                                                       [1., 0., 0., 0.],
+                                                       [0., 0., 1., 0.],
+                                                       [1., 0., 0., 0.],
+                                                       [0., 0., 1., 0.]])
+            confusion_mat_pred_discrim_2att = np.array([[0.2  , 0.4  , 0.4  , 0.   ],
+                                                       [0.   , 0.   , 0.   , 1.   ],
+                                                       [0.   , 0.   , 0.   , 1.   ],
+                                                       [1/3  , 1/3  , 1/3  , 0.   ],
+                                                       [0.4  , 0.2  , 0.   , 0.4  ],
+                                                       [0.   , 0.   , 1.   , 0.   ],
+                                                       [1.   , 0.   , 0.   , 0.   ],
+                                                       [0.   , 0.   , 1.   , 0.   ]])
+            confusion_mat_pred_state_bias = np.array([[0, 0, 1, 0],
+                                                    [1, 0, 0, 0],
+                                                    [1, 0, 0, 0],
+                                                    [0, 0, 1, 0],
+                                                    [0, 0, 0, 1],
+                                                    [0, 1, 0, 0],
+                                                    [0, 0, 0, 1],
+                                                    [0, 1, 0, 0]])
+        confusion_mat_pred_random = (np.round(confusion_mat_pred_att,3)>0.0001)*.33
+        if method == 'winner':
+            confusion_mat_pred_att = contextGenModelConfMatsWinner(confusion_mat_pred_att)
+            confusion_mat_pred_proto = contextGenModelConfMatsWinner(confusion_mat_pred_proto)
+            confusion_mat_pred_discrim_1att = contextGenModelConfMatsWinner(confusion_mat_pred_discrim_1att)
+            confusion_mat_pred_discrim_2att = contextGenModelConfMatsWinner(confusion_mat_pred_discrim_2att)
+            confusion_mat_pred_state_bias = contextGenModelConfMatsWinner(confusion_mat_pred_state_bias)
+        return_list = [confusion_mat_pred_att, confusion_mat_pred_proto, confusion_mat_pred_discrim_1att,
+                       confusion_mat_pred_discrim_2att, confusion_mat_pred_state_bias]
+    if context_gen_version == 2:
+        if experimental_set == 'humans':
+            confusion_mat_pred_att = np.array([[1.81817686e-01, 2.72726529e-01, 5.45453058e-01, 5.45453058e-07],
+                                               [3.33332222e-01, 6.66664444e-07, 3.33332222e-01, 3.33332222e-01],
+                                               [3.33332222e-01, 3.33332222e-01, 3.33332222e-01, 6.66664444e-07],
+                                               [5.45453058e-01, 5.45453058e-07, 1.81817686e-01, 2.72726529e-01],
+                                               [2.72726529e-01, 1.81817686e-01, 5.45453058e-07, 5.45453058e-01],
+                                               [6.66664444e-07, 3.33332222e-01, 3.33332222e-01, 3.33332222e-01],
+                                               [3.33332222e-01, 3.33332222e-01, 6.66664444e-07, 3.33332222e-01],
+                                               [5.45453058e-07, 5.45453058e-01, 2.72726529e-01, 1.81817686e-01]])
+            confusion_mat_pred_proto = np.array([[1.99999600e-01, 3.99999200e-01, 3.99999200e-01, 3.99999200e-07],
+                                               [3.99999200e-01, 3.99999200e-07, 1.99999600e-01, 3.99999200e-01],
+                                               [3.33332222e-01, 3.33332222e-01, 3.33332222e-01, 6.66664444e-07],
+                                               [3.99999200e-01, 3.99999200e-07, 1.99999600e-01, 3.99999200e-01],
+                                               [3.99999200e-01, 1.99999600e-01, 3.99999200e-07, 3.99999200e-01],
+                                               [6.66664444e-07, 3.33332222e-01, 3.33332222e-01, 3.33332222e-01],
+                                               [3.99999200e-01, 1.99999600e-01, 3.99999200e-07, 3.99999200e-01],
+                                               [3.99999200e-07, 3.99999200e-01, 3.99999200e-01, 1.99999600e-01]])
+            confusion_mat_pred_discrim_1att = np.array([[0., 1., 0., 0.],
+                                                       [0., 0., 0., 1.],
+                                                       [0., 1., 0., 0.],
+                                                       [0., 0., 0., 1.],
+                                                       [1., 0., 0., 0.],
+                                                       [0., 0., 1., 0.],
+                                                       [1., 0., 0., 0.],
+                                                       [0., 0., 1., 0.]])
+            confusion_mat_pred_state_bias = np.array([[0, 0, 1, 0],
+                                                    [1, 0, 0, 0],
+                                                    [0, 0, 1, 0],
+                                                    [1, 0, 0, 0],
+                                                    [0, 0, 0, 1],
+                                                    [0, 1, 0, 0],
+                                                    [0, 0, 0, 1],
+                                                    [0, 1, 0, 0]])
+        elif experimental_set == 'models':
+            confusion_mat_pred_att = np.array([[0.1818, 0.2727, 0.5455, 0.    ],
+                                               [0.5455, 0.    , 0.1818, 0.2727],
+                                               [0.3333, 0.3333, 0.3333, 0.    ],
+                                               [0.3333, 0.    , 0.3333, 0.3333],
+                                               [0.2727, 0.1818, 0.    , 0.5455],
+                                               [0.    , 0.5455, 0.2727, 0.1818],
+                                               [0.    , 0.3333, 0.3333, 0.3333],
+                                               [0.3333, 0.3333, 0.    , 0.3333]])
+            confusion_mat_pred_proto = np.array([[0.2  , 0.4  , 0.4  , 0.   ],
+                                                   [0.4  , 0.   , 0.2  , 0.4  ],
+                                                   [0.333, 0.333, 0.333, 0.   ],
+                                                   [0.4  , 0.   , 0.2  , 0.4  ],
+                                                   [0.4  , 0.2  , 0.   , 0.4  ],
+                                                   [0.   , 0.4  , 0.4  , 0.2  ],
+                                                   [0.   , 0.333, 0.333, 0.333],
+                                                   [0.4  , 0.2  , 0.   , 0.4  ]])
+            confusion_mat_pred_discrim_1att = np.array([[0., 1., 0., 0.],
+                                                       [0., 0., 0., 1.],
+                                                       [0., 1., 0., 0.],
+                                                       [0., 0., 0., 1.],
+                                                       [1., 0., 0., 0.],
+                                                       [0., 0., 1., 0.],
+                                                       [0., 0., 1., 0.],
+                                                       [1., 0., 0., 0.]])
+            confusion_mat_pred_state_bias = np.array([[0, 0, 1, 0],
+                                                    [1, 0, 0, 0],
+                                                    [0, 0, 1, 0],
+                                                    [1, 0, 0, 0],
+                                                    [0, 0, 0, 1],
+                                                    [0, 1, 0, 0],
+                                                    [0, 1, 0, 0],
+                                                    [0, 0, 0, 1]])
+        confusion_mat_pred_random = (np.round(confusion_mat_pred_att, 3) > 0.0001) * .33
+        if method == 'winner':
+            confusion_mat_pred_att = contextGenModelConfMatsWinner(confusion_mat_pred_att)
+            confusion_mat_pred_proto = contextGenModelConfMatsWinner(confusion_mat_pred_proto)
+            confusion_mat_pred_discrim_1att = contextGenModelConfMatsWinner(confusion_mat_pred_discrim_1att)
+            confusion_mat_pred_state_bias = contextGenModelConfMatsWinner(confusion_mat_pred_state_bias)
+        return_list = [confusion_mat_pred_att, confusion_mat_pred_proto, confusion_mat_pred_discrim_1att,
+                       confusion_mat_pred_state_bias]
+    if return_random:
+        return_list += [confusion_mat_pred_random]
+    return return_list
+
+
+def orderConfMat(confusion_matrix,conversion):
+    confusion_matrix_ordered = confusion_matrix*0
+    for i in range(8):
+        if confusion_matrix.ndim == 3:
+            confusion_matrix_ordered[i,:,:] = \
+                confusion_matrix[conversion['figure'] == i+1,:,:]
+        elif confusion_matrix.ndim == 2:
+            confusion_matrix_ordered[i,:] = \
+                confusion_matrix[conversion['figure'] == i+1,:]
+    return confusion_matrix_ordered
+
+
+def novelExampleGenTaskFirstCorrectGen(choice_record,inputs,set_record):
+    """
+    For Novel Example Generalization task, looks at the first appearance of each stimulus during the generalization
+    block and sees if it was correct
+    :param choice_record: Rows are trials, first column is choices and second is the correct largest
+    :param inputs: Stimuli by trials
+    :param set_record: For each trial, the session it belongs to.
+    :return: first_appearance_correct
+    """
+    if len(np.unique(set_record)) != 2:
+        raise ValueError('Novel Example Generalization task requires two blocks. You passed more or less than two blocks')
+
+    inputs = np.abs(np.round(inputs))
+    indx_gen_block = set_record==1
+
+    stimulus_prototypes_learned = np.unique(np.abs(np.round(inputs[set_record==0,:])),axis=0).astype(int)
+    stimulus_prototypes_gen_block = np.unique(np.abs(np.round(inputs[indx_gen_block,:])),axis=0).astype(int)
+
+    stimulus_prototypes_novel = []
+
+    correct_by_trial = choice_record[:,0] == choice_record[:,1]
+
+    for stimulus in stimulus_prototypes_gen_block:
+        if (stimulus == stimulus_prototypes_learned).all(axis=1).any():
+            continue
+        else:
+            stimulus_prototypes_novel.append(stimulus)
+    stimulus_prototypes_novel = np.array(stimulus_prototypes_novel)
+
+    if stimulus_prototypes_learned.shape[0] != stimulus_prototypes_novel.shape[0]:
+        raise ValueError('Unequal number of learned and novel stimuli. Cannot calculated paired performance difference')
+
+    indx_novel_consistent = (np.sum(stimulus_prototypes_novel,axis=0) == 0) + (np.sum(stimulus_prototypes_novel,axis=0) == stimulus_prototypes_novel.shape[0])
+    indx_learned_consistent = (np.sum(stimulus_prototypes_learned,axis=0) == 0) + (np.sum(stimulus_prototypes_learned,axis=0) == stimulus_prototypes_learned.shape[0])
+    indx_change_att = (indx_novel_consistent*indx_learned_consistent) * (stimulus_prototypes_learned[0,:] != stimulus_prototypes_novel[0,:])
+
+    first_appearance_correct = np.zeros((stimulus_prototypes_learned.shape[0],2),dtype=bool)
+    for s in range(stimulus_prototypes_learned.shape[0]):
+        #Get indices
+        indx_learned_first = np.where((inputs[indx_gen_block,:] == stimulus_prototypes_learned[s,:]).all(axis=1))[0][0]
+        indx_novel_stim = (stimulus_prototypes_novel[:,indx_change_att<1] == stimulus_prototypes_learned[s,indx_change_att<1]).all(axis=1)
+        indx_novel_first = np.where((inputs[indx_gen_block,:] == stimulus_prototypes_novel[indx_novel_stim,:]).all(axis=1))[0][0]
+        #Find whether correct or incorrect
+        first_appearance_correct[s,0] = correct_by_trial[indx_gen_block][indx_learned_first]
+        first_appearance_correct[s,1] = correct_by_trial[indx_gen_block][indx_novel_first]
+
+    return first_appearance_correct
+
+
+def setGeneralizationFirstAppearance(stimuli, choice_record, set_record, target_block=2):
+    stimuli = np.abs(np.round(stimuli))
+    stimulus_prototypes = np.unique(stimuli, axis=0)
+    stimulus_prototypes
+    set_bool = (set_record == target_block)
+
+    choice_record_gen = choice_record[set_bool, :]
+    stimuli_gen = stimuli[set_bool, :]
+    largest_chosen = choice_record_gen[:, 0] == choice_record_gen[:, 1]
+
+    ans_vals = np.unique(choice_record_gen[:, 1])
+    first_correct = np.zeros(stimulus_prototypes.shape[0])
+
+    for s in range(stimulus_prototypes.shape[0]):
+        try:
+            indx = np.where((stimuli_gen == stimulus_prototypes[s, :]).all(axis=1))[0][0]
+            first_correct[s] = largest_chosen[indx]
+        except:
+            first_correct[s] = np.nan
+
+    return first_correct
+
+
+def randomStimDifferenceErrors(distance_mat,ans_key,max_distance=3):
+    distances = np.zeros((distance_mat.shape[2],max_distance+1))
+    for s in range(distance_mat.shape[2]):
+        #Generative hyperplane distances (separate loop for readability)
+        ans_key_unique = np.unique(ans_key)
+        distances_tmp = np.zeros(len(ans_key_unique))
+        for a in range(len(ans_key_unique)):
+            if ans_key_unique[a] == ans_key[s]:
+                distances_tmp[a] = np.nan
+            else:
+                indx_ans = (ans_key == ans_key_unique[a])
+                distances_tmp[a] = np.min(np.sum(distance_mat[indx_ans,:,s],axis=1))
+        distances_tmp = distances_tmp[np.isnan(distances_tmp)<1]
+        vals, counts = np.unique(distances_tmp,return_counts=True)
+        distances[s,vals.astype(int)] = counts
+    return distances
+
+
+
+
+def setGenErrorTypes(choice_record, stimuli, set_key, ans_key=None, stimulus_prototypes=None, att_indices=None,
+                     error_type_categories=None, index_discrim='shape',att_order=['shape', 'color', 'size', 'texture'],
+                     return_chance=False,target_block=2,context_gen_version=1,experimental_set='humans'):
+    stimuli = np.abs(np.round(stimuli))
+    if choice_record.shape[0] != stimuli.shape[0]:
+        raise ValueError('The number of choices and trial stimuli must be the same')
+    if att_order is None:
+        att_order = ['shape', 'color', 'size', 'texture']
+    if att_indices is None:
+        att_indices = {
+            'shape': [0, 1],
+            'color': [2, 3, 4],
+            'size': [5, 6],
+            'texture': [7, 8]
+        }
+    if error_type_categories is None:
+        if context_gen_version == 1:
+            conversions = figurePrototypesConversion(experimental_set=experimental_set,context_gen_version=2)
+            error_type_categories = ['n_trials', 'total', 'same_set', 'other_set', 'attribute_distance_1',
+                                     'attribute_distance_2',
+                                     'attribute_distance_3', 'attribute_distance_4', 'discriminative_1att_distance_0',
+                                     'discriminative_1att_distance_1', 'discriminative_1att_distance_2',
+                                     'discriminative_1att_distance_3','generative_distance_0', 'generative_distance_1',
+                                     'generative_distance_2','generative_distance_3','discriminative_2att_distance_0',
+                                     'discriminative_2att_distance_1', 'discriminative_2att_distance_2',
+                                     'discriminative_2att_distance_3',
+                                     ]
+        if context_gen_version == 2:
+            error_type_categories = ['n_trials','total', 'same_set', 'other_set', 'attribute_distance_1', 'attribute_distance_2',
+                                 'attribute_distance_3', 'attribute_distance_4', 'discriminative_distance_0',
+                                 'discriminative_distance_1', 'discriminative_distance_2', 'discriminative_distance_3',
+                                 'generative_distance_0', 'generative_distance_1', 'generative_distance_2',
+                                 'generative_distance_3']
+    # Get prototype stimuli and associated correct responses
+    if (stimulus_prototypes is None) or (ans_key is None):
+        stimulus_prototypes = np.unique(stimuli,axis=0)
+        ans_key = np.zeros(stimulus_prototypes.shape[0])
+        for s in range(stimulus_prototypes.shape[0]):
+            ans_key[s] = choice_record[np.where((stimuli == stimulus_prototypes[s,:]).all(axis=1))[0][0],1]
+    # Determines and corrects if inputed full choice record, or a subset that is only the third block
+    if len(set_key) == stimuli.shape[0]:
+        stimulus_prototypes = np.unique(stimuli,axis=0)
+        set_key_short = np.zeros(stimulus_prototypes.shape[0])
+        for s in range(stimulus_prototypes.shape[0]):
+            set_key_short[s] = set_key[np.where((stimuli == stimulus_prototypes[s,:]).all(axis=1))[0][0]]
+        choice_record, stimuli = choice_record[set_key==target_block,:], stimuli[set_key==target_block,:]
+        set_key = set_key_short
+    # Determine attributes used by generative model
+    cat_atts = np.zeros((len(ans_key), len(att_order)))
+    for c in range(len(ans_key)):
+        indx_cat = (ans_key == ans_key[c])
+        stim_cat_var = np.var(stimulus_prototypes[indx_cat, :], axis=0)
+        for k in range(len(att_order)):
+            cat_atts[c, k] = np.sum(stim_cat_var[att_indices[att_order[k]]]) == 0
+    indx_errors = np.where(choice_record[:, 0] != choice_record[:, 1])[0]
+    n_error_types = np.zeros((stimulus_prototypes.shape[0], len(error_type_categories)))
+    #Attribute distance
+    att_distance_mat = stimDistance(stimulus_prototypes, att_indices=att_indices, att_order=att_order)
+    #Discriminative distance
+    att_distance_discrim_mat = stimDistance(stimulus_prototypes,
+                                    att_indices={index_discrim: att_indices[index_discrim]}, att_order=[index_discrim])
+    #Discriminative V2 distance
+    if context_gen_version == 1:
+        att_distance_discrim_2att_mat = att_distance_mat[:,:2,:] * 0
+        indx_set_1 = [np.where(conversions['figure'] == 1)[0][0], np.where(conversions['figure'] == 2)[0][0],
+                      np.where(conversions['figure'] == 3)[0][0], np.where(conversions['figure'] == 4)[0][0]]
+        indx_set_2 = [np.where(conversions['figure'] == 5)[0][0], np.where(conversions['figure'] == 6)[0][0],
+                      np.where(conversions['figure'] == 7)[0][0], np.where(conversions['figure'] == 8)[0][0]]
+        att_distance_discrim_2att_mat[:,:,indx_set_1] = stimDistance(stimulus_prototypes,stim_indx=indx_set_1,
+                                    att_indices={'shape': att_indices['shape'], 'color': att_indices['color']},
+                                                                      att_order=['shape','color'])[:,:,indx_set_1]
+        att_distance_discrim_2att_mat[:, 0, indx_set_2] += stimDistance(stimulus_prototypes, stim_indx=indx_set_2,
+                                                                        att_indices={'shape': att_indices['shape']},
+                                                                        att_order=['shape'])[:,0,indx_set_2]
+    att_distance_generative_mat = att_distance_mat.copy() * 0
+    for a in range(stimulus_prototypes.shape[0]):
+        dict_keys = [att_order[i] for i in np.where(cat_atts[a, :] > 0)[0]]
+        dict_vals = [att_indices[att] for att in dict_keys]
+        att_indices_gen = dict(zip(dict_keys, dict_vals))
+        att_distance_generative_mat[:, cat_atts[a, :] > 0, a] = stimDistance(stimulus_prototypes, stim_indx=[a],
+                                                                  att_indices=att_indices_gen,att_order=dict_keys)[:, :, a]
+    # Comb through and collect the error types
+    for s in range(stimulus_prototypes.shape[0]):
+        # n_trials
+        n_error_types[s, 0] = np.sum((stimuli == stimulus_prototypes[s, :]).all(axis=1))
+        indx_stim = (stimuli[indx_errors, :] == stimulus_prototypes[s, :]).all(axis=1)
+        # Total error types
+        n_error_types[s, 1] = np.sum(indx_stim)
+        # Same-set, other-set
+        indx_same = np.in1d(choice_record[indx_errors, 0][indx_stim], ans_key[set_key == set_key[s]])
+        n_error_types[s, 2] = sum(indx_same)
+        n_error_types[s, 3] = n_error_types[s, 1] - n_error_types[s, 2]
+        # attribute distance
+        for ans in np.unique(ans_key):
+            indx_ans = (ans_key == ans)
+            sum_tmp = np.sum(choice_record[indx_errors, 0][indx_stim] == ans)
+            distance = np.min(np.sum(att_distance_mat[indx_ans, :, s], axis=1))
+            if distance == 1:  # Distance 1
+                n_error_types[s, 4] += sum_tmp
+            elif distance == 2:  # Distance 2
+                n_error_types[s, 5] += sum_tmp
+            elif distance == 3:  # Distance 3
+                n_error_types[s, 6] += sum_tmp
+            elif distance == 4:  # Distance 3
+                n_error_types[s, 7] += sum_tmp
+        # discriminative hyperplane distances (separate loop for readability)
+        for ans in np.unique(ans_key):
+            indx_ans = (ans_key == ans)
+            sum_tmp = np.sum(choice_record[indx_errors, 0][indx_stim] == ans)
+            distance = np.min(np.sum(att_distance_discrim_mat[indx_ans, :, s], axis=1))
+            if distance == 0:  # Distance 0 (confusion)
+                n_error_types[s, 8] += sum_tmp
+            elif distance == 1:  # Distance 1
+                n_error_types[s, 9] += sum_tmp
+            elif distance == 2:  # Distance 2
+                n_error_types[s, 10] += sum_tmp
+            elif distance == 3:  # Distance 3
+                n_error_types[s, 11] += sum_tmp
+        # Generative hyperplane distances (separate loop for readability)
+        for ans in np.unique(ans_key):
+            indx_ans = (ans_key == ans)
+            sum_tmp = np.sum(choice_record[indx_errors, 0][indx_stim] == ans)
+            distance = np.min(np.sum(att_distance_generative_mat[indx_ans, :, s], axis=1))
+            if distance == 0:  # Distance 0 (confusion)
+                n_error_types[s, 12] += sum_tmp
+            elif distance == 1:  # Distance 1
+                n_error_types[s, 13] += sum_tmp
+            elif distance == 2:  # Distance 2
+                n_error_types[s, 14] += sum_tmp
+            elif distance == 3:  # Distance 3
+                n_error_types[s, 15] += sum_tmp
+        # SetGen 2 duel hyperplane
+        if context_gen_version == 1:
+            for ans in np.unique(ans_key):
+                indx_ans = (ans_key == ans)
+                sum_tmp = np.sum(choice_record[indx_errors, 0][indx_stim] == ans)
+                distance = np.min(np.sum(att_distance_discrim_2att_mat[indx_ans, :, s], axis=1))
+                if distance == 0:  # Distance 0 (confusion)
+                    n_error_types[s, 16] += sum_tmp
+                elif distance == 1:  # Distance 1
+                    n_error_types[s, 17] += sum_tmp
+                elif distance == 2:  # Distance 2
+                    n_error_types[s, 18] += sum_tmp
+                elif distance == 3:  # Distance 3
+                    n_error_types[s, 19] += sum_tmp
+    #Create a Dataframe of the error types
+    data_frame = pd.DataFrame(n_error_types,columns=error_type_categories)
+    #Determine what random performance would produce
+    if return_chance:
+        set_errors = np.ones((att_distance_mat.shape[0], 3))
+        set_errors[:, 0], set_errors[:, 1], set_errors[:, 2] = np.nan, 1 / 3, 2 / 3
+        chance_error_types = np.zeros((att_distance_mat.shape[0], len(error_type_categories)))
+        chance_error_types[:, 0] = np.nan
+
+        distances_attribute = randomStimDifferenceErrors(att_distance_mat, ans_key, max_distance=4)[:,1:]
+        distances_attribute = distances_attribute / np.sum(distances_attribute, axis=1).reshape(-1, 1)
+
+        distances_generative = randomStimDifferenceErrors(att_distance_generative_mat, ans_key, max_distance=3)
+        distances_generative = distances_generative / np.sum(distances_generative, axis=1).reshape(-1, 1)
+
+        distances_discrim = randomStimDifferenceErrors(att_distance_discrim_mat, ans_key, max_distance=3)
+        distances_discrim = distances_discrim / np.sum(distances_discrim, axis=1).reshape(-1, 1)
+
+        if context_gen_version == 1:
+            distances_discrim_2att = randomStimDifferenceErrors(att_distance_discrim_2att_mat, ans_key, max_distance=3)
+            distances_discrim_2att = distances_discrim_2att / np.sum(distances_discrim_2att, axis=1).reshape(-1, 1)
+            chance_error_types[:, 1:] = np.hstack(
+                (set_errors, distances_attribute, distances_discrim, distances_generative, distances_discrim_2att))
+        else:
+            chance_error_types[:, 1:] = np.hstack((set_errors, distances_attribute, distances_discrim, distances_generative))
+        data_frame_chance = pd.DataFrame(chance_error_types, columns=error_type_categories)
+        return data_frame, data_frame_chance
+    else:
+        return data_frame
+
+
+def setGeneralizationConfusionMatrix(inputs,choice_records,set_record,target_block=2):
+    if type(inputs) is list:
+        stimulus_prototypes = np.unique(np.abs(np.round(inputs[0])),axis=0)
+        confusion_matrix = np.zeros((stimulus_prototypes.shape[0],
+                                     len(np.unique(choice_records[0][:,1])),len(inputs)))
+
+        for p in range(len(inputs)):
+            stimuli = np.abs(np.round(inputs[p]))[set_record==target_block,:]
+            choice_record = choice_records[p][set_record==target_block,:]
+            indx_wrong = choice_record[:,0] != choice_record[:,1]
+            choices_wrong = choice_record[indx_wrong,:]
+            stimuli_wrong = stimuli[indx_wrong,:]
+
+            for s in range(stimulus_prototypes.shape[0]):
+                indx_stim = (stimuli_wrong == stimulus_prototypes[s,:]).all(axis=1)
+                if sum(indx_stim) > 0:
+                    vals, counts = np.unique(choices_wrong[indx_stim,0],return_counts=True)
+                    confusion_matrix[s,vals.astype(int),p] = counts
+    else:
+        stimuli = np.abs(np.round(inputs))[set_record == target_block, :]
+        stimulus_prototypes = np.unique(np.abs(np.round(stimuli)), axis=0)
+        confusion_matrix = np.zeros((stimulus_prototypes.shape[0],
+                                     len(np.unique(choice_records[:, 1]))))
+        choice_record = choice_records[set_record == target_block, :]
+        indx_wrong = choice_record[:, 0] != choice_record[:, 1]
+        choices_wrong = choice_record[indx_wrong, :]
+        stimuli_wrong = stimuli[indx_wrong, :]
+
+        for s in range(stimulus_prototypes.shape[0]):
+            indx_stim = (stimuli_wrong == stimulus_prototypes[s, :]).all(axis=1)
+            if sum(indx_stim) > 0:
+                vals, counts = np.unique(choices_wrong[indx_stim, 0], return_counts=True)
+                confusion_matrix[s, vals.astype(int)] = counts
+
+    return confusion_matrix
+
+###################################
+#  STATISTICAL TESTS
+###################################
+
+def bayesianTwoSampleTTest(vec1, vec2, alternative='both', paired_bool=False):
+    # Activate environment
+    from rpy2.robjects import r, pandas2ri
+    import rpy2.robjects as robjects
+    pandas2ri.activate()
+
+    # import the BayesFactor package
+    BayesFactor = importr('BayesFactor')
+
+    if paired_bool:
+        if len(vec1) != len(vec2):
+            raise ValueError('Asked to run paired test with unequal length vectors. ')
+        if (sum(np.isnan(vec1)) > 0) or (sum(np.isnan(vec2)) > 0):
+            warnings.warn(f"Found {sum(np.isnan(vec1)+np.isnan(vec2))} values in vectors. Removing those values")
+            indx = (np.isnan(vec1) < 1) * (np.isnan(vec2) < 1)
+            vec1, vec2 = vec1[indx], vec2[indx]
+    else:
+        if sum(np.isnan(vec1)) > 0:
+            warnings.warn(f"Found {sum(np.isnan(vec1))} values in vector 1. Removing those values")
+            vec1 = vec1[np.isnan(vec1) < 1]
+        if sum(np.isnan(vec2)) > 0:
+            warnings.warn(f"Found {sum(np.isnan(vec1))} values in vector 2. Removing those values")
+            vec2 = vec2[np.isnan(vec2) < 1]
+
+            # import the data frames into the R workspace
+    robjects.globalenv["vec1_vals"] = vec1
+    robjects.globalenv["vec2_vals"] = vec2
+
+    # # compute the Bayes factor
+    if alternative == 'both':
+        r(f'bf = ttestBF(y=vec1_vals, x=vec2_vals, paired={str(paired_bool).upper()})')
+        bayes_factor = r('as.vector(bf[1])')[0]
+    elif alternative == 'greater':
+        r(f'bf = ttestBF(y=vec1_vals, x=vec2_vals, paired={str(paired_bool).upper()}, nullInterval = c(-Inf,0))')
+        bayes_factor = r('as.vector(bf[1]/bf[2])')[0]
+    elif alternative == 'less':
+        r(f'bf = ttestBF(y=vec1_vals, x=vec2_vals, paired={str(paired_bool).upper()}, nullInterval = c(0,Inf))')
+        bayes_factor = r('as.vector(bf[1]/bf[2])')[0]
+    else:
+        raise ValueError('Alternative must be "both", "greater" or "less"')
+    del (robjects.globalenv['vec1_vals'])
+    del (robjects.globalenv['vec2_vals'])
+
+    return bayes_factor
+
+
+def bayesianOneSampleTTest(vec, mu=0, alternative='both'):
+    # Activate environment
+    from rpy2.robjects import r, pandas2ri
+    import rpy2.robjects as robjects
+    pandas2ri.activate()
+
+    if sum(np.isnan(vec)) > 0:
+        warnings.warn(f"Found {sum(np.isnan(vec))} values in vector. Removing those values")
+        vec = vec[np.isnan(vec) < 1]
+
+    # import the BayesFactor package
+    BayesFactor = importr('BayesFactor')
+
+    robjects.globalenv["vec_vals"] = vec
+    # Activate environment
+    pandas2ri.activate()
+    # import the BayesFactor package
+    BayesFactor = importr('BayesFactor')
+    # # compute the Bayes factor
+
+    if alternative == 'both':
+        r(f'bf = ttestBF(x=vec_vals, mu={mu})')
+        bayes_factor = r('as.vector(bf[1])')[0]
+    elif alternative == 'greater':
+        r(f'bf = ttestBF(x=vec_vals, mu={mu}, nullInterval = c(0,Inf))')
+        bayes_factor = r('as.vector(bf[1]/bf[2])')[0]
+    elif alternative == 'less':
+        r(f'bf = ttestBF(x=vec_vals, mu={mu}, nullInterval = c(-Inf,0))')
+        bayes_factor = r('as.vector(bf[1]/bf[2])')[0]
+    else:
+        raise ValueError('Alternative must be "both", "greater" or "less"')
+    del (robjects.globalenv['vec_vals'])
+
+    return bayes_factor
+
+
