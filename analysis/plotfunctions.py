@@ -15,8 +15,11 @@ import seaborn as sns
 import numpy as np
 import pandas as pd
 import os
+import arviz as az
+import dataframe_image as dfi
 from simulations.experiments import getPredictedRDMs
 from analysis.general import smooth, figurePrototypesConversion, contextGenModelConfMats, orderConfMat
+from analysis.fitting import calcPartialCorrelationProbs
 rcParams['axes.unicode_minus'] = False #Use hypens in labels
 
 
@@ -25,6 +28,10 @@ def removeSpines(ax):
     ax.spines['top'].set_visible(False)
     return ax
 
+
+####################################
+# Model-Specific Plotting Functions
+####################################
 
 def plotRDM(rdm, fontsize=14, ax=None, save_bool=False, ttl="ANN RDM", fig_dir='plots/', fig_name='nn_rdm.png',
             version=2,cbar_shrink=0.65):
@@ -133,6 +140,11 @@ def plotLC(ax,y_data=None,y_mn=None,y_se=None,color='k',label=None,n_trial_lim=N
     return ax
 
 
+###############################
+# General Plotting functions
+###############################
+
+
 def plotConfMat(confusion_mat,conversion=None,ax=None,ttl='',fontsize=13,vmin=0, vmax=1,cmap='magma',axis_labels_bool=True):
     if conversion is not None:
         confusion_mat = orderConfMat(confusion_mat,conversion)
@@ -209,6 +221,106 @@ def make_autopct(values):
         val = int(round(pct*total/100.0))
         return '{p:.2f}%  ({v:d})'.format(p=pct,v=val)
     return my_autopct
+
+
+##################################
+# Behavioral fit functions
+##################################
+
+
+def plotBayesianWithAssessment(fitted_dict, df_compare, pcorr_samples, fig_dir='plots/subjects',ttl_base='',extension='png',
+                               table_conversion='matplotlib',tables_bool=False):
+    #Change backend if necessary
+    directory = os.getcwd()
+    #Correct for if plotting through cluster or locally on the laptop
+    if ('wwp3' in directory) or ('wwp9' in directory): #It's being run on the cluster, so correct for no display
+        plt.switch_backend('agg')
+
+    # Plot Traces
+    plotBayesianTraces(fitted_dict['All'], fontsize=14, save_bool=True, ttl=f'Bayesian Trace {ttl_base.title()}',
+                       fig_dir=fig_dir, extension=extension)
+
+    # Plot posterior predictive
+    print("plotting posterior predictive")
+    ax = az.plot_ppc(fitted_dict['All'])
+    ttl_pp = f'Bayesian Posterior Predictive {ttl_base.title()}'
+    ax.set_title(ttl_pp)
+    ax = removeSpines(ax)
+    plt.tight_layout()
+    plt.savefig(os.path.join(fig_dir,f'{ttl_pp.replace(" ","_").lower().replace(",","")}.{extension}'))
+
+    # Partial correlations
+    print("plotting partial correlations")
+    plotBayesianCoefficients(pcorr_samples, save_bool=True, ax=None, fontsize=14,extension=extension,
+                             ttl=f'Bayesian Coefficient Importance {ttl_base}', fig_dir=fig_dir)
+    prob_greater_df = calcPartialCorrelationProbs(pcorr_samples)
+
+    # Model comparison
+    print('plotting model comparison')
+    ax = az.plot_compare(df_compare, insample_dev=False);
+    ttl_mc = f'Bayesian Model Comparison {ttl_base.title()}'
+    ax.set_title(ttl_mc,fontsize=14)
+    plt.savefig(os.path.join(fig_dir,f'{ttl_mc.replace(" ","_").lower().replace(",","")}.{extension}'))
+
+    #Tables (need to figure out for cluster)
+    if tables_bool:
+        print('Plotting tables')
+        dfi.export(az.summary(fitted_dict['All']),
+                   os.path.join(fig_dir, f'bayesian_fit_table_{ttl_base.replace(" ", "_").lower()}.png'),
+                   table_conversion=table_conversion)
+        dfi.export(prob_greater_df,
+                   os.path.join(fig_dir,
+                                f'bayesian_partial_correlation_table_{ttl_base.replace(" ", "_").lower()}.png'),
+                   table_conversion=table_conversion)
+        dfi.export(az.compare(fitted_dict, ic="LOO"),
+                   os.path.join(fig_dir, f'bayesian_model_comparison_table_{ttl_base.replace(" ", "_").lower()}.png'),
+                   table_conversion=table_conversion)
+    return 0
+
+
+def plotBayesianTraces(fitted,fontsize=14,save_bool=False,ttl='Bayesian Trace',fig_dir='plots',extension='png'):
+    #Make the figure object
+    data_vars = list(fitted['posterior'].to_dict()['data_vars'].keys())
+    fig, axs = plt.subplots(len(data_vars), 2, figsize=(10, 2.6*len(data_vars)))
+    #Plot
+    axs = az.plot_trace(fitted, axes=axs)
+    #Make pretty
+    xlims = np.zeros((axs.shape[0],2))
+    for i in range(axs.shape[0]):
+        xlims[i,:] = axs[i,0].get_xlim()
+    x_min, x_max = np.min(xlims), np.max(xlims)
+    for i in range(axs.shape[0]):
+        axs[i,0].set_xlim([x_min,x_max])
+        axs[i,0].axvline(0,linestyle=':',color='k')
+
+    axs = axs.reshape(-1)
+    for ax in axs:
+        ax = removeSpines(ax)
+        ax.set_title(ax.get_title(),fontsize=fontsize)
+    # ttl = f'Bambi Trace {priors.replace("_"," ").capitalize()} CGv{version}, Coeff, {subjects.replace("_"," ").capitalize()}, {epoch.capitalize()}'
+    fig.suptitle(ttl)
+    fig.tight_layout()
+    if save_bool:
+        fig.savefig(os.path.join(fig_dir,f'{ttl.replace(" ","_").lower().replace(",","")}.{extension}'),dpi=300)
+    return fig, axs
+
+
+def plotBayesianCoefficients(pcorr_samples,save_bool=False,ax=None,fontsize=14,extension='png',ylim=[0,10],xlim=[0,1.5],
+                             ttl='Bayesian Regression, Coefficient Importance',fig_dir='plots/hum_behav_conf_mat',
+                             fill_alpha=.5):
+    if ax is None:
+        fig, ax = plt.subplots()
+    for idx, (k, v) in enumerate(pcorr_samples.items()):
+        az.plot_kde(v.values ** 2, label=k, plot_kwargs={'color':f'C{idx}'}, fill_kwargs={'alpha': fill_alpha},ax=ax)
+    ax.set_ylim(ylim)
+    ax.set_xlim(xlim)
+    ax = removeSpines(ax)
+    ax.set_title(ttl,fontsize=fontsize+1)
+    ax.set_xlabel('Partial Correlation Coefficient',fontsize=fontsize)
+    ax.set_ylabel('Density',fontsize=fontsize)
+    if save_bool:
+        fig.savefig(os.path.join(fig_dir,f"{ttl.lower().replace(' ','_').replace(',','').replace(',','')}.{extension}"),dpi=300)
+    return ax
 
 
 ###################################
