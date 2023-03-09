@@ -7,10 +7,54 @@ from analysis.general import contextGenModelConfMats
 import pandas as pd
 import arviz as az
 import bambi as bmb
+from utils.utils import testArray, testString, testInt
 
 
-def fitBayesianWithAssessment(confusion_matrix,context_gen_version=2,priors='half_normal',fitvars=['D','P','A'],
+def fitBayesianWithAssessment(confusion_matrix,context_gen_version=2,priors='half_normal',fitvars=None,
                               conf_mat_method='winner',experimental_set='humans',cores=None,fit_init='adapt_diag'):
+    """
+    An ombibus function that performs the Bayesian fitting as well as several assessments of the fit. 
+
+    Parameters
+    ----------
+    confusion_matrix : np.ndarray
+        A 3D numpy array of confusion matrices. The first two dimensions are the confusion matrix dimensions, and the third
+        dimension is for subjects. If the third dimension is 1, then the function will assume that the confusion
+        matrix is a single subject and will not perform any subject averaging.
+    context_gen_version : int, optional
+        The version of the context generation task. The default is 2. Only 1 and 2 are valid options.
+    priors : str, optional
+        The type of priors to use over the idealized models. The default is 'half_normal'.
+    fitvars : list, optional
+        The variables to fit. The default is ['D1','D2','P','A'] for context_gen_version=2 and ['D','P','A'] for context_gen_version=2.
+    conf_mat_method : str, optional
+        The method used to determine the distribution of answers for idealized confusion matrices. The default is 'winner'.
+    experimental_set : str, optional ('humans', 'model')
+        Whether one is fitting the models or human subjects. The default is 'humans'.
+    cores : int, optional
+        The number of cores used by pymc. The default is None.
+    fit_init : str, optional
+        The initialization method used by pymc. The default is 'adapt_diag'.
+    
+    Returns
+    -------
+    return_dict = {
+        'conf_mat_df': The dataframe that was used to fit the models
+        'models_dic': A dictionary of the models
+        'fitted_dict': A dictionary of the fit results
+        'posterior_predictive': Posterior predictive of the fits (used for assessment)
+        'df_compare': Model comparison
+        'pcorr_samples': Partial correlation coefficients
+    }
+    """
+    testArray(confusion_matrix)
+    testInt(context_gen_version)
+    testString(priors)
+    testString(conf_mat_method)
+    testString(experimental_set)
+    testInt(cores)
+    testString(fit_init)
+    # Check inputs and set inputs
     if (context_gen_version != 1) and (context_gen_version != 2):
         raise ValueError('context_gen_version must be either 1 or 2')
     if (fitvars is None) and (context_gen_version==1):
@@ -24,6 +68,8 @@ def fitBayesianWithAssessment(confusion_matrix,context_gen_version=2,priors='hal
         include_state_bias=True
     else:
         include_state_bias=False
+    if experimental_set not in ['humans','models']:
+        raise ValueError('experimental_set must be either humans or models')
     # Fit Model
     print(f'Fitting Model')
     conf_mat_df, model, fitted = fitBayesian(confusion_matrix,context_gen_version=context_gen_version,fitvars=fitvars,\
@@ -53,10 +99,73 @@ def fitBayesianWithAssessment(confusion_matrix,context_gen_version=2,priors='hal
 
 def fitBayesian(confusion_matrix,indx=None,priors='half_normal',context_gen_version=1,fitvars=None,cores=None,
                 conf_mat_method='normed',include_state_bias=True,experimental_set='humans',no_intercept=False,fit_init='adapt_diag'):
+    """
+    Fits a Bayesian model to the confusion matrix data.
+
+    Parameters
+    ----------
+    confusion_matrix : np.ndarray
+        A 3D numpy array of confusion matrices. The first two dimensions are the confusion matrix dimensions, and the third
+        dimension is for subjects. If the third dimension is 1, then the function will assume that the confusion
+        matrix is a single subject and will not perform any subject averaging.
+    indx : list, optional
+        A list of indices to use for the confusion matrix. The default is None.
+    priors : str, optional
+        The type of priors to use over the idealized models. The default is 'half_normal'.
+    context_gen_version : int, optional
+        The version of the context generation task. The default is 1. Only 1 and 2 are valid options.
+    fitvars : list, optional
+        The variables to fit. The default is ['D1','D2','P','A'] for context_gen_version=2 and ['D','P','A'] for context_gen_version=2.
+    cores : int, optional
+        The number of cores used by pymc. The default is None.
+    conf_mat_method : str, optional
+        The method used to determine the distribution of answers for idealized confusion matrices. The default is 'winner'.
+    include_state_bias : bool, optional
+        Whether to include state bias in the model. The default is True.
+    experimental_set : str, optional ('humans', 'model')
+        Whether one is fitting the models or human subjects. The default is 'humans'.
+    no_intercept : bool, optional
+        Whether to include an intercept in the model. The default is False.
+    fit_init : str, optional
+        The initialization method used by pymc. The default is 'adapt_diag'.
+    
+    Returns
+    -------
+    conf_mat_df : pd.DataFrame
+        A dataframe containing the confusion matrix data.
+    model : pymc3.model.Model
+        The model.
+    fitted : pymc3.backends.base.MultiTrace
+        The fit results.
+    """
+    # Check inputs and set inputs
+    testArray(confusion_matrix)
+    testInt(context_gen_version)
+    testString(priors)
+    testString(conf_mat_method)
+    testString(experimental_set)
+    testInt(cores)
+    testString(fit_init)
+    if (context_gen_version != 1) and (context_gen_version != 2):
+        raise ValueError('context_gen_version must be either 1 or 2')
+    if (fitvars is None) and (context_gen_version==1):
+        fitvars = ['D1','D2','P','A']
+    elif (fitvars is None) and (context_gen_version==2):
+        fitvars = ['D','P','A']
+    for var in fitvars:
+        if var not in ['D','D1','D2','P','A','S']:
+            raise ValueError('fitvars must be a list containing only D, D1, D2, P, A, or S')
+    if 'S' in fitvars:
+        include_state_bias=True
+    else:
+        include_state_bias=False
+    if experimental_set not in ['humans','models']:
+        raise ValueError('experimental_set must be either humans or models')
     if include_state_bias:
         fitvars_base = ['P','A','S']
     else:
         fitvars_base = ['P','A']
+    # Format for the fitting
     if type(confusion_matrix) is np.ndarray:
         if confusion_matrix.ndim==3:
             if indx is None:
@@ -131,10 +240,24 @@ def predictorDroppingFit(conf_mat,model,fitted,priors='half_normal',version=2,co
 
 
 def calcBayesianCoefficients(conf_mat_df,model,fitted):
-    # if 'D1' in conf_mat_df.columns:
-    #     varnames=['D1','D2','P','A', 'S']
-    # else:
-    #     varnames=['D','P','A', 'S']
+    """
+    Wrapper function for calculating the partial correlation coefficients for the Bayesian model
+
+    Parameters
+    ----------
+    conf_mat_df : pandas dataframe
+        Dataframe containing the confusion matrix and the predicted values for each model
+    model : bmb.Model
+        Bayesian model
+    fitted : bmb.Fit
+        Fitted Bayesian model
+    
+    Returns
+    -------
+    coef_df : pandas dataframe
+        Dataframe containing the partial correlation coefficients for each variable in the model
+    """
+    # Get the partial correlation coefficients
     varnames = model.formula.split(' ')[-1].split('+')
     samples = fitted.posterior
     pcorr_samples = partialCorrelationCoefficients(model,conf_mat_df,samples,varnames=varnames,dependant_var='Observed')
@@ -143,9 +266,27 @@ def calcBayesianCoefficients(conf_mat_df,model,fitted):
 
 
 def partialCorrelationCoefficients(model, data, samples, varnames=['D', 'P', 'A'], dependant_var='Observed'):
-    # For Bayesian model fitting, compute the needed statistics like R-squared when each predictor is response and all the
-    # other predictors are the predictor.
+    """
+    Calculates the partial correlation coefficients for a Bayesian model
 
+    Parameters
+    ----------
+    model : bmb.Model
+        Bayesian model
+    data : pandas dataframe
+        Dataframe containing the confusion matrix and the predicted values for each model
+    samples : xarray dataset
+        Samples from the posterior distribution of the Bayesian model
+    varnames : list of strings
+        List of variable names to calculate the partial correlation coefficients for
+    dependant_var : string
+        Name of the dependant variable in the model
+    
+    Returns
+    -------
+    coef_df : pandas dataframe
+        Dataframe containing the partial correlation coefficients for each variable in the model
+    """
     # x_matrix = common effects design matrix (excluding intercept/constant term)
     terms = [t for t in model.common_terms.values() if t.name != "Intercept"]
     x_matrix = [pd.DataFrame(x.data, columns=x.levels) for x in terms]
@@ -175,15 +316,27 @@ def partialCorrelationCoefficients(model, data, samples, varnames=['D', 'P', 'A'
                              exog=sm.add_constant(data[[p for p in varnames if p != x]])).fit().rsquared
                       for x in varnames], index=varnames)
     sd_y = data[dependant_var].std()
-
     slope_constant = (sd_x[varnames] / sd_y) * ((1 - r2_x[varnames]) / (1 - r2_y)) ** 0.5
-
     pcorr_samples = (samples[varnames] * slope_constant).stack(samples=("draw", "chain"))
 
     return pcorr_samples
 
 
 def calcPartialCorrelationProbs(pcorr_samples):
+    """
+    Compares the partial correlation coefficients to determine which is larger
+
+    Parameters
+    ----------
+    pcorr_samples : pandas dataframe
+        Dataframe containing the partial correlation coefficients for each variable in the model
+    
+    Returns
+    -------
+    pcorr_probs : pandas dataframe
+        Dataframe containing the probability of the partial correlation coefficient being positive
+    """
+
     varnames = list(pcorr_samples.to_dict()['data_vars'].keys())
 
     indx_comp = np.array(list(itertools.product(np.arange(len(varnames)), repeat=2)))
@@ -195,7 +348,7 @@ def calcPartialCorrelationProbs(pcorr_samples):
     }
 
     for i in range(indx_comp.shape[0]):
-        # NEED TO LOOK CLOSER AT THIS OUTPUT. SEEMS TO BE GIVING OPPOSITE RESULT OF WHAT'S EXPECTED
+        # NEED TO LOOK CLOSER AT THIS OUTPUT
         prob_greater['Probability'].append((pcorr_samples[varnames[indx_comp[i,0]]]**2 > pcorr_samples[varnames[indx_comp[i,1]]]**2).mean().item())
         prob_greater['Comparison'].append(f'{varnames[indx_comp[i,0]]}>{varnames[indx_comp[i,1]]}')
 
@@ -206,6 +359,32 @@ def calcPartialCorrelationProbs(pcorr_samples):
 
 def prepNovelContextGenModelFitDF(confusion_matrix,confusion_mat_pred_proto,confusion_mat_pred_att,confusion_mat_pred_discrim_1att,
                     confusion_mat_pred_state_bias,confusion_mat_pred_discrim_2att=None,indx_null=None):
+    """
+    Prepares the dataframe for fitting the novel context generation model
+    
+    Parameters
+    ----------
+    confusion_matrix : np.array
+        Confusion matrix of subject choice behaviour. if three dimensions, it averages across the last dimension (subjects). 
+        If two dimensions, there is no averaging.
+    confusion_mat_pred_proto : np.array
+        Predicted confusion matrix for the prototype model
+    confusion_mat_pred_att : np.array
+        Predicted confusion matrix for the all-feature attention model
+    confusion_mat_pred_discrim_1att : np.array
+        Predicted confusion matrix for the discriminative 1-feature attention model (the only model for the CGv2 task)
+    confusion_mat_pred_state_bias : np.array
+        Predicted confusion matrix for the state bias model
+    confusion_mat_pred_discrim_2att : np.array
+        Predicted confusion matrix for the discriminative 2-feature attention model (required for the CGv1 task)
+    indx_null : np.array
+        Index of the null values in the confusion matrix that are removed for fitting
+    
+    Returns
+    -------
+    fit_df : pandas dataframe
+        Dataframe containing the observed and predicted confusion matrices for each model
+    """
     if indx_null is None:
         indx_null = np.round(confusion_mat_pred_att,2).flatten()==0
     if confusion_matrix.ndim == 3:

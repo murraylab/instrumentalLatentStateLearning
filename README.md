@@ -1,14 +1,10 @@
 # MultiLatentStateInstrumentalLearning
 Copyright 2021, Warren Woodrich Pettine
 
-This is a preliminary code base associated with:
+This code contains simulations and data analysis used in "Pettine, W. W., Raman, D. V., Redish, A. D., Murray, J. D.
+“Human generalization of internal representations through prototype learning with goal-directed attention,” March 2023, Nature Human Behavior.
 
-Pettine, W. W., Raman, D. V., Redish, A. D., Murray, J. D. “Human latent-state generalization through prototype 
-learning with discriminative attention.” December 2021. PsyArXiv
-
-https://psyarxiv.com/ku4fr
-
-The code base is under active development, and is being made available for reviewers. 
+https://www.nature.com/articles/s41562-023-01543-7
 
 For examples of running the code base, see the examples.py file in the main directory.
 # Installation
